@@ -228,7 +228,41 @@ const deleteAllNotificationController = async (req, res) => {
   }
 };
 
-module.exports = { loginController, registerController, authController, getUserRole, sendNotificationController, submitAvailabilityController, getAllAvailabilityController, getAllNotificationController, deleteAllNotificationController };
+// Delete Availability Controller
+const deleteAvailabilityController = async (req, res) => {
+  try {
+    const { availabilityId } = req.params; // Assuming the availability ID is passed as a URL parameter
+    const { userId } = req.body; // Assuming userId is passed in the request to check if the user is authorized to delete
+
+    // Optional: Check if the user owns the availability or if the user is an admin before deletion
+    const availability = await Availability.findById(availabilityId);
+    if (!availability) {
+      return res.status(404).send({ success: false, message: "Availability not found" });
+    }
+
+    const userRole = await getUserRole(userId);
+    if (availability.userId.toString() !== userId && userRole !== 'admin') {
+      return res.status(403).send({ success: false, message: "Unauthorized to delete this availability" });
+    }
+
+    // Proceed with deletion
+    await Availability.findByIdAndDelete(availabilityId);
+
+    res.status(200).send({
+      success: true,
+      message: "Availability deleted successfully",
+    });
+  } catch (error) {
+    console.error("Error deleting availability:", error);
+    res.status(500).send({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+
+module.exports = { loginController, registerController, authController, getUserRole, sendNotificationController, submitAvailabilityController, getAllAvailabilityController, getAllNotificationController, deleteAllNotificationController, deleteAvailabilityController };
 
 
 

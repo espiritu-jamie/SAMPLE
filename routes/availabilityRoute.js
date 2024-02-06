@@ -13,4 +13,8 @@ router.post('/', authMiddleware, submitAvailabilityController);
 // Fetching All Availabilities (for admins or an employee's own)
 router.get('/', authMiddleware, getAllAvailabilityController);
 
+// Deleting an availability (for employees or admin)
+router.delete('/:availabilityId', authMiddleware, deleteAvailabilityController);
+
+
 module.exports = router;

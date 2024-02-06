@@ -17,6 +17,6 @@ router.get('/', authMiddleware, getAllNotificationController);
 router.delete('/', authMiddleware, deleteAllNotificationController);
 
 // Mark Notification As Read
-router.put('/', authMiddleware, markNotificationAsReadController);
+// router.put('/', authMiddleware, markNotificationAsReadController);
 
 module.exports = router;

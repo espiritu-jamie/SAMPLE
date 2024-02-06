@@ -1,9 +1,9 @@
 const bcrypt = require("bcryptjs");
 const userModel = require('../models/userModel');
-const doctorModel = require("../models/doctorModel");
-const appointmentModel = require("../models/appointmentModel");
 const jwt = require("jsonwebtoken");
 const moment = require("moment");
+const Availability = require("../models/availabilityModel");
+const Notification = require("../models/notificationModel");
 
 // login callback
 const loginController = async (req, res) => {
@@ -80,36 +80,105 @@ const authController = async (req, res) => {
   }
 };
 
-// Appply Doctor Controller
-const applyDoctorController = async (req, res) => {
+const getUserRole = async (userId) => {
+  const user = await userModel.findById(userId);
+  if (!user) throw new Error('User not found');
+  return user.userRole; // Assuming userRole field exists
+};
+
+// Function to send a notification
+const sendNotificationController = async (userId, type, message, data) => {
   try {
-    const newDoctor = await doctorModel({ ...req.body, status: "pending" });
-    await newDoctor.save();
-    const adminUser = await userModel.findOne({ isAdmin: true });
-    const notification = adminUser.notification;
-    notification.push({
-      type: "apply-doctor-request",
-      message: `${newDoctor.firstName} ${newDoctor.lastName} Has Applied For A Doctor Account`,
-      data: {
-        doctorId: newDoctor._id,
-        name: newDoctor.firstName + " " + newDoctor.lastName,
-        onClickPath: "/admin/doctors",
-      },
+    const notification = new Notification({
+      userId,
+      type,
+      message,
+      data,
     });
-    await userModel.findByIdAndUpdate(adminUser._id, { notification });
-    res.status(201).send({
-      success: true,
-      message: "Doctor Account Applied Successfully",
-    });
+    await notification.save();
   } catch (error) {
-    console.log(error);
-    res.status(500).send({
-      success: false,
-      error,
-      message: "Error While Applying For Doctor",
-    });
+    console.error('Error sending notification:', error);
   }
 };
+
+// Submit Availability Controller (Employees Only)
+const submitAvailabilityController = async (req, res) => {
+  try {
+      const { userId, date, starttime, endtime } = req.body;
+      const userRole = await getUserRole(userId);
+      
+      if (userRole !== 'employee') {
+          return res.status(403).send({ message: "Unauthorized - Only employees can submit availability" });
+      }
+
+      const newAvailability = new Availability({
+          userId,
+          date: moment(date, "YYYY-MM-DD").toDate(),
+          starttime,
+          endtime,
+      });
+      await newAvailability.save();
+
+      // Send a notification to the admin
+      const notification = new Notification({
+        userId,
+        type: "new-employee-availability",
+        message: "New employee availability submitted",
+      });
+      await notification.save();
+
+      const adminUser = await userModel.findOne({ userRole: 'admin' });
+
+      if (adminUser) {
+        adminUser.notification.push(notification);
+        await adminUser.save();
+      }
+
+      // Employee gets a notification
+      res.status(201).send({
+          success: true,
+          message: "Availability submitted successfully",
+          data: newAvailability,
+      });
+
+  } catch (error) {
+      console.error("Error submitting availability:", error);
+      res.status(500).send({
+          success: false,
+          message: error.message,
+      });
+  }
+};
+
+// Get All Availability Controller (Admins get all, Employees get theirs)
+const getAllAvailabilityController = async (req, res) => {
+  try {
+      const { userId } = req.body; // Assuming userId is passed in the request
+      const userRole = await getUserRole(userId);
+      
+      let query = {};
+      if (userRole === 'employee') {
+          query.userId = userId; // Employees can only see their own availability
+      } else if (userRole !== 'admin') {
+          return res.status(403).send({ message: "Unauthorized - Access restricted" });
+      }
+      
+      const availabilities = await Availability.find(query);
+      res.status(200).send({
+          success: true,
+          message: "Availabilities fetched successfully",
+          data: availabilities,
+      });
+  } catch (error) {
+      console.error("Error fetching availabilities:", error);
+      res.status(500).send({
+          success: false,
+          message: error.message,
+      });
+  }
+};
+
+
 
 // Notification controller
 const getAllNotificationController = async (req, res) => {
@@ -159,70 +228,8 @@ const deleteAllNotificationController = async (req, res) => {
   }
 };
 
-//GET ALL DOC
-const getAllDocotrsController = async (req, res) => {
-  try {
-    const doctors = await doctorModel.find({ status: "approved" });
-    res.status(200).send({
-      success: true,
-      message: "Doctors Lists Fetched Successfully",
-      data: doctors,
-    });
-  } catch (error) {
-    console.log(error);
-    res.status(500).send({
-      success: false,
-      error,
-      message: "Error While Fetching Doctor",
-    });
-  }
-};
+module.exports = { loginController, registerController, authController, getUserRole, sendNotificationController, submitAvailabilityController, getAllAvailabilityController, getAllNotificationController, deleteAllNotificationController };
 
-// Checking Availability 
-const bookingAvailabilityController = async (req, res) => {
-  try {
-    const date = moment(req.body.date, "DD-MM-YYYY").toISOString();
-    const startTime = moment(req.body.time, "HH:mm").toISOString();
-    const doctorId = req.body.doctorId;
-    const doctor = await doctorModel.findById(doctorId);
-    if (!doctor) {
-      return res.status(404).send({
-        message: "Doctor not found",
-        success: false,
-      });
-    }
-    const start = moment(doctor.starttime, "HH:mm").toISOString();
-    const end = moment(doctor.endtime, "HH:mm").toISOString();
-    if (!moment(startTime).isBetween(start, end, undefined, "[]")) {
-      return res.status(200).send({
-        message: "Appointment Not Available",
-        success: false,
-      });
-    }
-    const appointments = await appointmentModel.find({
-      doctorId,
-      date,
-      time: startTime,
-    });
-    if (appointments.length > 0) {
-      return res.status(200).send({
-        message: "Appointment Not Available",
-        success: false,
-      });
-    }
-    return res.status(200).send({
-      success: true,
-      message: "Appointment Available",
-    });
-  } catch (error) {
-    console.log(error);
-    res.status(500).send({
-      success: false,
-      error,
-      message: "Error Checking Appointment Availability",
-    });
-  }
-};
 
 
 //BOOK APPOINTMENT
@@ -279,94 +286,7 @@ const bookingAvailabilityController = async (req, res) => {
   }
 };*/
 
-const bookAppointmentController = async (req, res) => {
-  try {
-    const date = moment(req.body.date, "DD-MM-YYYY").toISOString();
-    const startTime = moment(req.body.time, "HH:mm").toISOString();
-    const doctorId = req.body.doctorId;
-    const doctor = await doctorModel.findById(doctorId);
-    if (!doctor) {
-      return res.status(404).send({
-        message: "Doctor Not Found",
-        success: false,
-      });
-    }
-    const start = moment(doctor.starttime, "HH:mm").toISOString();
-    const end = moment(doctor.endtime, "HH:mm").toISOString();
-    if (!moment(startTime).isBetween(start, end, undefined, "[]")) {
-      return res.status(400).send({
-        message: "Selected Time Is Not Within Doctor's Available Range",
-        success: false,
-      });
-    }
-    const appointments = await appointmentModel.find({
-      doctorId,
-      date,
-      status: "approved"
-    });
-    if (appointments.length >= doctor.maxPatientsPerDay) {
-      return res.status(400).send({
-        message: "Maximum Number Of Appointments Reached For This Day",
-        success: false,
-      });
-    }
-    const existingAppointment = await appointmentModel.findOne({
-      doctorId,
-      date,
-      time: startTime,
-      status: "approved"
-    });
-    if (existingAppointment) {
-      return res.status(400).send({
-        message: "Appointment Already Booked For This Time Slot",
-        success: false,
-      });
-    }
-    const newAppointment = new appointmentModel({
-      doctorId,
-      userId: req.body.userId,
-      date,
-      time: startTime,
-      doctorInfo: req.body.doctorInfo,
-      userInfo: req.body.userInfo,
-    });
-    await newAppointment.save();
-    return res.status(200).send({
-      success: true,
-      message: "Appointment Booked Successfully",
-    });
-  } catch (error) {
-    console.log(error);
-    res.status(500).send({
-      success: false,
-      error,
-      message: "Error In Booking Appointment",
-    });
-  }
-};
 
 
 
 
-
-const userAppointmentsController = async (req, res) => {
-  try {
-    const appointments = await appointmentModel.find({
-      userId: req.body.userId,
-    });
-    res.status(200).send({
-      success: true,
-      message: "Users Appointments Fetch Successfully",
-      data: appointments,
-    });
-  } catch (error) {
-    console.log(error);
-    res.status(500).send({
-      success: false,
-      error,
-      message: "Error In User Appointments",
-    });
-  }
-};
-
-module.exports = { loginController, registerController, authController , applyDoctorController, getAllNotificationController, deleteAllNotificationController, getAllDocotrsController, bookAppointmentController, bookingAvailabilityController, userAppointmentsController};

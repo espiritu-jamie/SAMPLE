@@ -22,7 +22,7 @@ const handleMarkAllRead = async () => {
   try {
     dispatch(showLoading());
     const res = await axios.post(
-      "/api/user/get-all-notification",
+      "/api/user/get-all-notifications",
       {
         userId: user._id,
       },
@@ -59,7 +59,7 @@ const handleDeleteAllRead = async () => {
   try {
     dispatch(showLoading());
     const res = await axios.post(
-      "/api/user/delete-all-notification",
+      "/api/user/delete-all-notifications",
       {
         userId: user._id,
       },

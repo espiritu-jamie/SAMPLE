@@ -1,39 +1,36 @@
 const express = require("express");
 const colors = require("colors");
-const moragan = require("morgan");
+const morgan = require("morgan"); // Corrected typo from 'moragan' to 'morgan'
 const dotenv = require("dotenv");
 const userRoutes = require('./routes/userRoute');
-const adminRoutes = require("./routes/adminRoute");
-const doctorRoutes = require("./routes/doctorRoute")
+const availabilityRoutes = require('./routes/availabilityRoute'); // Add this line
+const notificationRoutes = require('./routes/notificationRoute'); // Add this line
 const connectDb = require("./config/connectDb");
 const path = require("path");
 
-//dotenv conig
+//dotenv config
 dotenv.config();
 connectDb();
 
-//rest obejct
 const app = express();
 
-//middlewares
 app.use(express.json());
-app.use(moragan("dev"));
+app.use(morgan("dev")); // Corrected typo
 
-//routes
+// Routes
 app.use("/api/user", userRoutes);
-app.use("/api/admin", adminRoutes);
-app.use("/api/doctor", doctorRoutes);
+app.use("/api/availability", availabilityRoutes); // Use your availability routes
+app.use("/api/notification", notificationRoutes); // Use your notification routes
 
-//static files
+// Static files
 app.use(express.static(path.join(__dirname, "./client/build")));
 
-app.get("*", function (req, res) {
+app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "./client/build/index.html"));
 });
 
-//port
 const PORT = process.env.PORT || 4001;
-//listen port
+
 app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+    console.log(`Server running on http://localhost:${PORT}`.green); // Example of using 'colors'
 });

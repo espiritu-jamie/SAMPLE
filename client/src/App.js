@@ -3,17 +3,17 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoute";
 import PublicRoute from "./components/PublicRoute";
 import Spinner from "./components/Spinner";
-import ApplyDoctor from "./pages/ApplyDoctor";
 import Appointments from "./pages/Appointments";
-import BookingPage from "./pages/BookingPage";
+
 import HomePage from "./pages/HomePage";
 import Login from "./pages/Login";
 import NotificationPage from "./pages/NotificationPage";
 import Register from "./pages/Register";
-import Doctors from "./pages/admin/Doctors";
-import Users from "./pages/admin/Users";
-import DoctorAppointments from "./pages/doctor/DoctorAppointments";
-import Profile from "./pages/doctor/Profile";
+import EmployeeAvailabilities from "./pages/EmployeeAvailabilities";
+
+
+import EnterAvailabilityPage from "./pages/EnterAvailability";
+
 
 function App() {
   const { loading } = useSelector((state) => state.alerts);
@@ -32,46 +32,27 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            
             <Route
-              path="/apply-doctor"
+              path="/enter-availability"
               element={
                 <ProtectedRoute>
-                  <ApplyDoctor />
+                  <EnterAvailabilityPage />
                 </ProtectedRoute>
               }
             />
             <Route
-              path="/admin/users"
+              path="/my-availability"
               element={
                 <ProtectedRoute>
-                  <Users />
+                  <EmployeeAvailabilities />
                 </ProtectedRoute>
               }
             />
-            <Route
-              path="/admin/doctors"
-              element={
-                <ProtectedRoute>
-                  <Doctors />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/doctor/profile/:id"
-              element={
-                <ProtectedRoute>
-                  <Profile />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/doctor/book-appointment/:doctorId"
-              element={
-                <ProtectedRoute>
-                  <BookingPage />
-                </ProtectedRoute>
-              }
-            />
+
+            
+            
+            
            <Route
               path="/appointments"
               element={
@@ -80,14 +61,7 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            <Route
-              path="/doctor-appointments"
-              element={
-                <ProtectedRoute>
-                  <DoctorAppointments />
-                </ProtectedRoute>
-              }
-            />
+            
             <Route
               path="/notification"
               element={

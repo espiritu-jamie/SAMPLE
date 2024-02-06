@@ -1,18 +1,18 @@
-export const userMenu = [
+export const employeeMenu = [
   {
     name: "Home",
     path: "/",
     icon: "fa-solid fa-house",
   },
   {
-    name: "Appointments",
-    path: "/appointments",
+    name: "My Availability",
+    path: "/my-availability",
     icon: "fa-solid fa-list",
   },
   {
-    name: "Apply Doctor",
-    path: "/apply-doctor",
-    icon: "fa-solid fa-user-doctor",
+    name: "Enter Availability",
+    path: "/enter-availability",
+    icon: "fa-solid fa-calendar-plus",
   }
 ];
 
@@ -25,14 +25,14 @@ export const adminMenu = [
   },
 
   {
-    name: "Doctors",
-    path: "/admin/doctors",
-    icon: "fa-solid fa-user-doctor",
+    name: "Employee Availability",
+    path: "/employee-availability",
+    icon: "fa-solid fa-list",
   },
   {
-    name: "Users",
-    path: "/admin/users",
-    icon: "fa-solid fa-user",
+    name: "All Appointments",
+    path: "/all-appointments",
+    icon: "fa-solid fa-calendar",
   }
 ];
 

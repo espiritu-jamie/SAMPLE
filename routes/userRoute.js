@@ -1,50 +1,28 @@
-const express = require("express");
-const {
-  loginController,
-  registerController,
-  authController,
-  applyDoctorController,
-  getAllNotificationController,
-  deleteAllNotificationController,
-  getAllDocotrsController,
-  bookAppointmentController,
-  bookingAvailabilityController,
-  userAppointmentsController,
-} = require("../controllers/userController");
-const authMiddleware = require("../middlewares/authMiddleware");
-
-//router object
+// routes/userRoute.js
+const express = require('express');
 const router = express.Router();
+const authMiddleware = require('../middlewares/authMiddleware');
+const {
+    loginController,
+    registerController,
+    authController,
+    getAllNotificationController,
+    deleteAllNotificationController
+} = require('../controllers/userController');
 
-//routes
-// POST || LOGIN USER
-router.post("/login", loginController);
+// User Registration
+router.post('/register', registerController);
 
-//POST || REGISTER USER
-router.post("/register", registerController);
+// User Login
+router.post('/login', loginController);
 
-//Auth || POST
-router.post("/getUserData", authMiddleware, authController);
+// User Authentication Check
+router.post('/getUserData', authMiddleware, authController);
 
-//Apply Doctor || POST
-router.post("/apply-doctor", authMiddleware, applyDoctorController);
+// Get All Notifications for a User
+router.get('/get-all-notifications', authMiddleware, getAllNotificationController);
 
-//Notifiaction  Doctor || POST
-router.post("/get-all-notification", authMiddleware, getAllNotificationController);
-
-//Notifiaction  Doctor || POST
-router.post("/delete-all-notification", authMiddleware, deleteAllNotificationController);
-
-//GET ALL DOC
-router.get("/getAllDoctors", authMiddleware, getAllDocotrsController);
-
-//BOOK APPOINTMENT
-router.post("/book-appointment", authMiddleware, bookAppointmentController);
-
-//Booking Avliability
-router.post("/booking-availbility", authMiddleware, bookingAvailabilityController);
-
-//Appointments List
-router.get("/user-appointments", authMiddleware, userAppointmentsController);
+// Delete All Notifications for a User
+router.post('/delete-all-notifications', authMiddleware, deleteAllNotificationController);
 
 module.exports = router;

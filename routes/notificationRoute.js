@@ -11,10 +11,10 @@ const {
 router.post('/', authMiddleware, submitAvailabilityController);
 
 // Get All Notifications
-router.get('/', authMiddleware, getAllNotificationController);
+router.get('/get-all-notifications', authMiddleware, getAllNotificationController);
 
 // Delete All Notifications
-router.delete('/', authMiddleware, deleteAllNotificationController);
+router.delete('/delete-all-notifications', authMiddleware, deleteAllNotificationController);
 
 // Mark Notification As Read
 // router.put('/', authMiddleware, markNotificationAsReadController);

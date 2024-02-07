@@ -36,3 +36,17 @@ export const adminMenu = [
   }
 ];
 
+// user menu
+export const userMenu = [
+  {
+    name: "Home",
+    path: "/",
+    icon: "fa-solid fa-house",
+  },
+  {
+    name: "My Appointments",
+    path: "/my-appointments",
+    icon: "fa-solid fa-calendar",
+  }
+];
+

@@ -4,7 +4,8 @@ const authMiddleware = require('../middlewares/authMiddleware'); // Assuming you
 const router = express.Router();
 const {
     submitAvailabilityController,
-    getAllAvailabilityController
+    getAllAvailabilityController,
+    deleteAvailabilityController
     } = require('../controllers/userController');
 
 // Submitting Availability (for employees)
@@ -15,6 +16,5 @@ router.get('/', authMiddleware, getAllAvailabilityController);
 
 // Deleting an availability (for employees or admin)
 router.delete('/:availabilityId', authMiddleware, deleteAvailabilityController);
-
 
 module.exports = router;

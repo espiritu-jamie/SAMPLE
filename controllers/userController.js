@@ -1,3 +1,5 @@
+import DeleteAvailabilityButton from "../client/src/components/DeleteAvailabilityButton";
+
 const bcrypt = require("bcryptjs");
 const userModel = require('../models/userModel');
 const jwt = require("jsonwebtoken");
@@ -228,9 +230,11 @@ const deleteAllNotificationController = async (req, res) => {
   }
 };
 
+<DeleteAvailabilityButton availabilityId={availability._id} onDeletionSuccess={fetchAvailabilities} />
 // Delete Availability Controller
 const deleteAvailabilityController = async (req, res) => {
   try {
+    <DeleteAvailabilityButton availabilityId={availability._id} onDeletionSuccess={fetchAvailabilities} />
     const { availabilityId } = req.params; // Assuming the availability ID is passed as a URL parameter
     const { userId } = req.body; // Assuming userId is passed in the request to check if the user is authorized to delete
 

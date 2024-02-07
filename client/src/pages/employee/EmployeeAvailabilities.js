@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Card from "antd/es/card/Card";
-import Layout from "../../components/Layout"; // Update the path as needed
+import Layout from "../../components/Layout"; 
+
 
 const EmployeeAvailabilities = () => {
   const [availabilities, setAvailabilities] = useState([]);
+  const sortOrder = "earliest";
 
   useEffect(() => {
     // Fetch the employee's availabilities here
@@ -17,14 +19,32 @@ const EmployeeAvailabilities = () => {
         };
 
         const response = await axios.get("/api/availability", { headers }); // Adjust the endpoint if needed
-        setAvailabilities(response.data.data);
+
+        const sortedAvailabilities = response.data.data.sort((a, b) => {
+          const dateA = new Date(a.date);
+          const dateB = new Date(b.date);
+          const dateComparison = dateA - dateB;
+
+          if (dateComparison === 0) {
+            if (sortOrder === "earliest") {
+              return a.starttime.localeCompare(b.starttime);
+            } else {
+              return b.starttime.localeCompare(a.starttime);
+            }
+          }
+
+          return sortOrder === "earliest" ? dateComparison : -dateComparison;
+
+        });
+
+        setAvailabilities(sortedAvailabilities);
       } catch (error) {
         console.error("Error fetching availabilities:", error);
       }
     };
 
     fetchAvailabilities();
-  }, []);
+  }, [sortOrder]);
 
   const formatTime = (time) => {
     const options = {

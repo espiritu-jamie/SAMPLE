@@ -153,30 +153,51 @@ const submitAvailabilityController = async (req, res) => {
 // Get All Availability Controller (Admins get all, Employees get theirs)
 const getAllAvailabilityController = async (req, res) => {
   try {
-      const { userId } = req.body; // Assuming userId is passed in the request
-      const userRole = await getUserRole(userId);
-      
-      let query = {};
-      if (userRole === 'employee') {
-          query.userId = userId; // Employees can only see their own availability
-      } else if (userRole !== 'admin') {
-          return res.status(403).send({ message: "Unauthorized - Access restricted" });
-      }
-      
-      const availabilities = await Availability.find(query);
-      res.status(200).send({
-          success: true,
-          message: "Availabilities fetched successfully",
-          data: availabilities,
-      });
+    const { userId } = req.body; // Assuming the userId is securely obtained (e.g., from token)
+    const userRole = await getUserRole(userId);
+    
+    // Restrict access for "general" users
+    if (userRole === 'general') {
+      return res.status(403).send({ message: "Unauthorized - Access is restricted" });
+    }
+
+    // Initialize the query object based on user role
+    let query = {};
+    
+    // Restrict "employee" users to only see their own availabilities
+    if (userRole === 'employee') {
+      query.userId = userId;
+    }
+    // Admins can see all availabilities, so no need to modify the query for them
+    
+    const availabilities = await Availability.find(query).populate('userId', 'name');
+
+    const data = availabilities.map(avail => ({
+      _id: avail._id,
+      date: avail.date,
+      starttime: avail.starttime,
+      endtime: avail.endtime,
+      user: {
+        _id: avail.userId._id,
+        name: avail.userId.name,
+      },
+    }));
+    
+    res.status(200).send({
+      success: true,
+      message: "Availabilities fetched successfully",
+      data: data,
+    });
   } catch (error) {
-      console.error("Error fetching availabilities:", error);
-      res.status(500).send({
-          success: false,
-          message: error.message,
-      });
+    console.error("Error fetching availabilities:", error);
+    res.status(500).send({
+      success: false,
+      message: error.message,
+    });
   }
 };
+
+
 
 
 

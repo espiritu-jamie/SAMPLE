@@ -10,6 +10,7 @@ import Login from "./pages/Login";
 import NotificationPage from "./pages/NotificationPage";
 import Register from "./pages/Register";
 import EmployeeAvailabilities from "./pages/employee/EmployeeAvailabilities";
+import AdminEmployeeAvailability from "./pages/admin/adminEmployeeAvailability";
 
 
 import EnterAvailabilityPage from "./pages/employee/EnterAvailability";
@@ -49,9 +50,14 @@ function App() {
                 </ProtectedRoute>
               }
             />
-
-            
-            
+            <Route
+              path="/admin-employee-availability"
+              element={
+                <ProtectedRoute>
+                  <AdminEmployeeAvailability />
+                </ProtectedRoute>
+              }
+            />         
             
            <Route
               path="/appointments"

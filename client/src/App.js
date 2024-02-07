@@ -9,10 +9,10 @@ import HomePage from "./pages/HomePage";
 import Login from "./pages/Login";
 import NotificationPage from "./pages/NotificationPage";
 import Register from "./pages/Register";
-import EmployeeAvailabilities from "./pages/EmployeeAvailabilities";
+import EmployeeAvailabilities from "./pages/employee/EmployeeAvailabilities";
 
 
-import EnterAvailabilityPage from "./pages/EnterAvailability";
+import EnterAvailabilityPage from "./pages/employee/EnterAvailability";
 
 
 function App() {

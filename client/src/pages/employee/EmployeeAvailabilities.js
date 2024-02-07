@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Card from "antd/es/card/Card";
-import Layout from "../components/Layout";
+import Layout from "../../components/Layout"; // Update the path as needed
 
 const EmployeeAvailabilities = () => {
   const [availabilities, setAvailabilities] = useState([]);

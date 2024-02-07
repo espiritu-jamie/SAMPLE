@@ -26,7 +26,7 @@ export const adminMenu = [
 
   {
     name: "Employee Availability",
-    path: "/employee-availability",
+    path: "/admin-employee-availability",
     icon: "fa-solid fa-list",
   },
   {

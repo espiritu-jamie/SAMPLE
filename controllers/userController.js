@@ -55,6 +55,62 @@ const registerController = async (req, res) => {
   }
 };
 
+const updateprofilecontroller = async (req, res) => {
+  try {
+    const { userId } = req.body;
+    const { firstName, lastName, address, phoneNumber } = req.body;
+
+    // Find the user by user ID
+    const user = await userModel.findById(userId);
+
+    if (!user) {
+      return res.status(404).send('User not found');
+    }
+
+    // Update the user's profile fields
+    user.firstName = firstName;
+    user.lastName = lastName;
+    user.address = address;
+    user.phoneNumber = phoneNumber;
+
+    // Save the updated user profile
+    await user.save();
+
+    res.status(200).send({ success: true, message: 'Profile updated successfully' });
+  } catch (error) {
+    console.error('Error updating profile:', error);
+    res.status(500).send({ success: false, message: 'Error updating profile', error });
+  }
+};
+
+const viewprofilecontroller = async (req, res) => {
+  try {
+    const { userId } = req.body;
+
+    // Find the user by user ID
+    const user = await userModel.findById(userId);
+
+    if (!user) {
+      return res.status(404).send('User not found');
+    }
+
+    // Extract the relevant profile information
+    const userProfile = {
+      firstName: user.firstName,
+      lastName: user.lastName,
+      address: user.address,
+      phoneNumber: user.phoneNumber,
+      // Add any other profile information you want to include here
+    };
+
+    res.status(200).send({ success: true, userProfile });
+  } catch (error) {
+    console.error('Error viewing profile:', error);
+    res.status(500).send({ success: false, message: 'Error viewing profile', error });
+  }
+};
+
+
 const authController = async (req, res) => {
   try {
     const user = await userModel.findById(req.body.userId);
@@ -228,7 +284,7 @@ const deleteAllNotificationController = async (req, res) => {
   }
 };
 
-module.exports = { loginController, registerController, authController, getUserRole, sendNotificationController, submitAvailabilityController, getAllAvailabilityController, getAllNotificationController, deleteAllNotificationController };
+module.exports = { loginController, registerController, authController, getUserRole, sendNotificationController, submitAvailabilityController, getAllAvailabilityController, getAllNotificationController, deleteAllNotificationController, updateprofilecontroller, viewprofilecontroller };
 
 
 

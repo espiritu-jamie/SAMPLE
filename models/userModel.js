@@ -37,6 +37,20 @@ const userMongooseSchema = new mongoose.Schema({
     type: String,
     default: "general", // Possible values: "general", "admin", "employee"
   },
+  address: { // Add the address portion
+    streetAddress: {
+      type: String,
+    },
+    city: {
+      type: String,
+    },
+    state: {
+      type: String,
+    },
+    postalCode: {
+      type: String,
+    },
+  },
   notification: {
     type: Array,
     default: [],
@@ -51,6 +65,7 @@ const userMongooseSchema = new mongoose.Schema({
   },
 });
 
+
 const userSchema = Joi.object({
   userId: Joi.string(),
   name: Joi.string().min(2).max(50).required(),
@@ -61,6 +76,12 @@ const userSchema = Joi.object({
     .max(128)
     .required(),
   userRole: Joi.string().valid("general", "admin", "employee").default("general"),
+  address: Joi.object({ // Add the address portion to the validation schema
+    streetAddress: Joi.string(),
+    city: Joi.string(),
+    state: Joi.string(),
+    postalCode: Joi.string(),
+  }),
   notification: Joi.array().items(Joi.object({
     type: Joi.string(),
     message: Joi.string(),

@@ -5,6 +5,13 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import "../styles/LayoutStyles.css";
 import { adminMenu, employeeMenu } from "./../Data/data";
 
+
+const profileMenuItem = {
+  name: "Profile",
+  path: "/pages/Profile", // Update with the correct path for the Profile component
+  icon: "fa-solid fa-user",
+};
+
 const Layout = ({ children }) => {
   const { user } = useSelector((state) => state.user);
   const location = useLocation();
@@ -39,12 +46,13 @@ const Layout = ({ children }) => {
 
   // rendering menu list
 
-  const SidebarMenu =
-  user?.userRole === "admin"
-    ? adminMenu.filter((menu) => menu.name !== "Profile")
-    : user?.userRole === "employee"
-    ? employeeMenu.filter((menu) => menu.name !== "Profile")
-    : doctorMenu;
+const SidebarMenu =
+    user?.userRole === "admin"
+      ? [...adminMenu, profileMenuItem] // Add profile menu item to admin menu
+      : user?.userRole === "employee"
+      ? [...employeeMenu, profileMenuItem] // Add profile menu item to employee menu
+      : [profileMenuItem]; // For other roles, show only the profile menu
+
 
   return (
     <>

@@ -1,10 +1,10 @@
 import { Form, Input, message, Button } from "antd";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import React, { useState } from "react";
+import Layout from "../components/Layout";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateUser } from "../redux/features/userSlice";
-import { updateprofilecontroller, viewprofilecontroller } from "../controllers/profileControl"; // Import the profile control functions
 
 const Profile = () => {
   const dispatch = useDispatch();
@@ -13,11 +13,35 @@ const Profile = () => {
 
   // State to manage form data
   const [formData, setFormData] = useState({
-    firstName: user.firstName,
-    lastName: user.lastName,
-    address: user.address,
-    phoneNumber: user.phoneNumber,
+    firstName: "",
+    lastName: "",
+    address: "",
+    phoneNumber: "",
   });
+
+  useEffect(() => {
+    // Load user profile when component mounts
+    loadUserProfile();
+  }, []);
+
+  // Load user profile
+const loadUserProfile = async () => {
+    try {
+      const response = await axios.get(`/api/user/profile/${user.userId}`);
+      const userProfile = response.data; // Assuming the response contains user profile data
+  
+      // Update form data with user profile
+      setFormData({
+        firstName: userProfile.firstName,
+        lastName: userProfile.lastName,
+        address: userProfile.address,
+        phoneNumber: userProfile.phoneNumber,
+      });
+    } catch (error) {
+      console.error("Error loading profile:", error);
+      message.error("Something went wrong");
+    }
+  };
 
   // Handle form submission to update profile
   const submitHandler = async () => {
@@ -44,22 +68,6 @@ const Profile = () => {
     }));
   };
 
-  // Function to view user profile
-  const viewProfile = async () => {
-    try {
-      const userProfile = await viewprofilecontroller(user.userId); // Call the viewprofilecontroller function
-      if (userProfile.success) {
-        // Display user profile data
-        console.log("User Profile:", userProfile.userProfile);
-      } else {
-        message.error(userProfile.message);
-      }
-    } catch (error) {
-      console.error("Error viewing profile:", error);
-      message.error("Something went wrong");
-    }
-  };
-
   return (
     <div className="profile-page">
       <h1>Profile</h1>
@@ -71,21 +79,20 @@ const Profile = () => {
         <p>Phone Number: {user.phoneNumber}</p>
       </div>
       <Form layout="vertical" onFinish={submitHandler}>
-        <Form.Item label="First Name" name="firstName" initialValue={user.firstName}>
+        <Form.Item label="First Name" name="firstName" initialValue={formData.firstName}>
           <Input name="firstName" onChange={handleChange} />
         </Form.Item>
-        <Form.Item label="Last Name" name="lastName" initialValue={user.lastName}>
+        <Form.Item label="Last Name" name="lastName" initialValue={formData.lastName}>
           <Input name="lastName" onChange={handleChange} />
         </Form.Item>
-        <Form.Item label="Address" name="address" initialValue={user.address}>
+        <Form.Item label="Address" name="address" initialValue={formData.address}>
           <Input name="address" onChange={handleChange} />
         </Form.Item>
-        <Form.Item label="Phone Number" name="phoneNumber" initialValue={user.phoneNumber}>
+        <Form.Item label="Phone Number" name="phoneNumber" initialValue={formData.phoneNumber}>
           <Input name="phoneNumber" onChange={handleChange} />
         </Form.Item>
         <Button type="primary" htmlType="submit">Update Profile</Button>
       </Form>
-      <Button onClick={viewProfile}>View Profile</Button>
     </div>
   );
 };

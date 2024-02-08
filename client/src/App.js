@@ -11,7 +11,6 @@ import NotificationPage from "./pages/NotificationPage";
 import Register from "./pages/Register";
 import EmployeeAvailabilities from "./pages/EmployeeAvailabilities";
 
-
 import EnterAvailabilityPage from "./pages/EnterAvailability";
 
 

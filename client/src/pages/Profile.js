@@ -1,5 +1,6 @@
 import { Form, Input, message, Button } from "antd";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateUser } from "../redux/features/userSlice";
@@ -7,6 +8,7 @@ import { updateprofilecontroller, viewprofilecontroller } from "../controllers/p
 
 const Profile = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const user = useSelector((state) => state.user); // Assuming user data is stored in Redux state
 
   // State to manage form data

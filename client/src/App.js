@@ -9,9 +9,15 @@ import HomePage from "./pages/HomePage";
 import Login from "./pages/Login";
 import NotificationPage from "./pages/NotificationPage";
 import Register from "./pages/Register";
-import EmployeeAvailabilities from "./pages/EmployeeAvailabilities";
+import EmployeeAvailabilities from "./pages/employee/EmployeeAvailabilities";
+import AdminEmployeeAvailability from "./pages/admin/adminEmployeeAvailability";
 
+<<<<<<< HEAD
 import EnterAvailabilityPage from "./pages/EnterAvailability";
+=======
+
+import EnterAvailabilityPage from "./pages/employee/EnterAvailability";
+>>>>>>> f0709b4a2451a4ba09d80b906bbecbb825b7fa25
 
 
 function App() {
@@ -48,9 +54,14 @@ function App() {
                 </ProtectedRoute>
               }
             />
-
-            
-            
+            <Route
+              path="/admin-employee-availability"
+              element={
+                <ProtectedRoute>
+                  <AdminEmployeeAvailability />
+                </ProtectedRoute>
+              }
+            />         
             
            <Route
               path="/appointments"

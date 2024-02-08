@@ -7,6 +7,7 @@ import { hideLoading, showLoading } from "../redux/features/alertSlice";
 import Layout from "./../components/Layout";
 import { DatePicker } from "antd";
 
+
 const SubmitAvailability = () => {
   const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
@@ -53,7 +54,8 @@ const SubmitAvailability = () => {
   };
 
   const handleDateChange = (date) => {
-    setAvailabilityData({ ...availabilityData, date });
+    const dateString = date ? date.format("YYYY-MM-DD") : null;
+    setAvailabilityData({ ...availabilityData, date: dateString });
   };
 
   const handleStartTimeChange = (starttime) => {

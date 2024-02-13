@@ -20,36 +20,37 @@ const NotificationPage = () => {
 // handle read notification
 const handleMarkAllRead = async () => {
   try {
+
     dispatch(showLoading());
-    const res = await axios.post(
-      "/api/user/get-all-notifications",
-      {
-        userId: user._id,
-      },
+
+    const res = await axios.put(
+      "/api/notification/mark-all-notification-as-read",
+      { },
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       }
     );
+
     dispatch(hideLoading());
+
     if (res.data.success) {
-      const unreadNotifications = res.data.notifications
-        ? res.data.notifications.filter(
-            (notification) => !notification.isRead
-          )
-        : [];
-      updateNotificationsInStore(unreadNotifications);
-      setRefreshNotifications(!refreshNotifications);
-      window.location.reload();
-      message.success(res.data.message);
+      message.success("All notifications marked as read.");
+
+      setRefreshNotifications(prevState => !prevState);
+
     } else {
       message.error(res.data.message);
-    }
+      }
+
   } catch (error) {
-    dispatch(hideLoading());
-    console.log(error);
-    message.error("Something Went Wrong");
+      dispatch(hideLoading());
+
+      console.error("Error making notifications as read: ", error);
+
+      message.error("Something went wrong while marking notifications as read.");
+
   }
 };
 

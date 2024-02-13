@@ -54,9 +54,9 @@ const HomePage = () => {
     if (user && user.userRole) {
       switch (user.userRole) {
         case "admin":
-          return "Welcome, Admin!";
+          return "Welcome to the Admin Page!";
         case "employee":
-          return "Welcome, Employee!";
+          return "Welcome to the Employee Page!";
         default:
           return "Welcome!";
       }

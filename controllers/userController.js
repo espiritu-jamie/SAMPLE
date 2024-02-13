@@ -199,7 +199,7 @@ const getAllAvailabilityController = async (req, res) => {
 
 const deleteAvailabilityController = async (req, res) => {
   try {
-      const userId = req.body.userId; // Using userId from req.body as set by authMiddleware
+      const userId = req.body._id; // Using userId from req.body as set by authMiddleware
       const availabilityId = req.params.id; // The ID of the availability to delete
 
       // Find the availability to ensure it exists and to check ownership
@@ -233,27 +233,24 @@ const deleteAvailabilityController = async (req, res) => {
 // Notification controller
 const getAllNotificationController = async (req, res) => {
   try {
-    const user = await userModel.findOne({ _id: req.body.userId });
-    const seennotification = user.seennotification;
-    const notification = user.notification;
-    seennotification.push(...notification);
-    user.notification = [];
-    user.seennotification = notification;
-    const updatedUser = await user.save();
-    res.status(200).send({
+    const userId = req.body._id;
+
+    const notifications = await Notification.find({ userId: userId });
+
+    res.status(200).json({
       success: true,
-      message: "All Notifications Marked As Read",
-      data: updatedUser,
+      message: "Notifications fetched successfully",
+      data: notifications,
     });
   } catch (error) {
-    console.log(error);
-    res.status(500).send({
-      message: "Error In Notification",
+    console.log("Error fetching notifications:", error);
+    res.status(500).json({
       success: false,
-      error,
+      message: "Error fetching notifications",
     });
   }
 };
+
 
 // delete notifications
 const deleteAllNotificationController = async (req, res) => {
@@ -278,7 +275,31 @@ const deleteAllNotificationController = async (req, res) => {
   }
 };
 
-module.exports = { loginController, registerController, authController, getUserRole, sendNotificationController, submitAvailabilityController, getAllAvailabilityController, deleteAvailabilityController, getAllNotificationController, deleteAllNotificationController };
+// Mark all notifications as read
+const markAllNotificationAsReadController = async (req, res) => {
+  try {
+    const userId = req.body.userId;
+
+    console.log("UserID for update:", userId );
+
+    await Notification.updateMany(
+      { userId: userId, isRead: false }, 
+      { $set: { isRead: true } });
+      
+    res.status(200).json({
+      success: true,
+      message: "All Notifications Marked As Read",
+    });
+  } catch (error) {
+    console.log("Error marking notifications as read:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error marking notifications as read",
+    });
+  }
+};
+
+module.exports = { loginController, registerController, authController, getUserRole, sendNotificationController, submitAvailabilityController, getAllAvailabilityController, deleteAvailabilityController, getAllNotificationController, deleteAllNotificationController, markAllNotificationAsReadController };
 
 
 

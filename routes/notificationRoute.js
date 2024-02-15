@@ -5,7 +5,7 @@ const {
     submitAvailabilityController,
     getAllNotificationController, 
     deleteAllNotificationController,
-    markNotificationAsReadController, } = require('../controllers/userController');
+    markAllNotificationAsReadController, } = require('../controllers/userController');
 
 // Send Notification through submitting availability
 router.post('/', authMiddleware, submitAvailabilityController);
@@ -17,6 +17,6 @@ router.get('/get-all-notifications', authMiddleware, getAllNotificationControlle
 router.delete('/delete-all-notifications', authMiddleware, deleteAllNotificationController);
 
 // Mark Notification As Read
-// router.put('/', authMiddleware, markNotificationAsReadController);
+router.put('/mark-all-notification-as-read', authMiddleware, markAllNotificationAsReadController);
 
 module.exports = router;

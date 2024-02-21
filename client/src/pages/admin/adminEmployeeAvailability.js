@@ -80,17 +80,14 @@ const AdminEmployeeAvailability = () => {
         return acc;
       }, {});
   
-      Object.keys(byEmployee).forEach(name => {
-        const sortedAvailabilities = byEmployee[name].slice().sort((a, b) => {
-          const dateA = new Date(a.date);
-          const dateB = new Date(b.date);
-          return sortOrder === 'earliest' ? dateA - dateB : dateB - dateA;
-        });
+      Object.entries(byEmployee)
+        .sort(([name1], [name2]) => name1.localeCompare(name2))
+        .forEach(([name, availabilities]) => {
   
         items.push({
           label: name,
           key: name,
-          children: sortedAvailabilities.map((availability, index) => (
+          children: availabilities.map((availability, index) => (
             <Card key={index}>
               Date: {formatDateWithDayOfWeek(availability.date)} <br />
               Start Time: {formatTime(availability.starttime)} <br />

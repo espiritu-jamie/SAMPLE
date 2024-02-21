@@ -3,8 +3,9 @@ const colors = require("colors");
 const morgan = require("morgan"); // Corrected typo from 'moragan' to 'morgan'
 const dotenv = require("dotenv");
 const userRoutes = require('./routes/userRoute');
-const availabilityRoutes = require('./routes/availabilityRoute'); // Add this line
-const notificationRoutes = require('./routes/notificationRoute'); // Add this line
+const availabilityRoutes = require('./routes/availabilityRoute'); 
+const notificationRoutes = require('./routes/notificationRoute'); 
+const appointmentRoutes = require('./routes/appointmentRoute');
 const connectDb = require("./config/connectDb");
 const path = require("path");
 
@@ -19,8 +20,9 @@ app.use(morgan("dev")); // Corrected typo
 
 // Routes
 app.use("/api/user", userRoutes);
-app.use("/api/availability", availabilityRoutes); // Use your availability routes
-app.use("/api/notification", notificationRoutes); // Use your notification routes
+app.use("/api/availability", availabilityRoutes); 
+app.use("/api/notification", notificationRoutes); 
+app.use("/api/appointment", appointmentRoutes);
 
 // Static files
 app.use(express.static(path.join(__dirname, "./client/build")));

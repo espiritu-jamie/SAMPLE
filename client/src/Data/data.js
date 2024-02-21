@@ -31,7 +31,7 @@ export const adminMenu = [
   },
   {
     name: "All Appointments",
-    path: "/all-appointments",
+    path: "/admin-all-appointments",
     icon: "fa-solid fa-calendar",
   }
 ];

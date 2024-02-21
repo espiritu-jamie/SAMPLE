@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoute";
 import PublicRoute from "./components/PublicRoute";
 import Spinner from "./components/Spinner";
-import Appointments from "./pages/Appointments";
+import AdminAllAppointments from "./pages/admin/adminAllAppointments";
 
 import HomePage from "./pages/HomePage";
 import Login from "./pages/Login";
@@ -60,10 +60,10 @@ function App() {
             />         
             
            <Route
-              path="/appointments"
+              path="/admin-all-appointments"
               element={
                 <ProtectedRoute>
-                  <Appointments />
+                  <AdminAllAppointments />
                 </ProtectedRoute>
               }
             />

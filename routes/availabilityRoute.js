@@ -5,8 +5,8 @@ const router = express.Router();
 const {
     submitAvailabilityController,
     getAllAvailabilityController,
-    deleteAvailabilityController
-    } = require('../controllers/userController');
+    deleteAvailabilityController,
+    } = require('../controllers/availabilityController');
 
 // Submitting Availability (for employees)
 router.post('/', authMiddleware, submitAvailabilityController);

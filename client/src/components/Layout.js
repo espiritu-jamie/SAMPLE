@@ -3,7 +3,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import "../styles/LayoutStyles.css";
-import { adminMenu, employeeMenu } from "./../Data/data";
+import { adminMenu, employeeMenu, userMenu } from "./../Data/data";
 
 
 const profileMenuItem = {
@@ -23,36 +23,16 @@ const Layout = ({ children }) => {
     message.success("Logout Successfully");
     navigate("/login");
   };
-  // =========== doctor menu ===============
-  const doctorMenu = [
-    {
-      name: "Home",
-      path: "/",
-      icon: "fa-solid fa-house",
-    },
-    {
-      name: "Appointments",
-      path: "/doctor-appointments",
-      icon: "fa-solid fa-list",
-    },
 
-    {
-      name: "Profile",
-      path: `/doctor/profile/${user?._id}`,
-      icon: "fa-solid fa-user",
-    },
-  ];
-  // =========== doctor menu ===============
 
   // rendering menu list
 
-const SidebarMenu =
-    user?.userRole === "admin"
-      ? [...adminMenu, profileMenuItem] // Add profile menu item to admin menu
-      : user?.userRole === "employee"
-      ? [...employeeMenu, profileMenuItem] // Add profile menu item to employee menu
-      : [profileMenuItem]; // For other roles, show only the profile menu
-
+  const SidebarMenu =
+  user?.userRole === "admin"
+    ? adminMenu.filter((menu) => menu.name !== "Profile")
+    : user?.userRole === "employee"
+    ? employeeMenu.filter((menu) => menu.name !== "Profile")
+    : userMenu;
 
   return (
     <>

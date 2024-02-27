@@ -1,15 +1,11 @@
-// availabilityModel.js
+// appointmentModel.js
 const mongoose = require('mongoose');
 
-const availabilitySchema = new mongoose.Schema({
+const appointmentSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true,
-  },
-  name: {
-    type: String,
-    ref: 'User',
   },
   date: {
     type: Date,
@@ -23,11 +19,22 @@ const availabilitySchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  phoneNumber: {
+    type: String,
+    required: true,
+  },
+  address: {
+    type: String,
+    required: true,
+  },
+  specialInstructions: {
+    type: String,
+  },
   createdAt: {
     type: Date,
     default: Date.now,
   },
 });
 
-const Availability = mongoose.model('Availability', availabilitySchema);
-module.exports = Availability;
+const Appointment = mongoose.model('Appointment', appointmentSchema);
+module.exports = Appointment;

@@ -1,9 +1,7 @@
 const bcrypt = require("bcryptjs");
 const userModel = require('../models/userModel');
 const jwt = require("jsonwebtoken");
-const moment = require("moment");
-const Availability = require("../models/availabilityModel");
-const Notification = require("../models/notificationModel");
+
 
 // login callback
 const loginController = async (req, res) => {

@@ -5,8 +5,8 @@ const { getUserRole } = require("../utils/userUtils");
 
 // Function to submit a new appointment
 const submitAppointmentController = async (req, res) => {
-  const { date, starttime, endtime, phoneNumber, address, specialInstructions } = req.body;
-  const userId = req.user._id; // Assuming the user is attached to the request by the auth middleware
+  const { date, starttime, endtime, phoneNumber, address, specialInstructions, userId } = req.body;
+  
 
   try {
     const newAppointment = new Appointment({

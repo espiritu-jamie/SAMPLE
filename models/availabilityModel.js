@@ -7,6 +7,10 @@ const availabilitySchema = new mongoose.Schema({
     ref: 'User',
     required: true,
   },
+  name: {
+    type: String,
+    ref: 'User',
+  },
   date: {
     type: Date,
     required: true,

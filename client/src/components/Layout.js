@@ -3,7 +3,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import "../styles/LayoutStyles.css";
-import { adminMenu, employeeMenu } from "./../Data/data";
+import { adminMenu, employeeMenu, userMenu } from "./../Data/data";
 
 const Layout = ({ children }) => {
   const { user } = useSelector((state) => state.user);
@@ -16,26 +16,11 @@ const Layout = ({ children }) => {
     message.success("Logout Successfully");
     navigate("/login");
   };
-  // =========== doctor menu ===============
-  const doctorMenu = [
-    {
-      name: "Home",
-      path: "/",
-      icon: "fa-solid fa-house",
-    },
-    {
-      name: "Appointments",
-      path: "/doctor-appointments",
-      icon: "fa-solid fa-list",
-    },
+  const handleFront = () => {
+    message.success("Logout Successfully");
+    navigate("/front");
+  };
 
-    {
-      name: "Profile",
-      path: `/doctor/profile/${user?._id}`,
-      icon: "fa-solid fa-user",
-    },
-  ];
-  // =========== doctor menu ===============
 
   // rendering menu list
 
@@ -44,7 +29,7 @@ const Layout = ({ children }) => {
     ? adminMenu.filter((menu) => menu.name !== "Profile")
     : user?.userRole === "employee"
     ? employeeMenu.filter((menu) => menu.name !== "Profile")
-    : doctorMenu;
+    : userMenu;
 
   return (
     <>
@@ -71,6 +56,10 @@ const Layout = ({ children }) => {
               <div className="menu-item" onClick={handleLogout}>
                 <i className="fa-solid fa-right-from-bracket"></i>
                 <Link to="/login">Logout</Link>
+              </div>
+              <div className="menu-item" onClick={handleFront}>
+                <i className="fa-solid fa-right-from-bracket"></i>
+                <Link to="/Front">Front</Link>
               </div>
             </div>
           </div>

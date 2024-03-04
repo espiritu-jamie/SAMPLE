@@ -5,10 +5,12 @@ const authMiddleware = require('../middlewares/authMiddleware');
 const {
     loginController,
     registerController,
-    authController,
-    getAllNotificationController,
-    deleteAllNotificationController
+    authController
 } = require('../controllers/userController');
+const { 
+    getAllNotificationController, 
+    deleteAllNotificationController 
+} = require('../controllers/notificationController');
 
 // User Registration
 router.post('/register', registerController);

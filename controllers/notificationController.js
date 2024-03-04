@@ -87,4 +87,65 @@ const sendNotificationController = async (userId, type, message, data) => {
     }
   };
 
-module.exports = { sendNotificationController, getAllNotificationController, deleteAllNotificationController, markAllNotificationAsReadController };
+// Mark notification as read
+const markNotificationAsReadController = async (req, res) => {
+  try {
+      const notificationId = req.params.notificationId;
+      const notification = await Notification.findByIdAndUpdate(notificationId, { $set: { isRead: true } }, { new: true });
+
+      if (!notification) {
+          return res.status(404).json({
+              success: false,
+              message: "Notification not found",
+          });
+      }
+
+      res.status(200).json({
+          success: true,
+          message: "Notification marked as read",
+          data: notification,
+      });
+  } catch (error) {
+      console.log("Error marking notification as read:", error);
+      res.status(500).json({
+          success: false,
+          message: "Error marking notification as read",
+      });
+  }
+};
+
+// Mark notification as unread
+const markNotificationAsUnreadController = async (req, res) => {
+  try {
+      const notificationId = req.params.notificationId;
+      const notification = await Notification.findByIdAndUpdate(notificationId, { $set: { isRead: false } }, { new: true });
+
+      if (!notification) {
+          return res.status(404).json({
+              success: false,
+              message: "Notification not found",
+          });
+      }
+
+      res.status(200).json({
+          success: true,
+          message: "Notification marked as unread",
+          data: notification,
+      });
+  } catch (error) {
+      console.log("Error marking notification as unread:", error);
+      res.status(500).json({
+          success: false,
+          message: "Error marking notification as unread",
+      });
+  }
+};
+
+module.exports = {
+  sendNotificationController,
+  getAllNotificationController,
+  deleteAllNotificationController,
+  markAllNotificationAsReadController,
+  markNotificationAsReadController,
+  markNotificationAsUnreadController,
+};

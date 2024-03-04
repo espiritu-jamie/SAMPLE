@@ -11,18 +11,17 @@ const MarkNotificationButton = ({ notificationId, markAsRead, onMarkSuccess }) =
     try {
       dispatch(showLoading());
       const response = await axios.put(
-        `/api/notification/${notificationId}`,
-        { isRead: markAsRead },
+        `/api/notification/${markAsRead ? 'mark-notification-as-read' : 'mark-notification-as-unread'}/${notificationId}`,
+        null,
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`, // Assuming token-based authentication
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         }
       );
       dispatch(hideLoading());
       if (response.status === 200) {
-        const action = markAsRead ? 'marked as read' : 'marked as unread';
-        message.success(`Notification ${action} successfully`);
+        message.success(`Notification ${markAsRead ? 'marked as read' : 'marked as unread'} successfully`);
         onMarkSuccess(); // Callback to refresh the notification list or update UI accordingly
       } else {
         message.error('Failed to mark notification');

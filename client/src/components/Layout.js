@@ -18,7 +18,7 @@ const Layout = ({ children }) => {
   };
   const handleFront = () => {
     message.success("Logout Successfully");
-    navigate("/front");
+    navigate("/Front");
   };
 
 

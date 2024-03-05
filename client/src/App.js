@@ -7,6 +7,7 @@ import AdminAllAppointments from "./pages/admin/adminAllAppointments";
 
 import HomePage from "./pages/HomePage";
 import Login from "./pages/Login";
+import Front from "./pages/Front"
 import NotificationPage from "./pages/NotificationPage";
 import Register from "./pages/Register";
 import EmployeeAvailabilities from "./pages/employee/EmployeeAvailabilities";
@@ -84,6 +85,21 @@ function App() {
                 </PublicRoute>
               }
             />
+            <Route
+              path="/Front"
+              element={
+                <ProtectedRoute>
+                  <Front />
+                </ProtectedRoute>
+              }
+              /><Route
+              path="/book-now"
+              element={
+                <PublicRoute>
+                  <Login />
+                </PublicRoute>
+              }
+              />
             <Route
               path="/register"
               element={

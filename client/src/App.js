@@ -4,7 +4,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import PublicRoute from "./components/PublicRoute";
 import Spinner from "./components/Spinner";
 import AdminAllAppointments from "./pages/admin/adminAllAppointments";
-
+import Front from "./pages/Front"
 import HomePage from "./pages/HomePage";
 import Login from "./pages/Login";
 import NotificationPage from "./pages/NotificationPage";
@@ -14,6 +14,7 @@ import AdminEmployeeAvailability from "./pages/admin/adminEmployeeAvailability";
 
 
 import EnterAvailabilityPage from "./pages/employee/EnterAvailability";
+
 
 
 function App() {
@@ -84,6 +85,14 @@ function App() {
                 </PublicRoute>
               }
             />
+            <Route
+              path="/Front"
+              element={
+                <ProtectedRoute>
+                  <Front />
+                </ProtectedRoute>
+              }
+              />
             <Route
               path="/register"
               element={

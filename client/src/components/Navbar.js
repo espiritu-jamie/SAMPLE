@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import login from "../App" 
-import { AiOutlineMenu } from "react-icons/ai";
+//import { AiOutlineMenu } from "react-icons/ai";
 
 const Navbar = () => {
   return (
@@ -23,7 +23,7 @@ const Navbar = () => {
           </button></li>
         </ul>
 
-        <AiOutlineMenu className="md:hidden text-accent" size={30} />
+       
       </div>
     </nav>
   );

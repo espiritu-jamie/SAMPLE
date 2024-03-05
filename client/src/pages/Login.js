@@ -64,7 +64,7 @@ import { setUser } from "../redux/features/userSlice";
 
 const Login = () => {
   const dispatch = useDispatch();
-   
+  const navigate = useNavigate();
   
   // Submit for Login
   const submitHandler = async (values) => {

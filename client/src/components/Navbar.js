@@ -27,7 +27,7 @@ const Navbar = () => {
           </button></li>
         </ul>
 
-        <AiOutlineMenu className="md:hidden text-accent" size={30} />
+       
       </div>
     </nav>
   );

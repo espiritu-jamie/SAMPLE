@@ -36,4 +36,6 @@ router.put('/update-profile', authMiddleware, updateprofilecontroller);
 // Route to view user profile
 router.get('/view-profile/:userId', authMiddleware, viewprofilecontroller);
 
+
+
 module.exports = router;

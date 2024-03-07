@@ -40,7 +40,7 @@ const sendNotificationController = async (userId, type, message, data) => {
   };
   
   
-  // delete notifications
+  delete notifications
   const deleteAllNotificationController = async (req, res) => {
     try {
       const user = await userModel.findOne({ _id: req.body.userId });

@@ -25,11 +25,11 @@ const Layout = ({ children }) => {
 
   const SidebarMenu =
   user?.userRole === "admin"
-    ? adminMenu
+    ? adminMenu.filter((menu) => menu.name !== "Profile")
     : user?.userRole === "employee"
-    ? employeeMenu
+    ? employeeMenu.filter((menu) => menu.name !== "Profile")
     : userMenu;
-    
+
   return (
     <>
       <div className={`main`}>

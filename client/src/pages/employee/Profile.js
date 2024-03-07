@@ -1,94 +1,85 @@
-// import React, { useState, useEffect } from "react";
-// import { Form, Input, message, Button } from "antd";
-// import axios from "axios";
-// import Layout from "../../components/Layout";
+// Profile.js
+import React, { useState, useEffect } from "react";
+import { Form, Input, message, Button } from "antd";
+import axios from "axios";
+import Layout from "../../components/Layout";
 
+const Profile = () => {
+  const [form] = Form.useForm();
+  const [profile, setProfile] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-// const Profile = ({ user }) => {
-//   const [formData, setFormData] = useState({
-//     firstName: "",
-//     lastName: "",
-//     address: "",
-//     phoneNumber: "",
-//   });
+  useEffect(() => {
+    axios.get("/view-profile")
+      .then((response) => {
+        setProfile(response.data.userProfile);
+        setLoading(false);
+      })
+      .catch((error) => {
+        setError(error.message);
+        setLoading(false);
+      });
+  }, []);
 
-//   useEffect(() => {
-//     loadUserProfile();
-//   }, []);
+  const handleInputChange = (e) => {
+    setProfile({
+      ...profile,
+      [e.target.name]: e.target.value,
+    });
+  };
 
-//   const loadUserProfile = async () => {
-//     try {
-//       const token = localStorage.getItem("token");
-//       const headers = {
-//         Authorization: `Bearer ${token}`,
-//       };
+  const handleSubmit = () => {
+    axios.put("/update-profile", profile)
+      .then(() => {
+        message.success("Profile updated successfully");
+      })
+      .catch((error) => {
+        message.error("Failed to update profile");
+      });
+  };
 
-//       const response = await axios.get(`/api/user/view-profile/${user.userId}`, { headers });
-//       const userProfile = response.data;
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
 
-//       setFormData({
-//         firstName: userProfile.firstName,
-//         lastName: userProfile.lastName,
-//         address: userProfile.address,
-//         phoneNumber: userProfile.phoneNumber,
-//       });
-//     } catch (error) {
-//       console.error("Error loading profile:", error);
-//       message.error("Something went wrong");
-//     }
-//   };
+  return (
+    <Layout>
+      <div className="profile-container">
+        <h2>Profile</h2>
+        <Form
+          form={form}
+          onFinish={handleSubmit}
+          initialValues={profile}
+          layout="vertical"
+        >
+          <Form.Item label="First Name" name="firstName">
+            <Input onChange={handleInputChange} />
+          </Form.Item>
+          <Form.Item label="Last Name" name="lastName">
+            <Input onChange={handleInputChange} />
+          </Form.Item>
+          <Form.Item label="Street Address" name={["address", "streetAddress"]}>
+            <Input onChange={handleInputChange} />
+          </Form.Item>
+          <Form.Item label="City" name={["address", "city"]}>
+            <Input onChange={handleInputChange} />
+          </Form.Item>
+          <Form.Item label="State" name={["address", "state"]}>
+            <Input onChange={handleInputChange} />
+          </Form.Item>
+          <Form.Item label="Postal Code" name={["address", "postalCode"]}>
+            <Input onChange={handleInputChange} />
+          </Form.Item>
+          <Form.Item label="Phone Number" name="phoneNumber">
+            <Input onChange={handleInputChange} />
+          </Form.Item>
+          <Form.Item>
+            <Button type="primary" htmlType="submit">Save</Button>
+          </Form.Item>
+        </Form>
+      </div>
+    </Layout>
+  );
+};
 
-//   const submitHandler = async () => {
-//     try {
-//       const token = localStorage.getItem("token");
-//       const headers = {
-//         Authorization: `Bearer ${token}`,
-//       };
-
-//       const updatedUser = await axios.put(`/api/user/update-profile`, formData, { headers });
-//       message.success("Profile updated successfully");
-//     } catch (error) {
-//       console.error("Error updating profile:", error);
-//       message.error("Something went wrong");
-//     }
-//   };
-//   const handleChange = (e) => {
-//     const { name, value } = e.target;
-//     setFormData((prevData) => ({
-//       ...prevData,
-//       [name]: value,
-//     }));
-//   };
-
-//   return (
-//     <Layout>
-//     <div className="profile-page">
-//       <h1>Profile</h1>
-//       <div>
-//         <h2>Current Profile Information:</h2>
-//         <p>First Name: {formData.firstName}</p>
-//         <p>Last Name: {formData.lastName}</p>
-//         <p>Address: {formData.address}</p>
-//         <p>Phone Number: {formData.phoneNumber}</p>
-//       </div>
-//       <Form layout="vertical" onFinish={submitHandler}>
-//         <Form.Item label="First Name" name="firstName" initialValue={formData.firstName}>
-//           <Input name="firstName" onChange={handleChange} />
-//         </Form.Item>
-//         <Form.Item label="Last Name" name="lastName" initialValue={formData.lastName}>
-//           <Input name="lastName" onChange={handleChange} />
-//         </Form.Item>
-//         <Form.Item label="Address" name="address" initialValue={formData.address}>
-//           <Input name="address" onChange={handleChange} />
-//         </Form.Item>
-//         <Form.Item label="Phone Number" name="phoneNumber" initialValue={formData.phoneNumber}>
-//           <Input name="phoneNumber" onChange={handleChange} />
-//         </Form.Item>
-//         <Button type="primary" htmlType="submit">Update Profile</Button>
-//       </Form>
-//     </div>
-//     </Layout>
-//   );
-// };
-
-// export default Profile;
+export default Profile;

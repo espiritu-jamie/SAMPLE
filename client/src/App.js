@@ -12,6 +12,9 @@ import NotificationPage from "./pages/NotificationPage";
 import Register from "./pages/Register";
 import EmployeeAvailabilities from "./pages/employee/EmployeeAvailabilities";
 import AdminEmployeeAvailability from "./pages/admin/adminEmployeeAvailability";
+import AdminScheduleManagement from "./pages/admin/adminScheduleManagement";
+import EmployeeShiftsPage from "./pages/employee/EmployeeShifts";
+
 
 
 import EnterAvailabilityPage from "./pages/employee/EnterAvailability";
@@ -45,6 +48,14 @@ function App() {
               }
             />
             <Route
+              path="/my-schedule"
+              element={
+                <ProtectedRoute>
+                  <EmployeeShiftsPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
               path="/my-availability"
               element={
                 <ProtectedRoute>
@@ -59,7 +70,15 @@ function App() {
                   <AdminEmployeeAvailability />
                 </ProtectedRoute>
               }
-            />         
+            />    
+            <Route
+              path="/admin-schedule-management"
+              element={
+                <ProtectedRoute>
+                  <AdminScheduleManagement />
+                </ProtectedRoute>
+              }
+            />     
             
            <Route
               path="/admin-all-appointments"

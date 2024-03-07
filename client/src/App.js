@@ -31,8 +31,14 @@ function App() {
           <Spinner />
         ) : (
           <Routes>
+            <Route 
+            path="/" 
+            element={
+            <Front />
+            } 
+            />
             <Route
-              path="/"
+              path="/home"
               element={
                 <ProtectedRoute>
                   <HomePage />

@@ -105,7 +105,7 @@ const submitAvailabilityController = async (req, res) => {
   
   const deleteAvailabilityController = async (req, res) => {
     try {
-        const userId = req.body.userd; // Using userId from req.body as set by authMiddleware
+        const userId = req.body.userId; // Using userId from req.body as set by authMiddleware
         const availabilityId = req.params.id; // The ID of the availability to delete
   
         // Find the availability to ensure it exists and to check ownership

@@ -29,9 +29,9 @@ const Layout = ({ children }) => {
 
   const SidebarMenu =
   user?.userRole === "admin"
-    ? adminMenu.filter((menu) => menu.name !== "Profile")
+    ? adminMenu.filter((menu) => menu.name !== "profile")
     : user?.userRole === "employee"
-    ? employeeMenu.filter((menu) => menu.name !== "Profile")
+    ? employeeMenu.filter((menu) => menu.name !== "profile")
     : userMenu;
 
   return (

@@ -14,8 +14,9 @@ import EmployeeAvailabilities from "./pages/employee/EmployeeAvailabilities";
 import AdminEmployeeAvailability from "./pages/admin/adminEmployeeAvailability";
 
 
+
 import EnterAvailabilityPage from "./pages/employee/EnterAvailability";
-import Profile from './pages/employee/Profile'; 
+import Profile from "./pages/employee/Profile";
 
 
 

@@ -65,7 +65,7 @@ const userMongooseSchema = new mongoose.Schema({
   },
 });
 
-
+// Validation schema for Joi
 const userSchema = Joi.object({
   userId: Joi.string(),
   name: Joi.string().min(2).max(50).required(),
@@ -104,9 +104,11 @@ const userSchema = Joi.object({
   })),
 });
 
+// Async validation function
 userMongooseSchema.validateUser = async function (user) {
   return userSchema.validateAsync(user);
 };
 
+// Exporting the User model
 const User = mongoose.model('User', userMongooseSchema);
 module.exports = User;

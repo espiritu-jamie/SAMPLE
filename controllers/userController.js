@@ -55,34 +55,64 @@ const registerController = async (req, res) => {
 
 const viewprofilecontroller = async (req, res) => {
   try {
-    const user = req.user; // Assuming user data is stored in the request object
+    // Check if user object is available in the request
+    if (!req.user) {
+      return res.status(401).json({ success: false, message: 'User not authenticated' });
+    }
+
+    // Extract user information from the request
+    const { firstName, lastName, email, address, phoneNumber } = req.user;
+
+    // Construct the user profile object
     const userProfile = {
-      firstName: user.firstName,
-      lastName: user.lastName,
-      address: user.address,
-      phoneNumber: user.phoneNumber
+      firstName,
+      lastName,
+      email,
+      address,
+      phoneNumber
     };
+
+    // Send the user profile as the response
     res.status(200).json({ success: true, userProfile });
   } catch (error) {
+    // Handle errors
+    console.error('Error viewing profile:', error);
     res.status(500).json({ success: false, message: 'Error viewing profile', error });
   }
 };
 
+// updateprofilecontroller
 const updateprofilecontroller = async (req, res) => {
   try {
-    const { userId, firstName, lastName, address, phoneNumber } = req.body;
+    const userId = req.body.userId; // Extract userId from URL parameters
+    const { firstName, lastName, email, address, phoneNumber, postalCode } = req.body;
+
+    // Check if all required fields are provided
+    if (!firstName || !lastName || !email || !address || !phoneNumber || !postalCode) {
+      return res.status(400).send({ success: false, message: 'Missing required fields' });
+    }
+
+    // Find the user by userId
     const user = await userModel.findById(userId);
     if (!user) {
-      return res.status(404).send('User not found');
+      return res.status(404).send({ success: false, message: 'User not found' });
     }
-    user.firstName = firstName;
-    user.lastName = lastName;
+
+    // Update user profile fields
+    user.name = `${firstName} ${lastName}`;
+    user.email = email;
     user.address = address;
     user.phoneNumber = phoneNumber;
+    user.address.postalCode = postalCode; // Ensure postalCode is updated separately
+
+    // Save changes to the user profile
     await user.save();
+
+    // Send success response
     res.status(200).send({ success: true, message: 'Profile updated successfully' });
   } catch (error) {
-    res.status(500).send({ success: false, message: 'Error updating profile', error });
+    console.error('Error updating profile:', error);
+    res.status(500).send({ success: false, message: 'Error updating profile', error: error.message });
   }
 };
 

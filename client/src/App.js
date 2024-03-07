@@ -12,6 +12,7 @@ import Register from "./pages/Register";
 import EmployeeAvailabilities from "./pages/employee/EmployeeAvailabilities";
 import AdminEmployeeAvailability from "./pages/admin/adminEmployeeAvailability";
 import AdminScheduleManagement from "./pages/admin/adminScheduleManagement";
+import EmployeeShiftsPage from "./pages/employee/EmployeeShifts";
 
 
 
@@ -42,6 +43,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <EnterAvailabilityPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/my-schedule"
+              element={
+                <ProtectedRoute>
+                  <EmployeeShiftsPage />
                 </ProtectedRoute>
               }
             />

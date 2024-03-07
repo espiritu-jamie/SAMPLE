@@ -108,7 +108,6 @@ const getAvailableEmployeesForAppointmentController = async (req, res) => {
 
 
 
-
 const autoAssignAppointments = async (req, res) => {
   try {
     // Fetch unassigned appointments
@@ -142,34 +141,69 @@ const assignEmployeesToAppointmentController = async (req, res) => {
   const { appointmentId, assignedEmployees } = req.body;
 
   try {
-      // Fetch the appointment and update it with assigned employees
-      const appointment = await Appointment.findById(appointmentId);
+    const appointment = await Appointment.findById(appointmentId);
+    if (!appointment) {
+      return res.status(404).json({ success: false, message: "Appointment not found" });
+    }
+    
+    appointment.assignedEmployees = assignedEmployees;
+    // Update status to 'confirmed' when at least one employee is assigned
+    if (assignedEmployees.length > 0) {
+      appointment.status = 'confirmed';
+    }
+    await appointment.save();
 
-      if (!appointment) {
-          return res.status(404).json({
-              success: false,
-              message: "Appointment not found",
-          });
-      }
-
-      // Assign employees to the appointment
-      appointment.assignedEmployees = assignedEmployees;
-      appointment.isConfirmed = true;
-      await appointment.save();
-
-      return res.status(200).json({
-          success: true,
-          message: "Employees assigned to appointment successfully",
-          data: appointment,
-      });
+    return res.status(200).json({ success: true, message: "Employees assigned to appointment successfully", data: appointment });
   } catch (error) {
-      console.error("Error assigning employees to appointment:", error);
-      return res.status(500).json({
-          success: false,
-          message: `Error assigning employees to appointment: ${error.message}`,
-      });
+    console.error("Error assigning employees to appointment:", error);
+    return res.status(500).json({ success: false, message: `Error assigning employees to appointment: ${error.message}` });
   }
 };
+
+const cancelAppointmentController = async (req, res) => {
+  const { appointmentId } = req.params; // Assuming appointmentId is passed as URL parameter
+
+  try {
+    const appointment = await Appointment.findById(appointmentId);
+    if (!appointment) {
+      return res.status(404).json({ success: false, message: "Appointment not found" });
+    }
+
+    appointment.status = 'cancelled';
+    await appointment.save();
+
+    return res.status(200).json({ success: true, message: "Appointment cancelled successfully", data: appointment });
+  } catch (error) {
+    console.error("Error cancelling appointment:", error);
+    return res.status(500).json({ success: false, message: `Error cancelling appointment: ${error.message}` });
+  }
+};
+
+// Get confirmed appointments for the logged-in employee
+const getConfirmedAppointmentsForEmployee = async (req, res) => {
+  const employeeId = req.user._id; // Assuming req.user is populated with the authenticated user's information
+
+  try {
+    const confirmedAppointments = await Appointment.find({
+      assignedEmployees: employeeId,
+      status: 'confirmed'
+    }).populate('userId', 'name').populate('assignedEmployees', 'name');
+
+    return res.status(200).json({
+      success: true,
+      data: confirmedAppointments,
+    });
+  } catch (error) {
+    console.error("Error fetching confirmed appointments:", error);
+    return res.status(500).json({
+      success: false,
+      message: `Error fetching confirmed appointments: ${error.message}`,
+    });
+  }
+};
+
+
+
 
 
 
@@ -181,4 +215,6 @@ module.exports = {
   getAvailableEmployeesForAppointmentController,
   autoAssignAppointments,
   assignEmployeesToAppointmentController,
+  cancelAppointmentController,
+  getConfirmedAppointmentsForEmployee,
 };

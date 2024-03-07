@@ -5,6 +5,11 @@ export const employeeMenu = [
     icon: "fa-solid fa-house",
   },
   {
+    name: "My Schedule",
+    path: "/my-schedule",
+    icon: "fa-solid fa-calendar",
+  },
+  {
     name: "My Availability",
     path: "/my-availability",
     icon: "fa-solid fa-list",

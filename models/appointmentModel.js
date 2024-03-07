@@ -38,9 +38,10 @@ const appointmentSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
   }],
-  isConfirmed: {
-    type: Boolean,
-    default: false
+  status: {
+    type: String,
+    enum: ['pending', 'confirmed', 'cancelled'],
+    default: 'pending',
   },
 });
 

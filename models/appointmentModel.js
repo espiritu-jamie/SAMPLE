@@ -34,6 +34,14 @@ const appointmentSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  assignedEmployees: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  }],
+  isConfirmed: {
+    type: Boolean,
+    default: false
+  },
 });
 
 const Appointment = mongoose.model('Appointment', appointmentSchema);

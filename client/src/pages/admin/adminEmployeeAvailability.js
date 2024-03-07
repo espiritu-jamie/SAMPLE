@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Card, Tabs, Select } from 'antd';
+import { Card, Tabs, Select, Button } from 'antd';
 import Layout from '../../components/Layout';
+import MyCalendar from '../../components/MyCalendar';
 
 const { Option } = Select;
 
@@ -9,6 +10,7 @@ const AdminEmployeeAvailability = () => {
   const [availabilities, setAvailabilities] = useState([]);
   const [sortOrder, setSortOrder] = useState('earliest');
   const [sortMode, setSortMode] = useState('byEmployee'); // Default sort mode
+  const [calendarEvents, setCalendarEvents] = useState([]);
 
   useEffect(() => {
     const fetchAvailabilities = async () => {
@@ -127,6 +129,7 @@ const AdminEmployeeAvailability = () => {
           <Option value="earliest">Earliest First</Option>
           <Option value="latest">Latest First</Option>
         </Select>
+        <MyCalendar events={calendarEvents}/>
         <Tabs items={tabsItems()} />
       </div>
     </Layout>

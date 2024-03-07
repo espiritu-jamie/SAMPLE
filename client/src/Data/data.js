@@ -28,7 +28,11 @@ export const adminMenu = [
     path: "/",
     icon: "fa-solid fa-house",
   },
-
+  {
+    name: "Schedule Management",
+    path: "/admin-schedule-management",
+    icon: "fa-solid fa-calendar-plus",
+  },
   {
     name: "Employee Availability",
     path: "/admin-employee-availability",

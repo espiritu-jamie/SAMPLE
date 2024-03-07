@@ -14,6 +14,7 @@ import AdminEmployeeAvailability from "./pages/admin/adminEmployeeAvailability";
 
 
 import EnterAvailabilityPage from "./pages/employee/EnterAvailability";
+import Profile from './pages/employee/Profile'; 
 
 
 function App() {
@@ -90,6 +91,14 @@ function App() {
                 <PublicRoute>
                   <Register />
                 </PublicRoute>
+              }
+            />
+              <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
               }
             />
           </Routes>

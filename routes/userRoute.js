@@ -5,7 +5,10 @@ const authMiddleware = require('../middlewares/authMiddleware');
 const {
     loginController,
     registerController,
-    authController
+    authController,
+    viewprofilecontroller,
+    updateprofilecontroller,
+    deleteAllNotificationController
 } = require('../controllers/userController');
 const { 
     getAllNotificationController, 
@@ -26,5 +29,11 @@ router.get('/get-all-notifications', authMiddleware, getAllNotificationControlle
 
 // Delete All Notifications for a User
 router.post('/delete-all-notifications', authMiddleware, deleteAllNotificationController);
+
+// Route to update user profile
+router.put('/update-profile', authMiddleware, updateprofilecontroller);
+
+// Route to view user profile
+router.get('/view-profile/:userId', authMiddleware, viewprofilecontroller);
 
 module.exports = router;

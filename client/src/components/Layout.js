@@ -6,11 +6,7 @@ import "../styles/LayoutStyles.css";
 import { adminMenu, employeeMenu, userMenu } from "./../Data/data";
 
 
-const profileMenuItem = {
-  name: "Profile",
-  path: "/pages/Profile", // Update with the correct path for the Profile component
-  icon: "fa-solid fa-user",
-};
+
 
 const Layout = ({ children }) => {
   const { user } = useSelector((state) => state.user);
@@ -29,11 +25,11 @@ const Layout = ({ children }) => {
 
   const SidebarMenu =
   user?.userRole === "admin"
-    ? adminMenu.filter((menu) => menu.name !== "Profile")
+    ? adminMenu
     : user?.userRole === "employee"
-    ? employeeMenu.filter((menu) => menu.name !== "Profile")
+    ? employeeMenu
     : userMenu;
-
+    
   return (
     <>
       <div className={`main`}>

@@ -101,25 +101,27 @@
 // export default AssignmentModal;
 
 import React, { useState, useEffect } from 'react';
-import { Modal, Button, message, Descriptions, Select } from 'antd';
+import { Modal, Button, Descriptions, Select, message } from 'antd';
 import axios from 'axios';
 import moment from 'moment';
 
 const { Option } = Select;
 
-const AssignmentModal = ({ isVisible, onClose, appointment, fetchAppointments, userRole }) => {
-    const [selectedEmployees, setSelectedEmployees] = useState([]);
+const AppointmentDetailsModal = ({ isVisible, onClose, appointment, fetchAppointments, userRole }) => {
     const [availableEmployees, setAvailableEmployees] = useState([]);
+    const [selectedEmployees, setSelectedEmployees] = useState([]);
 
     useEffect(() => {
-        // Reset state when modal is not visible or appointment is not selected
-        if (!isVisible || !appointment?.id) {
+
+        console.log("appointment", appointment);
+        console.log("appointment", appointment._id);
+
+        if (!isVisible || !appointment) {
             setAvailableEmployees([]);
             setSelectedEmployees([]);
             return;
         }
 
-        // For admin, fetch available employees
         if (userRole === 'admin') {
             const fetchAvailableEmployees = async () => {
                 try {
@@ -132,7 +134,6 @@ const AssignmentModal = ({ isVisible, onClose, appointment, fetchAppointments, u
                             endtime: appointment.endtime,
                         },
                     });
-
                     setAvailableEmployees(response.data.availableEmployees || []);
                 } catch (error) {
                     console.error("Failed to fetch available employees", error);
@@ -152,7 +153,7 @@ const AssignmentModal = ({ isVisible, onClose, appointment, fetchAppointments, u
 
         try {
             await axios.post('/api/appointment/assign-employees', {
-                appointmentId: appointment.id,
+                appointmentId: appointment._id,
                 assignedEmployees: selectedEmployees
             }, {
                 headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
@@ -173,16 +174,20 @@ const AssignmentModal = ({ isVisible, onClose, appointment, fetchAppointments, u
             onCancel={onClose}
             footer={[
                 <Button key="back" onClick={onClose}>Close</Button>,
-                ...(userRole === 'admin' ? [<Button key="submit" type="primary" onClick={handleAssign}>Assign</Button>] : [])
+                userRole === 'admin' && <Button key="submit" type="primary" onClick={handleAssign}>Assign</Button>,
             ]}
         >
             <Descriptions bordered column={1}>
-                <Descriptions.Item label="Booked by">{appointment?.name || 'N/A'}</Descriptions.Item>
-                <Descriptions.Item label="Start Time">{appointment?.starttime || 'N/A'}</Descriptions.Item>
-                <Descriptions.Item label="End Time">{appointment?.endtime || 'N/A'}</Descriptions.Item>
+                <Descriptions.Item label="Booked by">{appointment?.userId?.name || 'N/A'}</Descriptions.Item>
+                <Descriptions.Item label="Start Time">
+                    {moment(appointment?.starttime, "HH:mm").isValid() ? moment(appointment?.starttime, "HH:mm").format("hh:mm A") : 'N/A'}
+                </Descriptions.Item>
+                <Descriptions.Item label="End Time">
+                    {moment(appointment?.endtime, "HH:mm").isValid() ? moment(appointment?.endtime, "HH:mm").format("hh:mm A") : 'N/A'}
+                </Descriptions.Item>
                 <Descriptions.Item label="Special Instructions">{appointment?.specialInstructions || 'None'}</Descriptions.Item>
-                <Descriptions.Item label="Phone Number">{appointment?.phoneNumber}</Descriptions.Item>
-                <Descriptions.Item label="Address">{appointment?.address}</Descriptions.Item>
+                <Descriptions.Item label="Phone Number">{appointment?.phoneNumber || 'N/A'}</Descriptions.Item>
+                <Descriptions.Item label="Address">{appointment?.address || 'N/A'}</Descriptions.Item>
             </Descriptions>
             {userRole === 'admin' && (
                 <Select
@@ -202,4 +207,4 @@ const AssignmentModal = ({ isVisible, onClose, appointment, fetchAppointments, u
     );
 };
 
-export default AssignmentModal;
+export default AppointmentDetailsModal;

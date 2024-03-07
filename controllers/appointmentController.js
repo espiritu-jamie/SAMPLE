@@ -181,7 +181,7 @@ const cancelAppointmentController = async (req, res) => {
 
 // Get confirmed appointments for the logged-in employee
 const getConfirmedAppointmentsForEmployee = async (req, res) => {
-  const employeeId = req.user._id; // Assuming req.user is populated with the authenticated user's information
+  const employeeId = req.body.userId; // Assuming req.user is populated with the authenticated user's information
 
   try {
     const confirmedAppointments = await Appointment.find({

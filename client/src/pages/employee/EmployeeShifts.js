@@ -68,6 +68,8 @@ import interactionPlugin from '@fullcalendar/interaction';
 import Layout from '../../components/Layout';
 import AppointmentDetailsModal from '../../components/modal/AppointmentDetailsModal';
 import moment from 'moment';
+import { message } from 'antd';
+
 
 const EmployeeShiftsPage = () => {
     const [confirmedAppointments, setConfirmedAppointments] = useState([]);

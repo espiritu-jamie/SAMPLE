@@ -1,12 +1,13 @@
 import React from 'react';
-import { AiOutlineMenu } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const navigate = useNavigate();
+
   const handleBookNowButtonClick = () => {
-    navigate("/book-now"); // Example navigation to the "/book-now" route
+    navigate("/login"); // Example navigation to the "/book-now" route
   };
+  
   return (
     <nav className="container pt-6">
       <div className="flex justify-between items-center shadow-lg w-auto" >
@@ -22,8 +23,8 @@ const Navbar = () => {
           <li><button className="bg-yellow-600 text-white px-6 py-2 rounded-3xl text-[14px] sm:text-[16px] shadow-lg">
             <a>About Us</a>
           </button></li>
-          <li><button  className="bg-yellow-600 text-white px-6 py-2 rounded-3xl text-[14px] sm:text-[16px] shadow-lg" on onClick={handleBookNowButtonClick}>
-           Book Now!
+          <li><button  className="bg-yellow-600 text-white px-6 py-2 rounded-3xl text-[14px] sm:text-[16px] shadow-lg" onClick={handleBookNowButtonClick}>
+           Login
           </button></li>
         </ul>
 

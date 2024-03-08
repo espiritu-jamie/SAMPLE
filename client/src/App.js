@@ -4,11 +4,10 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import PublicRoute from "./components/PublicRoute";
 import Spinner from "./components/Spinner";
 import AdminAllAppointments from "./pages/admin/adminAllAppointments";
-import Front from "./pages/Front"
+import Front from "./pages/Front";
 import HomePage from "./pages/HomePage";
 import BusinessHome from "./pages/BusinessHome";
 import Login from "./pages/Login";
-import Front from "./pages/Front"
 import NotificationPage from "./pages/NotificationPage";
 import Register from "./pages/Register";
 import EmployeeAvailabilities from "./pages/employee/EmployeeAvailabilities";
@@ -32,10 +31,10 @@ function App() {
         ) : (
           <Routes>
             <Route 
-            path="/" 
-            element={
-            <Front />
-            } 
+              path="/" 
+              element={
+              <Front />
+              } 
             />
             <Route
               path="/home"
@@ -107,9 +106,7 @@ function App() {
             <Route
               path="/login"
               element={
-                <PublicRoute>
                   <Login />
-                </PublicRoute>
               }
             />
             <Route 
@@ -120,22 +117,8 @@ function App() {
               </PublicRoute>
             }
             />
+
             <Route
-              path="/Front"
-              element={
-                <ProtectedRoute>
-                  <Front />
-                </ProtectedRoute>
-              }
-              />
-            <Route
-              path="/Front"
-              element={
-                <ProtectedRoute>
-                  <Front />
-                </ProtectedRoute>
-              }
-              /><Route
               path="/book-now"
               element={
                 <PublicRoute>

@@ -14,6 +14,7 @@ import AdminEmployeeAvailability from "./pages/admin/adminEmployeeAvailability";
 import AdminScheduleManagement from "./pages/admin/adminScheduleManagement";
 import EmployeeShiftsPage from "./pages/employee/EmployeeShifts";
 import EnterAvailabilityPage from "./pages/employee/EnterAvailability";
+import EmployeeAvailabilitySchedule from "./pages/employee/EmployeeAvailabilitySchedule";
 
 
 
@@ -44,10 +45,18 @@ function App() {
               }
             />
             <Route
-              path="/my-schedule"
+              path="/my-shifts"
               element={
                 <ProtectedRoute>
                   <EmployeeShiftsPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/my-schedule"
+              element={
+                <ProtectedRoute>
+                  <EmployeeAvailabilitySchedule />
                 </ProtectedRoute>
               }
             />

@@ -1,6 +1,7 @@
+// client\src\pages\NotificationPage.js
 import { message, Tabs } from "antd";
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
@@ -15,105 +16,88 @@ const NotificationPage = () => {
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.user);
   const [refreshNotifications, setRefreshNotifications] = useState(false);
+  const [activeTab, setActiveTab] = useState("0"); // Initialize active tab to "New"
 
-  
-// handle read notification
-const handleMarkAllRead = async () => {
-  try {
+  useEffect(() => {
+    if (refreshNotifications) {
+      setActiveTab("1"); // Switch to "Read" tab after refreshing notifications
+    }
+  }, [refreshNotifications]);
 
-    dispatch(showLoading());
-
-    const res = await axios.put(
-      "/api/notification/mark-all-notification-as-read",
-      { },
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      }
-    );
-
-    dispatch(hideLoading());
-
-    if (res.data.success) {
-      message.success("All notifications marked as read.");
-
-      setRefreshNotifications(prevState => !prevState);
-
-    } else {
-      message.error(res.data.message);
-      }
-
-  } catch (error) {
+  // handle read notification
+  const handleMarkAllRead = async () => {
+    try {
+      dispatch(showLoading());
+      const res = await axios.put(
+        "/api/notification/mark-all-notification-as-read",
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
       dispatch(hideLoading());
-
-      console.error("Error making notifications as read: ", error);
-
-      message.error("Something went wrong while marking notifications as read.");
-
-  }
-};
-
-
-// handle delete notification
-const handleDeleteAllRead = async () => {
-  try {
-    dispatch(showLoading());
-    const res = await axios.post(
-      "/api/user/delete-all-notifications",
-      {
-        userId: user._id,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
+      if (res.data.success) {
+        message.success("All notifications marked as read.");
+        const updatedUser = {
+          ...user,
+          seennotification: [...user.seennotification, ...user.notification],
+          notification: [],
+        };
+        dispatch(setUser(updatedUser));
+        setRefreshNotifications((prevState) => !prevState);
+      } else {
+        message.error(res.data.message);
       }
-    );
-    dispatch(hideLoading());
-    if (res.data.success) {
-      const updatedNotifications = res.data.notifications || []; // Add a default value of an empty array if the notifications array is undefined
-      const updatedUser = {
-        ...user,
-        notification: updatedNotifications.filter(notification => !notification.isRead),
-        seennotification: updatedNotifications.filter(notification => notification.isRead),
-      };
-      dispatch(setUser(updatedUser));
-      setRefreshNotifications(!refreshNotifications);
-      message.success(res.data.message);
-    } else {
-      message.error(res.data.message);
+    } catch (error) {
+      dispatch(hideLoading());
+      console.error("Error making notifications as read: ", error);
+      message.error("Something went wrong while marking notifications as read.");
     }
-  } catch (error) {
-    dispatch(hideLoading());
-    console.log(error);
-    message.error("Something Went Wrong");
-  }
-};
-
-
-const updateNotificationsInStore = (notifications) => {
-  const updatedUser = {
-    ...user,
-    notification: [],
-    seennotification: [],
   };
-  notifications.forEach((notification) => {
-    if (notification.isRead) {
-      updatedUser.seennotification.push(notification);
-    } else {
-      updatedUser.notification.push(notification);
-    }
-  });
-  dispatch(setUser(updatedUser));
-};
 
+  // handle delete notification
+  const handleDeleteAllRead = async () => {
+    try {
+      dispatch(showLoading());
+      const res = await axios.post(
+        "/api/user/delete-all-notifications",
+        {
+          userId: user._id,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      dispatch(hideLoading());
+      if (res.data.success) {
+        const updatedNotifications = res.data.notifications || [];
+        const updatedUser = {
+          ...user,
+          notification: updatedNotifications.filter(notification => !notification.isRead),
+          seennotification: updatedNotifications.filter(notification => notification.isRead),
+        };
+        dispatch(setUser(updatedUser));
+        setRefreshNotifications(!refreshNotifications);
+        message.success(res.data.message);
+      } else {
+        message.error(res.data.message);
+      }
+    } catch (error) {
+      dispatch(hideLoading());
+      console.error("Error deleting notifications: ", error);
+      message.error("Something went wrong while deleting notifications.");
+    }
+  };
 
   return (
     <Layout>
       <h3 className="p-3 text-center">Notifications</h3>
-      <Tabs>
-        <Tabs.TabPane tab="New" key={0}>
+      <Tabs activeKey={activeTab} onChange={(key) => setActiveTab(key)}>
+        <Tabs.TabPane tab="New" key="0">
           <div className="d-flex justify-content-end">
             <button
               className="p-1 btn btn-warning"
@@ -144,12 +128,12 @@ const updateNotificationsInStore = (notifications) => {
             <p>You have no new notifications.</p>
           )}
         </Tabs.TabPane>
-        <Tabs.TabPane tab="Read" key={1}>
+        <Tabs.TabPane tab="Read" key="1">
           <div className="d-flex justify-content-end">
             <button
               className="p-1 btn btn-danger"
               style={{ cursor: "pointer" }}
-              onClick={handleDeleteAllRead}
+              onClick={handleDeleteAllRead} // Update active tab to "New" after deleting all read notifications
             >
               Delete All Read
             </button>

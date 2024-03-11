@@ -12,6 +12,7 @@ import NotificationPage from "./pages/NotificationPage";
 import Register from "./pages/Register";
 import EmployeeAvailabilities from "./pages/employee/EmployeeAvailabilities";
 import AdminEmployeeAvailability from "./pages/admin/adminEmployeeAvailability";
+import HourTracker from "./pages/admin/adminHourTracker";
 
 
 import EnterAvailabilityPage from "./pages/employee/EnterAvailability";
@@ -65,6 +66,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <AdminAllAppointments />
+                </ProtectedRoute>
+              }
+            />
+            <Route 
+              path="/admin-hour-tracker"
+              element={
+                <ProtectedRoute>
+                  <HourTracker />
                 </ProtectedRoute>
               }
             />

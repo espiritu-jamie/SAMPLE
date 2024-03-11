@@ -13,7 +13,7 @@ export const employeeMenu = [
     name: "Enter Availability",
     path: "/enter-availability",
     icon: "fa-solid fa-calendar-plus",
-  }
+  },
   {
   name: "Profile",
   path: "/pages/Profile", // Update with the correct path for the Profile component
@@ -38,6 +38,11 @@ export const adminMenu = [
     name: "All Appointments",
     path: "/admin-all-appointments",
     icon: "fa-solid fa-calendar",
+  },
+  {
+    name: "Employee Hours",
+    path: "/admin-hour-tracker",
+    icon: "fa-solid fa-list",
   }
 ];
 

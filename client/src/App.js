@@ -18,6 +18,7 @@ import EmployeeShiftsPage from "./pages/employee/EmployeeShifts";
 
 
 import EnterAvailabilityPage from "./pages/employee/EnterAvailability";
+import BookingPage from "./pages/BookingPage";
 
 
 
@@ -34,6 +35,14 @@ function App() {
               path="/" 
               element={
               <Front />
+              } 
+            />
+            <Route 
+              path="/Book" 
+              element={
+                <ProtectedRoute>
+              <BookingPage/>
+              </ProtectedRoute>
               } 
             />
             <Route

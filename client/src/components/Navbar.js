@@ -7,6 +7,9 @@ const Navbar = () => {
   const handleBookNowButtonClick = () => {
     navigate("/login"); // Example navigation to the "/book-now" route
   };
+  const handleBookNowButtonClickBook = () => {
+    navigate("/Book"); // Example navigation to the "/book-now" route
+  };
   
   return (
     <nav className="container pt-6">
@@ -22,6 +25,9 @@ const Navbar = () => {
           </button></li>
           <li><button className="bg-yellow-600 text-white px-6 py-2 rounded-3xl text-[14px] sm:text-[16px] shadow-lg">
             <a>About Us</a>
+          </button></li>
+          <li><button className="bg-yellow-600 text-white px-6 py-2 rounded-3xl text-[14px] sm:text-[16px] shadow-lg" onClick={handleBookNowButtonClickBook}>
+            <a>Book Now</a>
           </button></li>
           <li><button  className="bg-yellow-600 text-white px-6 py-2 rounded-3xl text-[14px] sm:text-[16px] shadow-lg" onClick={handleBookNowButtonClick}>
            Login

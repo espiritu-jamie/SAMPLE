@@ -15,6 +15,11 @@ export const employeeMenu = [
     icon: "fa-solid fa-list",
   },
   {
+    name: "Booking Form",
+    path: "/Book",
+    icon: "fa-solid fa-calendar",
+  },
+  {
     name: "Enter Availability",
     path: "/enter-availability",
     icon: "fa-solid fa-calendar-plus",

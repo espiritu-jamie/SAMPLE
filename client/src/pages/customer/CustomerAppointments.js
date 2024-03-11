@@ -1,75 +1,67 @@
-import React, { useState, useEffect } from 'react';
-import { Table, message } from 'antd';
-import axios from 'axios';
-import Layout from '../../components/Layout'; // Assuming you have a Layout component
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import Layout from "../../components/Layout";
 
-const CustomerAppointmentsPage = () => {
-  const [appointments, setAppointments] = useState([]);
-  const [loading, setLoading] = useState(false);
+const CustomerAppointments = () => {
+  const [appointment, setAppointment] = useState(null);
 
   useEffect(() => {
+    const fetchAppointments = async () => {
+      try {
+        const res = await axios.get("/api/appointments/", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`, // Add Authorization header with token
+          },
+        });
+        // Assuming appointments is an array and you want to display the first one
+        if (res.data.length > 0) {
+          setAppointment(res.data[0]);
+        }
+      } catch (error) {
+        console.error("Error fetching appointments:", error);
+      }
+    };
+
     fetchAppointments();
   }, []);
 
-  const fetchAppointments = async () => {
-    setLoading(true);
-    try {
-      const response = await axios.get('/api/customer/appointments', {
-        headers: {
-        },
-      });
-      setAppointments(response.data.appointments);
-    } catch (error) {
-      console.error('Failed to fetch appointments:', error);
-      message.error('Failed to load appointments.');
-    }
-    setLoading(false);
+  const handleEdit = () => {
+    // Implement edit functionality here
+    console.log("Edit button clicked");
   };
 
-  const columns = [
-    {
-      title: 'Service',
-      dataIndex: 'service',
-      key: 'service',
-    },
-    {
-      title: 'Date',
-      dataIndex: 'date',
-      key: 'date',
-    },
-    {
-      title: 'Time',
-      dataIndex: 'time',
-      key: 'time',
-    },
-    {
-      title: 'Status',
-      dataIndex: 'status',
-      key: 'status',
-      render: status => {
-        let color = status === 'Confirmed' ? 'green' : 'volcano';
-        return (
-          <span style={{ color }}>
-            {status}
-          </span>
-        );
-      },
-    },
-  ];
+  const handleDelete = () => {
+    // Implement delete functionality here
+    console.log("Delete button clicked");
+  };
 
   return (
     <Layout>
-      <div className="appointments-container">
-        <h2>Your Appointments</h2>
-        <Table
-          columns={columns}
-          dataSource={appointments}
-          rowKey={record => record.id}
-          loading={loading}
-        />
+      <div className="container">
+        <h3 className="text-center my-4">Appointments</h3>
+        {appointment && (
+          <div className="appointment-item">
+            <h4>Date: {appointment.date}</h4>
+            <p>Start Time: {appointment.starttime}</p>
+            <p>End Time: {appointment.endtime}</p>
+            <p>Phone Number: {appointment.phoneNumber}</p>
+            <p>Address: {appointment.address}</p>
+            {appointment.specialInstructions && (
+              <p>Special Instructions: {appointment.specialInstructions}</p>
+            )}
+            <div>
+              <button onClick={handleEdit} className="btn btn-primary mr-2">
+                Edit
+              </button>
+              <button onClick={handleDelete} className="btn btn-danger">
+                Delete
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </Layout>
   );
 };
 
-export default CustomerAppointmentsPage;
+export default CustomerAppointments;

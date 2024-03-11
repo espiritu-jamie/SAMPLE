@@ -15,7 +15,7 @@ import AdminEmployeeAvailability from "./pages/admin/adminEmployeeAvailability";
 
 import EnterAvailabilityPage from "./pages/employee/EnterAvailability";
 import BookingPage from "./pages/customer/BookingPage";
-// import CustomerAppointments from "./pages/customer/CustomerAppointments";
+import CustomerAppointments from "./pages/customer/CustomerAppointments";
 
 
 
@@ -87,13 +87,16 @@ function App() {
                 </ProtectedRoute> // if they are logged in 
               }
             />
-            {/* <Route
+            
+            <Route
               path="/customer-appointments"
               element={
                 <ProtectedRoute>
                   <CustomerAppointments />
                 </ProtectedRoute> // if they are logged in 
-              } */}
+              }
+
+            />
             <Route
               path="/login"
               element={

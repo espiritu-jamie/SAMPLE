@@ -48,7 +48,7 @@ export const userMenu = [
     path: "/customer-appointments",
     icon: "fa-solid fa-calendar",
   },
-
+  
   {
     name: "Book Now",
     path: "/book-appointment",

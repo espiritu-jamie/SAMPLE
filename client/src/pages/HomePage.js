@@ -42,19 +42,21 @@
 
 // export default HomePage;
 
-import React from "react";
+import React,{useState} from "react";
 import { useSelector } from "react-redux"; // Import useSelector to access the state
 import Layout from "./../components/Layout";
 
 const HomePage = () => {
   const { user } = useSelector((state) => state.user); // Retrieve the user from state
-
+  const [newItem, setNewItem] = useState("");
+  const [items, setItems] = useState([]);
   // Define a function to determine what welcome message to display
   const getWelcomeMessage = () => {
     if (user && user.userRole) {
       switch (user.userRole) {
         case "admin":
           return "Welcome to the Admin Page!";
+
         case "employee":
           return "Welcome to the Employee Page!";
         default:
@@ -63,11 +65,36 @@ const HomePage = () => {
     }
     return "Welcome, Guest!";
   };
+  const handleAddItem = () => {
+    if (newItem.trim() !== "") {
+      setItems([...items, newItem.trim()]); // Add the new item to the list
+      setNewItem(""); // Clear the input field
+    }
+  };
+ const renderAdminList = () => {
+    if (user && user.userRole === "admin") {
+      return (
+        <div>
+          <h4 className="text-center text-2xl mt-3">Ratings</h4>
+          <ul className="border border-gray-300 rounded p-4 mt-4">
+            <li className="border-b border-gray-300 py-2">Very good experience</li>
+          </ul>
+          <input
+            type="text"
+            value={newItem}
+            onChange={(e) => setNewItem(e.target.value)}
+          />
+          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4 mx-auto block" onClick={handleAddItem}>Add</button>
+        </div>
+      );
+    }
+    return null; // If the user is not an admin, return null (or an empty section)
+  };
 
   return (
     <Layout>
       <h3 className="text-center">{getWelcomeMessage()}</h3>
-      {/* You can remove the rest of the code related to doctors if it's not needed */}
+      {renderAdminList()}
     </Layout>
   );
 };

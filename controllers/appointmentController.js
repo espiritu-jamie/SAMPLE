@@ -1,5 +1,5 @@
 const Appointment = require("../models/appointmentModel");
-const User = require("../models/userModel"); // If needed for role checking
+const User = require("../models/userModel");
 const moment = require("moment");
 const { getUserRole } = require("../utils/userUtils");
 
@@ -35,27 +35,29 @@ const submitAppointmentController = async (req, res) => {
 
 // Function to get all appointments for an admin, or just the user's appointments if not an admin
 const getAllAppointmentsController = async (req, res) => {
-    try {
-        const userRole = req.user.role; // Directly using req.user.role
+  try {
+    console.log("req.user", req);
+    const userId = req.body.userId; // Get user id from request
+    const userRole = await getUserRole(userId); // Get user role using the utility function
 
     let query = {};
     if (userRole !== "admin") {
-        query.userId = req.user._id; // Limit to user's own appointments if not an admin
+      query.userId = userId; // Limit to user's own appointments if not an admin
     }
   
-      const appointments = await Appointment.find(query).populate('userId', 'name email');
-      return res.status(200).json({
-        success: true,
-        data: appointments,
-      });
-    } catch (error) {
-      console.error("Error fetching appointments:", error);
-      return res.status(500).json({
-        success: false,
-        message: `Error fetching appointments: ${error.message}`,
-      });
-    }
-  };
+    const appointments = await Appointment.find(query).populate('userId', 'name email');
+    return res.status(200).json({
+      success: true,
+      data: appointments,
+    });
+  } catch (error) {
+    console.error("Error fetching appointments:", error);
+    return res.status(500).json({
+      success: false,
+      message: `Error fetching appointments: ${error.message}`,
+    });
+  }
+};
 
 module.exports = {
   submitAppointmentController,

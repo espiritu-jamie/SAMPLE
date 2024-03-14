@@ -15,6 +15,9 @@ import AdminEmployeeAvailability from "./pages/admin/adminEmployeeAvailability";
 import AdminScheduleManagement from "./pages/admin/adminScheduleManagement";
 import EmployeeShiftsPage from "./pages/employee/EmployeeShifts";
 import EnterAvailabilityPage from "./pages/employee/EnterAvailability";
+import BookingPage from "./pages/customer/BookingPage";
+import CustomerAppointments from "./pages/customer/CustomerAppointments";
+
 
 
 
@@ -91,15 +94,33 @@ function App() {
               element={
                 <ProtectedRoute>
                   <NotificationPage />
-                </ProtectedRoute>
+                </ProtectedRoute> // if they are logged in 
               }
+            />
+            <Route
+              path="/book-appointment"
+              element={
+                <ProtectedRoute>
+                  <BookingPage />
+                </ProtectedRoute> // if they are logged in 
+              }
+            />
+            
+            <Route
+              path="/customer-appointments"
+              element={
+                <ProtectedRoute>
+                  <CustomerAppointments />
+                </ProtectedRoute> // if they are logged in 
+              }
+
             />
             <Route
               path="/login"
               element={
                 <PublicRoute>
                   <Login />
-                </PublicRoute>
+                </PublicRoute> // anyone can see it 
               }
             />
             <Route 

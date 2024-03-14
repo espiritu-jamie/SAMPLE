@@ -50,7 +50,7 @@ export const adminMenu = [
   }
 ];
 
-// user menu
+// client menu
 export const userMenu = [
   {
     name: "Home",
@@ -59,8 +59,14 @@ export const userMenu = [
   },
   {
     name: "My Appointments",
-    path: "/my-appointments",
+    path: "/customer-appointments",
     icon: "fa-solid fa-calendar",
+  },
+  
+  {
+    name: "Book Now",
+    path: "/book-appointment",
+    icon: "fa-solid fa-calendar-plus",
   }
 ];
 

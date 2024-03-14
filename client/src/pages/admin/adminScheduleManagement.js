@@ -22,7 +22,7 @@ const ScheduleManagement = () => {
         const fetchAppointments = async () => {
             const token = localStorage.getItem('token');
             const headers = { Authorization: `Bearer ${token}` };
-
+        
             try {
                 const response = await axios.get('/api/appointment', { headers });
                 const filteredAppointments = response.data.data
@@ -35,7 +35,10 @@ const ScheduleManagement = () => {
                         allDay: false,
                         extendedProps: {
                             ...appointment
-                        }
+                        },
+                        // Customize the event appearance based on the appointment status
+                        color: appointment.status === 'confirmed' ? '#33CC33' : appointment.status === 'cancelled' ? 'red' : 'blue', // sets the background color
+                        textColor: 'white', // sets the text color
                     }));
                 setAppointments(filteredAppointments);
             } catch (error) {
@@ -43,6 +46,7 @@ const ScheduleManagement = () => {
                 message.error('Failed to fetch appointments');
             }
         };
+        
 
         fetchAppointments();
     }, [filter]); // filter is the only dependency now

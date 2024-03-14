@@ -17,6 +17,8 @@ const ViewAppointments = ({ isAdminView }) => {
       try {
         const response = await axios.get('/api/appointment', { headers });
         setAppointments(response.data.data);
+
+        console.log("response.data.data", response.data.data);
       } catch (error) {
         console.error('Error fetching appointments:', error);
         message.error('Failed to fetch appointments');
@@ -88,7 +90,7 @@ const ViewAppointments = ({ isAdminView }) => {
         <Option value="upcoming">Upcoming</Option>
         <Option value="past">Past</Option>
       </Select>
-      <Table dataSource={filteredAppointments} columns={columns} rowKey="id" />
+      <Table dataSource={filteredAppointments} columns={columns} rowKey="_id" />
     </Layout>
   );
 };

@@ -52,6 +52,8 @@ const EmployeeShiftsPage = () => {
         <Layout>
             <h2>My Shifts</h2>
             <FullCalendar
+                aspectRatio={1.5}
+                contentHeight="auto"
                 plugins={[dayGridPlugin, interactionPlugin]}
                 initialView="dayGridMonth"
                 events={confirmedAppointments}

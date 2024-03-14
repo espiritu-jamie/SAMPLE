@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Table, Modal, Button, Select, Divider } from 'antd';
+import { Table, Modal, Button, Radio, Select, Divider, Collapse } from 'antd';
 import Layout from '../../components/Layout';
 import { DeleteOutlined } from '@ant-design/icons';
 import moment from 'moment'; // Import moment
@@ -10,6 +10,7 @@ import dayGridPlugin from '@fullcalendar/daygrid'; // import the day grid plugin
 import SubmitAvailability from '../../components/SubmitAvailability'; // Import the SubmitAvailability component
 
 const { Option } = Select;
+const { Panel } = Collapse;
 
 const EmployeeAvailabilities = () => {
   const [availabilities, setAvailabilities] = useState([]);
@@ -117,7 +118,11 @@ const EmployeeAvailabilities = () => {
     <Layout>
       <div style={{ textAlign: 'center', maxWidth: '900px', margin: '0 auto' }}>
         {/* Render SubmitAvailability component and pass fetchAvailabilities to refresh list */}
+        <Collapse defaultActiveKey={[]}>
+          <Panel header="Add Availability" key="1">
         <SubmitAvailability onAvailabilitySubmitted={fetchAvailabilities} />
+        </Panel>
+        </Collapse>
 
       <Divider />
 
@@ -145,17 +150,25 @@ const EmployeeAvailabilities = () => {
           </div>
         )}
       </Modal>
-
-      <h2 style={{ textAlign: 'center', margin: '16px 0' }}>My Availability</h2>
-        <Select defaultValue="list" style={{ width: 120, marginBottom: 20 }} onChange={(value) => setViewMode(value)}>
-          <Option value="list">List</Option>
-          <Option value="calendar">Calendar</Option>
-        </Select>
-        {viewMode === 'list' ? (
+      
+      <Collapse defaultActiveKey={[]}>
+        <Panel header="My Availability" key="2">
+          <Radio.Group
+            defaultValue="list"
+            buttonStyle="solid"
+            onChange={(e) => setViewMode(e.target.value)}
+            style={{ marginBottom: 20 }}
+          >
+            <Radio.Button value="list">List View</Radio.Button>
+            <Radio.Button value="calendar">Calendar View</Radio.Button>
+          </Radio.Group>
+          {viewMode === 'list' ? (
           <Table dataSource={availabilities} columns={columns} rowKey="_id" />
         ) : (
           
           <FullCalendar
+            aspectRatio={1.5}
+            contentHeight="auto"
             plugins={[dayGridPlugin]}
             initialView="dayGridMonth"
             timeZone="UTC" // Explicitly set FullCalendar to use UTC
@@ -167,9 +180,10 @@ const EmployeeAvailabilities = () => {
               // Use moment.duration to properly parse the "HH:mm" formatted times
             }))}
             eventClick={onEventClick} // Attach event click listener
-
-/>
+          />
         )}
+        </Panel>
+        </Collapse>
       </div>
     </Layout>
   );

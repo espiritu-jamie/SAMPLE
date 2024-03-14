@@ -10,16 +10,20 @@ const AppointmentDetailsModal = ({ isVisible, onClose, appointment, fetchAppoint
     const [selectedEmployees, setSelectedEmployees] = useState([]);
 
     useEffect(() => {
-
-        console.log("appointment", appointment);
-        console.log("appointment", appointment._id);
-
         if (!isVisible || !appointment) {
             setAvailableEmployees([]);
             setSelectedEmployees([]);
             return;
         }
-
+    
+        if (appointment?.status === 'confirmed' && appointment?.assignedEmployees) {
+            console.log("assignedEmployees at useEffect:", appointment.assignedEmployees);
+            setSelectedEmployees(appointment.assignedEmployees);
+        } else {
+            setSelectedEmployees([]);
+        }
+    
+        // Fetch available employees only if the user is an admin
         if (userRole === 'admin') {
             const fetchAvailableEmployees = async () => {
                 try {
@@ -32,38 +36,63 @@ const AppointmentDetailsModal = ({ isVisible, onClose, appointment, fetchAppoint
                             endtime: appointment.endtime,
                         },
                     });
+                    console.log("availableEmployees", response.data.availableEmployees);
                     setAvailableEmployees(response.data.availableEmployees || []);
                 } catch (error) {
                     console.error("Failed to fetch available employees", error);
                     message.error("Failed to fetch available employees");
                 }
+                
             };
-
+    
             fetchAvailableEmployees();
+
+
         }
     }, [isVisible, appointment, userRole]);
 
-    const handleAssign = async () => {
-        if (!selectedEmployees.length) {
-            message.warning("Please select at least one employee");
-            return;
-        }
+    // const handleUpdateAssignees = async () => {
+    //     console.log("Sending these employees for update:", selectedEmployees);
+    //     try {
+    //         const response = await axios.post('/api/appointment/assign-employees', {
+    //             appointmentId: appointment._id,
+    //             assignedEmployees: selectedEmployees
 
+    //         }, {
+    //             headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    //         });
+
+    //         console.log("response", response.data);
+    //         message.success(response.data.message);
+    //         fetchAppointments();
+    //         onClose();
+    //     } catch (error) {
+    //         console.error("Failed to update appointment assignees", error);
+    //         message.error("Failed to update appointment assignees");
+    //     }
+    // };
+
+    const handleUpdateAssignees = async () => {
+        console.log("Sending these employees for update:", selectedEmployees);
         try {
-            await axios.post('/api/appointment/assign-employees', {
+            const response = await axios.post('/api/appointment/assign-employees', {
                 appointmentId: appointment._id,
                 assignedEmployees: selectedEmployees
             }, {
                 headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
             });
-            message.success("Appointment assigned successfully");
-            fetchAppointments();
-            onClose();
+    
+            console.log("response", response.data);
+            message.success(response.data.message);
+            fetchAppointments(); // Refresh the appointments list
+            onClose(); // Close the modal
         } catch (error) {
-            console.error("Failed to assign employees", error);
-            message.error("Failed to assign employees");
+            console.error("Failed to update appointment assignees", error);
+            message.error("Failed to update appointment assignees");
         }
     };
+
+    console.log("Available Employees", availableEmployees); 
 
     return (
         <Modal
@@ -72,7 +101,11 @@ const AppointmentDetailsModal = ({ isVisible, onClose, appointment, fetchAppoint
             onCancel={onClose}
             footer={[
                 <Button key="back" onClick={onClose}>Close</Button>,
-                userRole === 'admin' && <Button key="submit" type="primary" onClick={handleAssign}>Assign</Button>,
+                userRole === 'admin' && (
+                    <Button key="submit" type="primary" onClick={handleUpdateAssignees}>
+                        {appointment?.status === 'confirmed' ? 'Update Assignment' : 'Assign'}
+                    </Button>
+                ),
             ]}
         >
             <Descriptions bordered column={1}>
@@ -89,17 +122,19 @@ const AppointmentDetailsModal = ({ isVisible, onClose, appointment, fetchAppoint
             </Descriptions>
             {userRole === 'admin' && (
                 <Select
-                    mode="multiple"
-                    style={{ width: '100%', marginTop: 16 }}
-                    placeholder="Select available employees"
-                    value={selectedEmployees}
-                    onChange={setSelectedEmployees}
-                    maxTagCount="responsive"
-                >
-                    {availableEmployees.map(employee => (
-                        <Option key={employee.id} value={employee.id}>{employee.name}</Option>
-                    ))}
-                </Select>
+                mode="multiple"
+                style={{ width: '100%', marginTop: 16 }}
+                placeholder="Select available employees"
+                value={selectedEmployees}
+                onChange={setSelectedEmployees}
+                maxTagCount="responsive"
+            >
+                {availableEmployees.map((employee) => (
+                    <Option key={employee.id} value={employee.id}>{employee.name}</Option>
+                ))}
+
+                
+            </Select>
             )}
         </Modal>
     );

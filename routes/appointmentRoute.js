@@ -6,6 +6,7 @@ const {
     submitAppointmentController,
     getAllAppointmentsController,
     getAvailableEmployeesForAppointmentController,
+    updateAppointmentStatusController,
     autoAssignAppointments,
     assignEmployeesToAppointmentController,
     cancelAppointmentController,
@@ -32,5 +33,8 @@ router.patch('/cancel-appointment/:appointmentId', authMiddleware, cancelAppoint
 
 // Fetching the confirmed appointments for the logged-in employee
 router.get('/confirmed-for-employee', authMiddleware, getConfirmedAppointmentsForEmployee);
+
+// Updating the status of an appointment (for admins)
+router.patch('/update-status/:appointmentId', authMiddleware, updateAppointmentStatusController);
 
 module.exports = router;

@@ -84,10 +84,10 @@ const CustomerAppointments = () => {
       key: 'actions',
       render: (_, record) => (
         <>
-          <Button onClick={() => handleEdit(record._id)} type="primary" style={{ marginRight: 8 }}>
+          <Button onClick={() => handleEdit(record._id)} type="default" style={{ marginRight: 8 }}>
             Edit
           </Button>
-          <Button onClick={() => handleDelete(record._id)} type="danger">
+          <Button onClick={() => handleDelete(record._id)} type="default" danger>
             Delete
           </Button>
         </>

@@ -155,7 +155,7 @@ const EmployeeAvailabilities = () => {
         <Panel header="My Availability" key="2">
           <Radio.Group
             defaultValue="list"
-            buttonStyle="solid"
+            buttonStyle=""
             onChange={(e) => setViewMode(e.target.value)}
             style={{ marginBottom: 20 }}
           >

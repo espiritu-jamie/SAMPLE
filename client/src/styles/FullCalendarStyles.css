@@ -19,7 +19,7 @@
   
   
   /* This will target all links within the FullCalendar and set the cursor to default */
-  .fc a {
+  .fc .a {
     cursor: default !important; /* Ensures the cursor does not change to a pointer when hovering */
     text-decoration: none !important; /* Optionally removes the underline from links */
   }

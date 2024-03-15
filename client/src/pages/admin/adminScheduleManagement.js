@@ -8,6 +8,7 @@ import { message, Select } from 'antd';
 import Layout from '../../components/Layout';
 import moment from 'moment';
 import AppointmentDetailsModal from '../../components/modal/AppointmentDetailsModal';
+import '../../styles/FullCalendarStyles.css';
 
 const { Option } = Select;
 

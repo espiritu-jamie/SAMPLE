@@ -6,7 +6,6 @@ import Spinner from "./components/Spinner";
 import AdminAllAppointments from "./pages/admin/adminAllAppointments";
 import Home from "./pages/Home"
 import HomePage from "./pages/HomePage";
-import BusinessHome from "./pages/BusinessHome";
 import Login from "./pages/Login";
 import NotificationPage from "./pages/NotificationPage";
 import Register from "./pages/Register";
@@ -122,14 +121,6 @@ function App() {
                   <Login />
 
               }
-            />
-            <Route 
-            path="/BusinessHome"
-            element={
-              <PublicRoute>
-                <BusinessHome />
-              </PublicRoute>
-            }
             />
             <Route
               path="/"

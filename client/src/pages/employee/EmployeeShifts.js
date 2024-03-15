@@ -7,6 +7,7 @@ import Layout from '../../components/Layout';
 import AppointmentDetailsModal from '../../components/modal/AppointmentDetailsModal';
 import moment from 'moment';
 import { message } from 'antd';
+import '../../styles/FullCalendarStyles.css';
 
 
 const EmployeeShiftsPage = () => {

@@ -59,7 +59,23 @@ const getAllAppointmentsController = async (req, res) => {
   }
 };
 
+// controllers/appointmentController.js
+const Appointment = require('../models/Appointment'); // Assuming you have a model for appointments
+
+exports.deleteAppointmentController = async (req, res) => {
+    try {
+        const { appointmentId } = req.params;
+        // Find the appointment by ID and delete it
+        await Appointment.findByIdAndDelete(appointmentId);
+        res.status(200).send({ message: 'Appointment deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting appointment:', error);
+        res.status(500).send({ message: 'Internal server error' });
+    }
+};
+
 module.exports = {
   submitAppointmentController,
   getAllAppointmentsController,
+  deleteAppointmentController,
 };

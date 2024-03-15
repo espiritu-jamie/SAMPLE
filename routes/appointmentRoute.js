@@ -6,7 +6,7 @@ const {
     submitAppointmentController,
     getAllAppointmentsController,
     deleteAppointmentController,
-    getAppointmentByIdController,
+
     } = require('../controllers/appointmentController');
 
 // Submitting a new appointment for authenticated customers
@@ -16,9 +16,9 @@ router.post('/', authMiddleware, submitAppointmentController);
 router.get('/', authMiddleware, getAllAppointmentsController);
 
 // Deleting an appointment for authenticated customers
-router.delete('/:appointmentIdD', authMiddleware, deleteAppointmentController);
+router.delete('/:appointmentId', authMiddleware, deleteAppointmentController);
 
-// Fetching a single appointment for authenticated users
-router.get('/:appointmentId', authMiddleware, getAppointmentByIdController);
+// // Fetching a single appointment for authenticated users
+// router.get('/:appointmentId', authMiddleware, getAppointmentByIdController);
 
 module.exports = router;

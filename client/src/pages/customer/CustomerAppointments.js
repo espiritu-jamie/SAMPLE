@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Layout from "../../components/Layout";
-import { Table, Button, message, Radio } from "antd";
+import { Table, Button, message, Radio, Modal } from "antd";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import moment from "moment"; // Make sure you've installed moment
@@ -43,10 +43,37 @@ const CustomerAppointments = () => {
   };
 
   const handleDelete = (appointmentId) => {
-    // Implement delete functionality here
-    console.log("Delete button clicked for appointment:", appointmentId);
+    Modal.confirm({
+      title: "Are you sure you want to delete this appointment?",
+      onOk() {
+        deleteAppointment(appointmentId);
+      },
+    });
   };
-
+  
+  const deleteAppointment = async (appointmentId) => {
+    try {
+      // Make DELETE request to delete the appointment
+      await axios.delete(`/api/appointment/${appointmentId}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+  
+      // If deletion is successful, update the local state to reflect the changes
+      setAppointments(prevAppointments =>
+        prevAppointments.filter(appointment => appointment._id !== appointmentId)
+      );
+  
+      // Show success message to the user
+      message.success("Appointment deleted successfully");
+    } catch (error) {
+      // If there's an error, log it and show an error message to the user
+      console.error("Error deleting appointment:", error);
+      message.error("Failed to delete appointment");
+    }
+  };
+  
   const columns = [
     {
       title: 'Date',
@@ -101,6 +128,8 @@ const CustomerAppointments = () => {
     end: moment(appointment.date, "MMMM D, YYYY").toISOString(),
     allDay: true,
   }));
+
+  
 
   return (
     <Layout>

@@ -108,7 +108,8 @@ const Profile = () => {
   }, []);
 
   const fetchUserProfile = () => {
-    axios.get("/view-profile/:userId")
+    const token = localStorage.getItem("token"); // Assuming the token is stored in localStorage
+    axios.get("/view-profile/:userId", { headers: { Authorization: `Bearer ${token}` } })
       .then((response) => {
         const userProfile = response.data.userProfile;
         setProfile(userProfile); // Assuming the response includes user data directly
@@ -128,26 +129,44 @@ const Profile = () => {
   };
 
   const handleSubmit = async () => {
+    const token = localStorage.getItem("token"); // Retrieve the JWT token stored in localStorage
+  
+    // Adjust the profileUpdateData object to match the userModel structure
+    const profileUpdateData = {
+      name: profile.name, // Assuming you have a name field in your profile state
+      email: profile.email,
+      address: {
+        streetAddress: profile.streetAddress, // Make sure these fields are managed in your profile state
+        city: profile.city,
+        state: profile.state,
+        postalCode: profile.postalCode,
+      },
+      // Add any other fields you want to update that match the userModel structure
+    };
   
     try {
-      const response = await axios.get("/auth", { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } });
-      const userId = response.data.data.id;
-
-      console.log("Profile object:", profile);
+      // Sending the PUT request to the update profile endpoint
+      const response = await axios.put('/update-profile', profileUpdateData, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Include the JWT token in the authorization header
+        },
+      });
   
-      // Now, you can use the userId to update the profile
-      axios.put(`/update-profile/${userId}`, profile)
-        .then(() => {
-          message.success("Profile updated successfully");
-        })
-        .catch((error) => {
-          message.error("Failed to update profile");
-        });
+      // Handle the response from the backend
+      if (response.data.success) {
+        message.success("Profile updated successfully");
+        // Optionally, you might want to fetch the updated profile data here or update the UI accordingly
+      } else {
+        // Handle cases where the backend response indicates failure
+        message.error("Failed to update profile. Please try again.");
+      }
     } catch (error) {
-      console.error("Error fetching user data:", error);
-      message.error("Failed to fetch user data");
+      // Handle any errors that occur during the API request
+      console.error("Error updating profile:", error);
+      message.error("Failed to update profile due to an error.");
     }
   };
+  
   
 
   if (loading) return <div>Loading...</div>;

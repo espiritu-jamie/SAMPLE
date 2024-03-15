@@ -4,7 +4,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import PublicRoute from "./components/PublicRoute";
 import Spinner from "./components/Spinner";
 import AdminAllAppointments from "./pages/admin/adminAllAppointments";
-import Front from "./pages/Front"
+import Home from "./pages/Home"
 import HomePage from "./pages/HomePage";
 import BusinessHome from "./pages/BusinessHome";
 import Login from "./pages/Login";
@@ -31,7 +31,7 @@ function App() {
         ) : (
           <Routes>
             <Route
-              path="/"
+              path="/HomePage"
               element={
                 <ProtectedRoute>
                   <HomePage />
@@ -118,9 +118,9 @@ function App() {
             <Route
               path="/login"
               element={
-                <PublicRoute>
+
                   <Login />
-                </PublicRoute> // anyone can see it 
+
               }
             />
             <Route 
@@ -132,11 +132,9 @@ function App() {
             }
             />
             <Route
-              path="/Front"
+              path="/"
               element={
-                <ProtectedRoute>
-                  <Front />
-                </ProtectedRoute>
+                  <Home />
               }
               />
             <Route

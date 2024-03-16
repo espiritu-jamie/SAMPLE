@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Modal, Button, Descriptions, Select, 
     message, Input, DatePicker, Dropdown, Menu } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
@@ -36,7 +36,7 @@ const AppointmentDetailsModal = ({ isVisible, onClose, appointment, fetchAppoint
         }
     }, [isVisible, appointment, userRole, isCanceled]);
 
-    const fetchAvailableEmployees = async () => {
+    const fetchAvailableEmployees = useCallback(async () => {
         try {
             const formattedDate = moment(appointment.date).format("YYYY-MM-DD");
             const response = await axios.get(`/api/appointment/available-employees`, {
@@ -52,9 +52,15 @@ const AppointmentDetailsModal = ({ isVisible, onClose, appointment, fetchAppoint
             console.error("Failed to fetch available employees", error);
             message.error("Failed to fetch available employees");
         }
-    };
+    }, [appointment?.date, appointment?.starttime, appointment?.endtime]);
 
     const handleUpdateAssignees = async () => {
+        // Check if assigning for the first time and ensure employees are selected
+        if (appointment?.status !== 'confirmed' && selectedEmployees.length === 0) {
+            message.error("Please select at least one employee to assign.");
+            return;
+        }
+    
         try {
             const response = await axios.post('/api/appointment/assign-employees', {
                 appointmentId: appointment._id,
@@ -71,6 +77,7 @@ const AppointmentDetailsModal = ({ isVisible, onClose, appointment, fetchAppoint
             message.error("Failed to update appointment assignees");
         }
     };
+    
 
     const handleCancelAppointment = async () => {
         if (!cancellationReason.trim()) {

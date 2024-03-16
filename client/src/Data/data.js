@@ -5,6 +5,11 @@ export const employeeMenu = [
     icon: "fa-solid fa-house",
   },
   {
+    name: "My Shifts",
+    path: "/my-shifts",
+    icon: "fa-solid fa-calendar",
+  },
+  {
     name: "My Availability",
     path: "/my-availability",
     icon: "fa-solid fa-list",
@@ -28,7 +33,11 @@ export const adminMenu = [
     path: "/",
     icon: "fa-solid fa-house",
   },
-
+  {
+    name: "Schedule Management",
+    path: "/admin-schedule-management",
+    icon: "fa-solid fa-calendar-plus",
+  },
   {
     name: "Employee Availability",
     path: "/admin-employee-availability",

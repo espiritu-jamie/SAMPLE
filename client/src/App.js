@@ -4,7 +4,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import PublicRoute from "./components/PublicRoute";
 import Spinner from "./components/Spinner";
 import AdminAllAppointments from "./pages/admin/adminAllAppointments";
-
+import Front from "./pages/Front"
 import HomePage from "./pages/HomePage";
 import BusinessHome from "./pages/BusinessHome";
 import Login from "./pages/Login";
@@ -13,9 +13,10 @@ import Register from "./pages/Register";
 import EmployeeAvailabilities from "./pages/employee/EmployeeAvailabilities";
 import AdminEmployeeAvailability from "./pages/admin/adminEmployeeAvailability";
 import HourTracker from "./pages/admin/adminHourTracker";
-
-
+import AdminScheduleManagement from "./pages/admin/adminScheduleManagement";
+import EmployeeShiftsPage from "./pages/employee/EmployeeShifts";
 import EnterAvailabilityPage from "./pages/employee/EnterAvailability";
+
 
 
 function App() {
@@ -45,6 +46,14 @@ function App() {
               }
             />
             <Route
+              path="/my-shifts"
+              element={
+                <ProtectedRoute>
+                  <EmployeeShiftsPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
               path="/my-availability"
               element={
                 <ProtectedRoute>
@@ -59,7 +68,15 @@ function App() {
                   <AdminEmployeeAvailability />
                 </ProtectedRoute>
               }
-            />         
+            />    
+            <Route
+              path="/admin-schedule-management"
+              element={
+                <ProtectedRoute>
+                  <AdminScheduleManagement />
+                </ProtectedRoute>
+              }
+            />     
             
            <Route
               path="/admin-all-appointments"
@@ -102,6 +119,14 @@ function App() {
               </PublicRoute>
             }
             />
+            <Route
+              path="/Front"
+              element={
+                <ProtectedRoute>
+                  <Front />
+                </ProtectedRoute>
+              }
+              />
             <Route
               path="/register"
               element={

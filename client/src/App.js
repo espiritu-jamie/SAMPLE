@@ -13,8 +13,6 @@ import Register from "./pages/Register";
 import EmployeeAvailabilities from "./pages/employee/EmployeeAvailabilities";
 import AdminEmployeeAvailability from "./pages/admin/adminEmployeeAvailability";
 import HourTracker from "./pages/admin/adminHourTracker";
-
-
 import AdminScheduleManagement from "./pages/admin/adminScheduleManagement";
 import EmployeeShiftsPage from "./pages/employee/EmployeeShifts";
 import EnterAvailabilityPage from "./pages/employee/EnterAvailability";

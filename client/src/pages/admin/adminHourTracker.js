@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from "react";
 import Layout from '../../components/Layout';
-import DoctorList from '../../components/DoctorList';
+import EmployeeList from '../../components/EmployeeList';
 import axios from "axios";
 import { Row } from "antd";
 
 const HourTracker = () => {
     const [employees, setEmployees] = useState([]);
+    
     const getEmployeeData = async () => {
-
         try {
             const response = await axios.get(
-                "api/user/getAllDoctors",
-
+                "api/user/getAllEmployees",
                 {
                     headers: {
                         Authorization: "Bearer " + localStorage.getItem("token"),
@@ -35,7 +34,9 @@ const HourTracker = () => {
             <h3 className="text-center">Hour Tracker</h3>
             <br/>
             <Row>
-                {employees && employees.map((employee) => <DoctorList employee={employee} />)}
+                {employees.map((employee) => (
+                    <EmployeeList key={employee._id} employee={employee} />
+                ))}
             </Row>
         </Layout>
     );

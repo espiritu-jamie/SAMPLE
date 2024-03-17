@@ -4,9 +4,8 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import PublicRoute from "./components/PublicRoute";
 import Spinner from "./components/Spinner";
 import AdminAllAppointments from "./pages/admin/adminAllAppointments";
-import Front from "./pages/Front"
+import Home from "./pages/Home"
 import HomePage from "./pages/HomePage";
-import BusinessHome from "./pages/BusinessHome";
 import Login from "./pages/Login";
 import NotificationPage from "./pages/NotificationPage";
 import Register from "./pages/Register";
@@ -15,6 +14,9 @@ import AdminEmployeeAvailability from "./pages/admin/adminEmployeeAvailability";
 import AdminScheduleManagement from "./pages/admin/adminScheduleManagement";
 import EmployeeShiftsPage from "./pages/employee/EmployeeShifts";
 import EnterAvailabilityPage from "./pages/employee/EnterAvailability";
+import BookingPage from "./pages/customer/BookingPage";
+import CustomerAppointments from "./pages/customer/CustomerAppointments";
+
 
 
 
@@ -28,7 +30,7 @@ function App() {
         ) : (
           <Routes>
             <Route
-              path="/"
+              path="/HomePage"
               element={
                 <ProtectedRoute>
                   <HomePage />
@@ -91,31 +93,39 @@ function App() {
               element={
                 <ProtectedRoute>
                   <NotificationPage />
-                </ProtectedRoute>
+                </ProtectedRoute> // if they are logged in 
               }
+            />
+            <Route
+              path="/book-appointment"
+              element={
+                <ProtectedRoute>
+                  <BookingPage />
+                </ProtectedRoute> // if they are logged in 
+              }
+            />
+            
+            <Route
+              path="/customer-appointments"
+              element={
+                <ProtectedRoute>
+                  <CustomerAppointments />
+                </ProtectedRoute> // if they are logged in 
+              }
+
             />
             <Route
               path="/login"
               element={
-                <PublicRoute>
+
                   <Login />
-                </PublicRoute>
+
               }
             />
-            <Route 
-            path="/BusinessHome"
-            element={
-              <PublicRoute>
-                <BusinessHome />
-              </PublicRoute>
-            }
-            />
             <Route
-              path="/Front"
+              path="/"
               element={
-                <ProtectedRoute>
-                  <Front />
-                </ProtectedRoute>
+                  <Home />
               }
               />
             <Route

@@ -2,33 +2,60 @@ import React from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
-import interactionPlugin from '@fullcalendar/interaction'; // for selectable
+import interactionPlugin from '@fullcalendar/interaction';
+import { Modal } from 'antd';
+import { useState } from 'react';
+import moment from 'moment';
 
 const MyCalendar = ({ events }) => {
-  const handleEventClick = ({ event, el }) => {
-    // Handle click on event
-    console.log("Event clicked:", event);
-  };
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState(null);
 
-  const handleDateClick = (arg) => {
-    // Handle click on a date
-    console.log("Date clicked:", arg);
+  const handleEventClick = ({ event, el }) => {
+    setSelectedEvent({
+      title: event.title,
+      date: moment(event.start).format('dddd, MMMM D YYYY'), // Correctly formatted date
+      startTime: moment(event.start).format('h:mm A'),
+      endTime: event.end ? moment(event.end).format('h:mm A') : '',
+    });
+    setIsModalVisible(true);
+  };
+  
+  const handleModalClose = () => {
+    setIsModalVisible(false);
   };
 
   return (
-    <FullCalendar
-      plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-      initialView="dayGridMonth"
-      headerToolbar={{
-        left: 'prev,next today',
-        center: 'title',
-        right: 'dayGridMonth,timeGridWeek,timeGridDay'
-      }}
-      events={events}
-      eventClick={handleEventClick}
-      dateClick={handleDateClick}
-      selectable={true}
-    />
+    <>
+      <FullCalendar
+        aspectRatio={1.5} // Adjust the width to height ratio
+        contentHeight="auto" // or you can use a specific height like '600px'
+        plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+        initialView="dayGridMonth"
+        timeZone='UTC'
+        headerToolbar={{
+          right: 'today prev,next',
+          left: 'title',
+        }}
+        events={events}
+        eventClick={handleEventClick}
+        selectable={true}
+      />
+<Modal
+  title="Availability Details"
+  open={isModalVisible}
+  onOk={handleModalClose}
+  onCancel={handleModalClose}
+  footer={null} // Remove default buttons
+>
+  {selectedEvent && (
+    <div style={{ padding: '20px' }}>
+      <p style={{ marginBottom: '5px', fontSize: '16px', fontWeight: 'bold' }}>{selectedEvent.title}</p>
+      <p style={{ marginBottom: '5px', fontSize: '16px', fontWeight: 'bold' }}>Date: <span style={{ fontWeight: 'normal' }}>{selectedEvent.date}</span></p>
+    </div>
+  )}
+</Modal>
+    </>
   );
 };
 

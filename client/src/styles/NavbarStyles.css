@@ -1,0 +1,47 @@
+/* NavbarStyles.css */
+.navbar {
+    padding-top: 16px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 16px;
+  }
+  
+  .navbar-logo {
+    width: 80px; /* Adjust as needed */
+    height: auto;
+  }
+  
+  .navbar-brand {
+    font-size: 24px;
+    color: #333;
+    font-weight: bold;
+    display: none; /* Hide on smaller screens */
+  }
+  
+  .navbar-menu {
+    display: flex;
+    list-style: none;
+    gap: 16px;
+  }
+  
+  .navbar-menu button {
+    background-color: #f0c040; /* A pleasant yellow */
+    color: #333;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 20px; /* Slightly rounded corners */
+    cursor: pointer;
+    text-transform: uppercase;
+    font-weight: bold;
+    transition: background-color 0.3s;
+  }
+  
+  .navbar-menu button:hover {
+    background-color: #e5b037; /* Darker yellow on hover */
+  }
+  

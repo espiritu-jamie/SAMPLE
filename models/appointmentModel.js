@@ -43,6 +43,12 @@ const appointmentSchema = new mongoose.Schema({
     enum: ['pending', 'confirmed', 'cancelled'],
     default: 'pending',
   },
+  cancellationReason: {
+    type: String,
+  },
+  rescheduledTo: {
+    type: Date,
+  },
 });
 
 const Appointment = mongoose.model('Appointment', appointmentSchema);

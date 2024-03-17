@@ -1,33 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Card, Tabs, Select } from 'antd';
+import { Table, Radio } from 'antd';
 import Layout from '../../components/Layout';
 import MyCalendar from '../../components/MyCalendar';
 import moment from 'moment';
 
-const { Option } = Select;
-
 const AdminEmployeeAvailability = () => {
     const [availabilities, setAvailabilities] = useState([]);
-    const [sortOrder, setSortOrder] = useState('earliest');
     const [sortMode, setSortMode] = useState('byEmployee');
-    const [calendarEvents, setCalendarEvents] = useState([]);
 
     useEffect(() => {
         fetchAvailabilities();
-    }, [sortMode, sortOrder]);
-
-    useEffect(() => {
-        if (sortMode === 'byDate') {
-            const events = availabilities.map(availability => ({
-                title: `${availability.user?.name}: ${moment(availability.starttime, 'HH:mm').format('hh:mm A')} - ${moment(availability.endtime, 'HH:mm').format('hh:mm A')}`,
-                start: new Date(availability.date).toISOString(),
-                end: new Date(availability.date).toISOString(),
-                allDay: false,
-            }));
-            setCalendarEvents(events);
-        }
-    }, [availabilities, sortMode]);
+    }, [sortMode]);
 
     const fetchAvailabilities = async () => {
         const token = localStorage.getItem('token');
@@ -53,46 +37,78 @@ const AdminEmployeeAvailability = () => {
             return acc;
         }, {});
 
-        // Sort the keys (employee names) alphabetically
         const sortedEmployeeNames = Object.keys(groupedByEmployee).sort();
 
-        // Map the sorted names to tabs items
         return sortedEmployeeNames.map(name => ({
-            label: name,
             key: name,
-            children: groupedByEmployee[name].sort((a, b) => {
-                // Sort by date and then by start time within each employee's availabilities
-                return sortOrder === 'earliest' ?
-                    new Date(a.date) - new Date(b.date) || a.starttime.localeCompare(b.starttime) :
-                    new Date(b.date) - new Date(a.date) || b.starttime.localeCompare(a.starttime);
-            }).map((availability, index) => (
-                <Card key={index}>
-                    Date: {new Date(availability.date).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })} <br />
-                    Start Time: {moment(availability.starttime, 'HH:mm').format('hh:mm A')} <br /> 
-                    End Time: {moment(availability.endtime, 'HH:mm').format('hh:mm A')} <br /> 
-                </Card>
-            )),
+            name: name,
+            children: groupedByEmployee[name].map((availability, index) => ({
+                key: `${name}_${index}`,
+                date: moment.utc(availability.date).format('LL'),
+                starttime: moment(availability.starttime, 'HH:mm').format('hh:mm A'),
+                endtime: moment(availability.endtime, 'HH:mm').format('hh:mm A'),
+            })),
         }));
     };
+
+    const columns = [
+        {
+            title: 'Employee Name',
+            dataIndex: 'name',
+            key: 'name',
+        },
+        {
+            title: 'Date',
+            dataIndex: 'date',
+            key: 'date',
+            sorter: (a, b) => moment(a.date).unix() - moment(b.date).unix(),
+            // Sort dates using moment.js by converting them to UNIX timestamps
+        },
+        {
+            title: 'Start Time',
+            dataIndex: 'starttime',
+            key: 'starttime',
+        },
+        {
+            title: 'End Time',
+            dataIndex: 'endtime',
+            key: 'endtime',
+        },
+    ];
 
     return (
         <Layout>
             <div>
                 <h2>Employee Availabilities</h2>
-                <Select defaultValue="byEmployee" style={{ width: 200, marginRight: 20 }} onChange={setSortMode}>
-                    <Option value="byEmployee">Sort by Employee</Option>
-                    <Option value="byDate">Sort by Date</Option>
-                </Select>
-                {sortMode === 'byEmployee' && (
-                    <Select defaultValue="earliest" style={{ width: 200 }} onChange={setSortOrder}>
-                        <Option value="earliest">Earliest First</Option>
-                        <Option value="latest">Latest First</Option>
-                    </Select>
-                )}
+                <Radio.Group defaultValue="byEmployee" style={{ marginBottom: 20 }} onChange={e => setSortMode(e.target.value)}>
+                    <Radio.Button value="byEmployee">List</Radio.Button>
+                    <Radio.Button value="byDate">Calendar</Radio.Button>
+                </Radio.Group>
                 {sortMode === 'byDate' ? (
-                    <MyCalendar events={calendarEvents} />
+                    <MyCalendar events={availabilities.map(availability => {
+                        // Directly use moment.utc to handle the date in UTC
+                        const eventDateStart = moment.utc(availability.date);
+                        const eventDateEnd = moment.utc(availability.date);
+
+                        // Adjust the time part using UTC methods
+                        const start = eventDateStart.add(moment.duration(availability.starttime)).toISOString();
+                        const end = eventDateEnd.add(moment.duration(availability.endtime)).toISOString();
+
+                        return {
+                            title: `${availability.user?.name}: ${moment.utc(availability.starttime, 'HH:mm').format('hh:mm A')} - ${moment.utc(availability.endtime, 'HH:mm').format('hh:mm A')}`,
+                            start: start,
+                            end: end,
+                            allDay: false,
+                        };
+                    })} />
                 ) : (
-                    <Tabs defaultActiveKey="1" items={getSortedAvailabilitiesByEmployee()} />
+                    <Table
+                        columns={columns}
+                        dataSource={getSortedAvailabilitiesByEmployee()}
+                        expandable={{
+                            rowExpandable: record => record.children && record.children.length > 0,
+                        }}
+                    />
                 )}
             </div>
         </Layout>

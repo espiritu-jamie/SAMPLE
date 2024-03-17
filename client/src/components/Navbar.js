@@ -1,29 +1,26 @@
-import React, { useState } from 'react';
-import login from "../App" 
-//import { AiOutlineMenu } from "react-icons/ai";
+// Navbar.js
+import React from 'react';
+import { useNavigate } from "react-router-dom";
+import '../styles/NavbarStyles.css';
 
 const Navbar = () => {
+  const navigate = useNavigate();
+
+  const navigateTo = (path) => {
+    navigate(path);
+  };
+  
   return (
-    <nav className="container pt-6">
-      <div className="flex justify-between items-center shadow-lg w-auto" >
-        <img src="/jkl.png" width={100} height={100} alt="logo" />
-
-        <ul className="md:flex gap-8 items-center font-semibold text-[14px] hidden">
-          <li className="text-[24px] text-cyan-800"> JKL CLeaning Services</li>
-          </ul>
-        <ul className="md:flex gap-8 items-center font-semibold text-[20px] hidden">
-          <li><button className="bg-yellow-600 text-white px-6 py-2 rounded-3xl text-[14px] sm:text-[16px] shadow-lg">
-            Home
-          </button></li>
-          <li><button className="bg-yellow-600 text-white px-6 py-2 rounded-3xl text-[14px] sm:text-[16px] shadow-lg">
-            About Us
-          </button></li>
-          <li><button  className="bg-yellow-600 text-white px-6 py-2 rounded-3xl text-[14px] sm:text-[16px] shadow-lg">
-           Book Now!
-          </button></li>
+    <nav className="navbar">
+      <div className="navbar-container">
+        <img src="/jkl.png" alt="logo" className="navbar-logo" />
+        <div className="navbar-brand">JKL Cleaning Services</div>
+        <ul className="navbar-menu">
+          <li><button onClick={() => navigateTo("/")}>Home</button></li>
+          <li><button onClick={() => navigateTo("/about")}>About Us</button></li>
+          <li><button onClick={() => navigateTo("/book-appointment")}>Book Now</button></li>
+          <li><button onClick={() => navigateTo("/login")}>Login</button></li>
         </ul>
-
-       
       </div>
     </nav>
   );

@@ -1,7 +1,7 @@
 export const employeeMenu = [
   {
     name: "Home",
-    path: "/",
+    path: "/HomePage",
     icon: "fa-solid fa-house",
   },
   {
@@ -30,7 +30,7 @@ export const employeeMenu = [
 export const adminMenu = [
   {
     name: "Home",
-    path: "/",
+    path: "/HomePage",
     icon: "fa-solid fa-house",
   },
   {
@@ -55,17 +55,23 @@ export const adminMenu = [
   }
 ];
 
-// user menu
+// client menu
 export const userMenu = [
   {
     name: "Home",
-    path: "/",
+    path: "/HomePage",
     icon: "fa-solid fa-house",
   },
   {
     name: "My Appointments",
-    path: "/my-appointments",
+    path: "/customer-appointments",
     icon: "fa-solid fa-calendar",
+  },
+  
+  {
+    name: "Book Now",
+    path: "/book-appointment",
+    icon: "fa-solid fa-calendar-plus",
   }
 ];
 

@@ -4,6 +4,7 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { hideLoading, showLoading } from "../redux/features/alertSlice";
+import moment from "moment";
 
 const SubmitAvailability = ({ onAvailabilitySubmitted }) => {
   const { user } = useSelector((state) => state.user);
@@ -32,6 +33,16 @@ const SubmitAvailability = ({ onAvailabilitySubmitted }) => {
       return;
     }
 
+    // Convert time strings to moment objects for comparison
+    const startTimeMoment = moment(time.starttime, 'HH:mm');
+    const endTimeMoment = moment(time.endtime, 'HH:mm');
+
+    // Check if end time is before or equal to start time
+    if (!endTimeMoment.isAfter(startTimeMoment)) {
+      message.error("End time must be later than start time.");
+      return;
+    }
+
     try {
       dispatch(showLoading());
 
@@ -53,12 +64,15 @@ const SubmitAvailability = ({ onAvailabilitySubmitted }) => {
       dispatch(hideLoading());
       message.success("Availability submitted successfully");
       onAvailabilitySubmitted(); // Refresh availabilities on parent component
+      setDates([]); // Clear dates after successful submission
+      setTime({ starttime: null, endtime: null }); // Clear times after successful submission
     } catch (error) {
       dispatch(hideLoading());
       message.error("Failed to submit availability");
       console.error(error);
     }
-  };
+};
+
 
   const removeDate = (dateToRemove) => {
     setDates(dates.filter(date => date !== dateToRemove));
@@ -66,7 +80,6 @@ const SubmitAvailability = ({ onAvailabilitySubmitted }) => {
 
   return (
     <div>
-      <h3 className="text-center">Enter Availability</h3>
       <Form layout="vertical" onFinish={handleFinish} className="m-3">
         <Row gutter={20}>
           <Col xs={24} sm={12} lg={8}>

@@ -42,6 +42,24 @@ const CustomerAppointments = () => {
     console.log("Edit button clicked for appointment:", appointmentId);
   };
 
+  // const handleEdit = (appointmentId) => {
+  //   const appointmentToEdit = appointments.find(appointment => appointment._id === appointmentId);
+  //   if (appointmentToEdit) {
+  //     setCurrentAppointment(appointmentToEdit);
+  //     form.setFieldsValue({
+  //       date: moment(appointmentToEdit.date, "MMMM D, YYYY"),
+  //       starttime: moment(appointmentToEdit.starttime, "hh:mm A"),
+  //       endtime: moment(appointmentToEdit.endtime, "hh:mm A"),
+  //       phoneNumber: appointmentToEdit.phoneNumber,
+  //       address: appointmentToEdit.address,
+  //       specialInstructions: appointmentToEdit.specialInstructions,
+  //     });
+  //     setIsEditModalVisible(true);
+  //   } else {
+  //     message.error("Appointment not found");
+  //   }
+  // };
+
   const handleDelete = (appointmentId) => {
     Modal.confirm({
       title: "Are you sure you want to delete this appointment?",
@@ -74,6 +92,35 @@ const CustomerAppointments = () => {
     }
   };
   
+  // const handleUpdateAppointment = async () => {
+  //   try {
+  //     const values = await form.validateFields();
+  //     const updatedAppointmentData = {
+  //       date: values.date.format("YYYY-MM-DD"),
+  //       starttime: values.starttime.format("HH:mm"),
+  //       endtime: values.endtime.format("HH:mm"),
+  //       phoneNumber: values.phoneNumber,
+  //       address: values.address,
+  //       specialInstructions: values.specialInstructions,
+  //     };
+  //     await axios.put(`/api/appointment/${currentAppointment._id}`, updatedAppointmentData, {
+  //       headers: {
+  //         Authorization: `Bearer ${localStorage.getItem("token")}`,
+  //       },
+  //     });
+
+  //     setAppointments(appointments.map(appointment => 
+  //       appointment._id === currentAppointment._id ? { ...appointment, ...updatedAppointmentData } : appointment
+  //     ));
+
+  //     message.success("Appointment updated successfully");
+  //     setIsEditModalVisible(false);
+  //   } catch (error) {
+  //     console.error("Failed to update appointment:", error);
+  //     message.error("Failed to update appointment");
+  //   }
+  // };
+
   const columns = [
     {
       title: 'Date',
@@ -150,8 +197,56 @@ const CustomerAppointments = () => {
             plugins={[dayGridPlugin]}
             initialView="dayGridMonth"
             events={calendarEvents}
+          
           />
         )}
+        {/* <Modal
+  title="Edit Appointment"
+  visible={isEditModalVisible}
+  onOk={handleUpdateAppointment}
+  onCancel={() => setIsEditModalVisible(false)}
+  okText="Update"
+  cancelText="Cancel"
+>
+  {currentAppointment && (
+    <>
+      <DatePicker
+        format="YYYY-MM-DD"
+        value={moment(currentAppointment.date, "MMMM D, YYYY")}
+        onChange={(value) => setCurrentAppointment({...currentAppointment, date: value.format("MMMM D, YYYY")})}
+      />
+      <TimePicker
+        format="HH:mm"
+        value={moment(currentAppointment.starttime, "hh:mm A")}
+        onChange={(value) => setCurrentAppointment({...currentAppointment, starttime: value.format("HH:mm")})}
+        style={{ margin: '10px 0' }}
+      />
+      <TimePicker
+        format="HH:mm"
+        value={moment(currentAppointment.endtime, "hh:mm A")}
+        onChange={(value) => setCurrentAppointment({...currentAppointment, endtime: value.format("HH:mm")})}
+        style={{ margin: '10px 0' }}
+      />
+      <Input
+        placeholder="Phone Number"
+        value={currentAppointment.phoneNumber}
+        onChange={(e) => setCurrentAppointment({...currentAppointment, phoneNumber: e.target.value})}
+      />
+      <Input
+        placeholder="Address"
+        value={currentAppointment.address}
+        onChange={(e) => setCurrentAppointment({...currentAppointment, address: e.target.value})}
+        style={{ margin: '10px 0' }}
+      />
+      <Input.TextArea
+        placeholder="Special Instructions"
+        value={currentAppointment.specialInstructions}
+        onChange={(e) => setCurrentAppointment({...currentAppointment, specialInstructions: e.target.value})}
+        rows={3}
+      />
+    </>
+  )}
+</Modal> */}
       </div>
     </Layout>
   );

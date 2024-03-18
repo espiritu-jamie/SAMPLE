@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
@@ -8,6 +8,7 @@ import { message, Select } from 'antd';
 import Layout from '../../components/Layout';
 import moment from 'moment';
 import AppointmentDetailsModal from '../../components/modal/AppointmentDetailsModal';
+import '../../styles/FullCalendarStyles.css';
 
 const { Option } = Select;
 
@@ -16,36 +17,38 @@ const ScheduleManagement = () => {
     const [filter, setFilter] = useState('all');
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [currentAppointment, setCurrentAppointment] = useState(null);
+    const calendarRef = useRef(null); // Ref for accessing FullCalendar methods
+
+    const fetchAppointments = async () => {
+        const token = localStorage.getItem('token');
+        const headers = { Authorization: `Bearer ${token}` };
+    
+        try {
+            const response = await axios.get('/api/appointment', { headers });
+            const filteredAppointments = response.data.data
+                .filter(appointment => filter === 'all' || appointment.status === filter)
+                .map(appointment => ({
+                    id: appointment._id,
+                    title: `Appointment: ${appointment.userId.name} - ${appointment.status.toUpperCase()}`,
+                    start: moment(appointment.date).format('YYYY-MM-DD') + 'T' + appointment.starttime,
+                    end: moment(appointment.date).format('YYYY-MM-DD') + 'T' + appointment.endtime,
+                    allDay: false,
+                    extendedProps: {
+                        ...appointment
+                    },
+                    color: appointment.status === 'confirmed' ? '#33CC33' : appointment.status === 'cancelled' ? 'red' : 'blue',
+                    textColor: 'white',
+                }));
+            setAppointments(filteredAppointments);
+        } catch (error) {
+            console.error('Error fetching appointments:', error);
+            message.error('Failed to fetch appointments');
+        }
+    };
 
     useEffect(() => {
-        // Now the fetchAppointments function is defined inside useEffect, making it unnecessary to add to dependencies
-        const fetchAppointments = async () => {
-            const token = localStorage.getItem('token');
-            const headers = { Authorization: `Bearer ${token}` };
-
-            try {
-                const response = await axios.get('/api/appointment', { headers });
-                const filteredAppointments = response.data.data
-                    .filter(appointment => filter === 'all' || appointment.status === filter)
-                    .map(appointment => ({
-                        id: appointment._id,
-                        title: `Appointment: ${appointment.userId.name} - ${appointment.status.toUpperCase()}`,
-                        start: moment(appointment.date).format('YYYY-MM-DD') + 'T' + appointment.starttime,
-                        end: moment(appointment.date).format('YYYY-MM-DD') + 'T' + appointment.endtime,
-                        allDay: false,
-                        extendedProps: {
-                            ...appointment
-                        }
-                    }));
-                setAppointments(filteredAppointments);
-            } catch (error) {
-                console.error('Error fetching appointments:', error);
-                message.error('Failed to fetch appointments');
-            }
-        };
-
         fetchAppointments();
-    }, [filter]); // filter is the only dependency now
+    }, [filter]);
 
     const handleEventClick = ({ event }) => {
         setIsModalVisible(true);
@@ -67,12 +70,13 @@ const ScheduleManagement = () => {
                     <Option value="cancelled">Cancelled</Option>
                 </Select>
                 <FullCalendar
+                    aspectRatio={1.5} // Adjust the width to height ratio
+                    contentHeight="auto" // or you can use a specific height like '600px'
                     plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
                     initialView="dayGridMonth"
                     headerToolbar={{
-                        left: 'prev,next today',
-                        center: 'title',
-                        right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                        right: 'today prev,next',
+
                     }}
                     events={appointments}
                     eventClick={handleEventClick}
@@ -82,7 +86,7 @@ const ScheduleManagement = () => {
                         isVisible={isModalVisible}
                         onClose={() => setIsModalVisible(false)}
                         appointment={currentAppointment}
-                        fetchAppointments={() => {}}
+                        fetchAppointments={fetchAppointments} 
                         userRole="admin"
                     />
                 )}

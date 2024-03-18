@@ -1,12 +1,12 @@
 export const employeeMenu = [
   {
     name: "Home",
-    path: "/",
+    path: "/HomePage",
     icon: "fa-solid fa-house",
   },
   {
-    name: "My Schedule",
-    path: "/my-schedule",
+    name: "My Shifts",
+    path: "/my-shifts",
     icon: "fa-solid fa-calendar",
   },
   {
@@ -14,11 +14,11 @@ export const employeeMenu = [
     path: "/my-availability",
     icon: "fa-solid fa-list",
   },
-  {
-    name: "Enter Availability",
-    path: "/enter-availability",
-    icon: "fa-solid fa-calendar-plus",
-  },
+  // {
+  //   name: "Enter Availability",
+  //   path: "/enter-availability",
+  //   icon: "fa-solid fa-calendar-plus",
+  // },
   {
   name: "Profile",
   path: "/pages/Profile", // Update with the correct path for the Profile component
@@ -30,7 +30,7 @@ export const employeeMenu = [
 export const adminMenu = [
   {
     name: "Home",
-    path: "/",
+    path: "/HomePage",
     icon: "fa-solid fa-house",
   },
   {
@@ -50,17 +50,23 @@ export const adminMenu = [
   }
 ];
 
-// user menu
+// client menu
 export const userMenu = [
   {
     name: "Home",
-    path: "/",
+    path: "/HomePage",
     icon: "fa-solid fa-house",
   },
   {
     name: "My Appointments",
-    path: "/my-appointments",
+    path: "/customer-appointments",
     icon: "fa-solid fa-calendar",
+  },
+  
+  {
+    name: "Book Now",
+    path: "/book-appointment",
+    icon: "fa-solid fa-calendar-plus",
   }
 ];
 

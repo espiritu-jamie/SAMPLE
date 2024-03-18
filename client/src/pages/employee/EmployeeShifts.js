@@ -1,65 +1,3 @@
-// import React, { useEffect, useState } from "react";
-// import axios from "axios";
-// import { Card, Button } from "antd";
-// import Layout from "./Layout"; // Adjust the import path as necessary
-// import AppointmentDetailsModal from ".modal/AppointmentDetailsModal"; // Adjust the import path as necessary
-
-// const EmployeeShifts = () => {
-//   const [confirmedAppointments, setConfirmedAppointments] = useState([]);
-//   const [selectedAppointment, setSelectedAppointment] = useState(null);
-//   const [isModalVisible, setIsModalVisible] = useState(false);
-
-//   useEffect(() => {
-//     fetchConfirmedAppointments();
-//   }, []);
-
-//   const fetchConfirmedAppointments = async () => {
-//     try {
-//       const { data } = await axios.get('/api/appointment/confirmed-for-employee', {
-//         headers: {
-//           Authorization: `Bearer ${localStorage.getItem("token")}`, // Adjust as necessary
-//         },
-//       });
-//       setConfirmedAppointments(data.data);
-//     } catch (error) {
-//       console.error("Error fetching confirmed appointments:", error);
-//     }
-//   };
-
-//   const handleAppointmentClick = (appointment) => {
-//     setSelectedAppointment(appointment);
-//     setIsModalVisible(true);
-//   };
-
-//   return (
-//     <Layout>
-//       <h2>My Confirmed Shifts</h2>
-//       {confirmedAppointments.map((appointment) => (
-//         <Card 
-//           key={appointment._id} 
-//           onClick={() => handleAppointmentClick(appointment)}
-//           style={{ cursor: "pointer" }}
-//         >
-//           <p>Customer Name: {appointment.userId.name}</p>
-//           <p>Date: {new Date(appointment.date).toLocaleDateString()}</p>
-//           <p>Start Time: {appointment.starttime}</p>
-//           <p>End Time: {appointment.endtime}</p>
-//         </Card>
-//       ))}
-//       {selectedAppointment && (
-//         <AppointmentDetailsModal
-//           isVisible={isModalVisible}
-//           onClose={() => setIsModalVisible(false)}
-//           appointment={selectedAppointment}
-//           fetchAppointments={fetchConfirmedAppointments}
-//         />
-//       )}
-//     </Layout>
-//   );
-// };
-
-// export default EmployeeShifts;
-
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import FullCalendar from '@fullcalendar/react';
@@ -69,6 +7,7 @@ import Layout from '../../components/Layout';
 import AppointmentDetailsModal from '../../components/modal/AppointmentDetailsModal';
 import moment from 'moment';
 import { message } from 'antd';
+import '../../styles/FullCalendarStyles.css';
 
 
 const EmployeeShiftsPage = () => {
@@ -91,6 +30,7 @@ const EmployeeShiftsPage = () => {
                 start: moment(appointment.date).format('YYYY-MM-DD') + 'T' + appointment.starttime,
                 end: moment(appointment.date).format('YYYY-MM-DD') + 'T' + appointment.endtime,
                 allDay: false,
+                color: '#33CC33',
                 extendedProps: { ...appointment }
             })));
         } catch (error) {
@@ -113,6 +53,8 @@ const EmployeeShiftsPage = () => {
         <Layout>
             <h2>My Shifts</h2>
             <FullCalendar
+                aspectRatio={1.5}
+                contentHeight="auto"
                 plugins={[dayGridPlugin, interactionPlugin]}
                 initialView="dayGridMonth"
                 events={confirmedAppointments}

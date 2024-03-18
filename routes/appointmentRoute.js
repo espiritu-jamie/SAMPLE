@@ -6,10 +6,12 @@ const {
     submitAppointmentController,
     getAllAppointmentsController,
     getAvailableEmployeesForAppointmentController,
+    updateAppointmentStatusController,
     autoAssignAppointments,
     assignEmployeesToAppointmentController,
     cancelAppointmentController,
     getConfirmedAppointmentsForEmployee,
+    rescheduleAppointmentController,
     } = require('../controllers/appointmentController');
 
 // Submitting a new appointment for authenticated customers
@@ -32,5 +34,11 @@ router.patch('/cancel-appointment/:appointmentId', authMiddleware, cancelAppoint
 
 // Fetching the confirmed appointments for the logged-in employee
 router.get('/confirmed-for-employee', authMiddleware, getConfirmedAppointmentsForEmployee);
+
+// Updating the status of an appointment (for admins)
+router.patch('/update-status/:appointmentId', authMiddleware, updateAppointmentStatusController);
+
+// Rescheduling an appointment (on admin page)
+router.patch('/reschedule-appointment/:appointmentId', authMiddleware, rescheduleAppointmentController);
 
 module.exports = router;

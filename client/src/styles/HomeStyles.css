@@ -1,0 +1,90 @@
+/* HomeStyles.css */
+.home-container {
+    position: relative;
+    min-height: 100vh;
+  }
+  
+  .hero-section {
+    position: relative;
+    padding: 60px 0; /* Gives some spacing on the top and bottom */
+  }
+  
+  .hero-image {
+    width: 100%;
+    height: auto;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: -1;
+    opacity: 0.5; /* Makes the image less prominent so the text stands out */
+  }
+  
+  .content-container {
+    height: calc(100vh - 120px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .text-container {
+    background-color: rgba(255, 255, 255, 0.8); /* Subtle white background */
+    padding: 32px;
+    border-radius: 16px; /* Rounded corners */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Soft shadow */
+  }
+  
+  .choice-text {
+    text-transform: uppercase;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 16px;
+  }
+  
+  .headline {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 16px;
+  }
+  
+  .accent-text {
+    color: #f94c25; /* Your accent color */
+  }
+  
+  .description-text {
+    color: #555;
+    font-size: 1rem;
+    margin-bottom: 24px;
+  }
+  
+  .view-more-button {
+    background-color: #f94c25; /* Your accent color */
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 50px; /* Fully rounded corners */
+    cursor: pointer;
+    text-transform: uppercase;
+    font-weight: bold;
+  }
+  
+  /* Responsive styles */
+  @media (min-width: 1024px) {
+    .hero-image {
+      opacity: 0.75; /* Less transparency for larger screens */
+    }
+  
+    .text-container {
+      padding: 48px;
+    }
+  
+    .headline {
+      font-size: 4rem;
+    }
+  
+    .view-more-button {
+      font-size: 1.25rem;
+      padding: 16px 32px;
+    }
+  }
+  

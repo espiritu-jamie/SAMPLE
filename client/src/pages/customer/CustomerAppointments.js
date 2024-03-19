@@ -4,7 +4,8 @@ import Layout from "../../components/Layout";
 import { Table, Button, message, Radio, Input, Modal } from "antd";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
-import moment from "moment"; 
+import moment from "moment";
+import "../../styles/CustomerAppointmentsStyles.css";
 
 const CustomerAppointments = () => {
   const [appointments, setAppointments] = useState([]);
@@ -12,42 +13,71 @@ const CustomerAppointments = () => {
   const [commentModalVisible, setCommentModalVisible] = useState(false);
   const [commentText, setCommentText] = useState("");
   const [selectedAppointmentId, setSelectedAppointmentId] = useState(null);
+  const [cancelModalVisible, setCancelModalVisible] = useState(false);
+  const [cancellationReason, setCancellationReason] = useState("");
+
+  const fetchAppointments = async () => {
+    try {
+      const res = await axios.get("/api/appointment", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+
+      const formattedAppointments = res.data.data.map((appointment) => ({
+        ...appointment,
+        date: moment(appointment.date).format("MMMM D, YYYY"),
+        starttime: moment(appointment.starttime, "HH:mm").format("hh:mm A"),
+        endtime: moment(appointment.endtime, "HH:mm").format("hh:mm A"),
+        status: appointment.status
+      }));
+
+      setAppointments(formattedAppointments);
+    } catch (error) {
+      message.error("Error fetching appointments");
+      console.error("Error fetching appointments:", error);
+    }
+  };
+
   useEffect(() => {
-    const fetchAppointments = async () => {
-      try {
-        const res = await axios.get("/api/appointment", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
-
-        // Format the date and times immediately after fetching
-        const formattedAppointments = res.data.data.map((appointment) => ({
-          ...appointment,
-          date: moment(appointment.date).format("MMMM D, YYYY"),
-          starttime: moment(appointment.starttime, "HH:mm").format("hh:mm A"),
-          endtime: moment(appointment.endtime, "HH:mm").format("hh:mm A"),
-        }));
-
-        setAppointments(formattedAppointments);
-      } catch (error) {
-        message.error("Error fetching appointments");
-        console.error("Error fetching appointments:", error);
-      }
-    };
-
     fetchAppointments();
   }, []);
 
-  const handleEdit = (appointmentId) => {
-    // Implement edit functionality here
-    console.log("Edit button clicked for appointment:", appointmentId);
+  const promptCancelAppointment = (appointmentId) => {
+    setSelectedAppointmentId(appointmentId);
+    setCancelModalVisible(true);
   };
 
-  const handleDelete = (appointmentId) => {
-    // Implement delete functionality here
-    console.log("Delete button clicked for appointment:", appointmentId);
+  const handleCancelAppointment = async () => {
+    if (!selectedAppointmentId || !cancellationReason.trim()) {
+      message.error("A cancellation reason is required.");
+      return;
+    }
+
+    try {
+      const res = await axios.patch(`/api/appointment/cancel-appointment/${selectedAppointmentId}`, {
+        cancellationReason,
+      }, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+
+      if (res.status === 200 || res.status === 204) {
+        message.success("Appointment cancelled successfully");
+        fetchAppointments();
+        setCancelModalVisible(false);
+        setSelectedAppointmentId(null);
+        setCancellationReason("");
+      } else {
+        message.error("Failed to cancel the appointment. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error cancelling appointment:", error);
+      message.error("An error occurred while cancelling the appointment. Please try again.");
+    }
   };
+  
   const handleComment = (appointmentId) => {
     setSelectedAppointmentId(appointmentId);
     setCommentModalVisible(true);
@@ -107,14 +137,20 @@ const CustomerAppointments = () => {
       key: 'actions',
       render: (_, record) => (
         <>
-          {/* <Button onClick={() => handleEdit(record._id)} type="primary" style={{ marginRight: 8 }}>
-            Edit
-          </Button> */}
-          <Button onClick={() => handleDelete(record._id)} type="danger">
-            Delete
-          </Button>
-          
-        </>
+      <Button 
+        onClick={() => promptCancelAppointment(record._id)} 
+        type="primary"
+        danger
+        disabled={record.status === "cancelled"} // Disable the button if the appointment is canceled
+        style={{ 
+          marginRight: 8,
+          color: record.status === "cancelled" ? "#ccc" : undefined, // Optional: grey out text color
+          borderColor: record.status === "cancelled" ? "#ccc" : undefined // Optional: grey out border color
+        }}
+      >
+        Cancel Appointment
+      </Button>
+    </>
       ),
     },
     {
@@ -122,20 +158,33 @@ const CustomerAppointments = () => {
       key: 'comments',
       render: (_, record) => (
         <>
-          <Button onClick={() => handleComment(record._id)} type="primary">
-           Rate
-          </Button>
+        <Button 
+          onClick={() => handleComment(record._id)}
+          type="primary"
+          disabled={record.status === "cancelled"} // Disable the button if the appointment is canceled
+          style={{ 
+            color: record.status === "cancelled" ? "#ccc" : undefined, // Grey out text color if canceled
+            borderColor: record.status === "cancelled" ? "#ccc" : undefined // Grey out border if canceled
+          }}
+      >
+        Rate
+      </Button>
         </>
       ),
     },
   ];
+
 
   const calendarEvents = appointments.map((appointment) => ({
     title: `Appointment with ${appointment.phoneNumber}`,
     start: moment(appointment.date, "MMMM D, YYYY").toISOString(),
     end: moment(appointment.date, "MMMM D, YYYY").toISOString(),
     allDay: true,
+    color: appointment.status === "cancelled" ? "#cccccc" : "#378006",
   }));
+
+
+  
 
   return (
     <Layout>
@@ -149,8 +198,15 @@ const CustomerAppointments = () => {
           <Radio.Button value="list">List View</Radio.Button>
           <Radio.Button value="calendar">Calendar View</Radio.Button>
         </Radio.Group>
+        
         {viewMode === 'list' ? (
-          <Table dataSource={appointments} columns={columns} rowKey="_id" />
+          <Table 
+            dataSource={appointments}
+            columns={columns}
+            rowKey="_id"
+            rowClassName={(record) => record.status === "cancelled" ? 'greyed-out' : ''}
+        
+          />
         ) : (
           <FullCalendar
             plugins={[dayGridPlugin]}
@@ -158,11 +214,14 @@ const CustomerAppointments = () => {
             events={calendarEvents}
           />
         )}
+  
         <Modal
           title="Add Comment"
           visible={commentModalVisible}
           onOk={handleCommentSubmit}
-          onCancel={handleCancelComment}
+          onCancel={() => setCommentModalVisible(false)}
+          okText="Submit Comment"
+          cancelText="Cancel"
         >
           <Input.TextArea
             value={commentText}
@@ -171,9 +230,30 @@ const CustomerAppointments = () => {
             placeholder="Enter your comment"
           />
         </Modal>
+  
+        <Modal
+          title="Cancel Appointment"
+          visible={cancelModalVisible}
+          onOk={handleCancelAppointment}
+          onCancel={() => {
+            setCancelModalVisible(false);
+            setCancellationReason(""); // Reset the cancellation reason if the modal is cancelled
+          }}
+          okText="Confirm Cancellation"
+          cancelText="Go Back"
+        >
+          <Input.TextArea
+            rows={4}
+            value={cancellationReason}
+            onChange={(e) => setCancellationReason(e.target.value)}
+            placeholder="Please provide a reason for cancellation."
+          />
+        </Modal>
       </div>
     </Layout>
   );
 };
+  
+
 
 export default CustomerAppointments;

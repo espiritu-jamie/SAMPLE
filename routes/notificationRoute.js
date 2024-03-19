@@ -10,12 +10,12 @@ const {
 } = require('../controllers/notificationController');
 
 // Send Notification through submitting availability
-router.post('/', authMiddleware, submitAvailabilityController);
+// router.post('/', authMiddleware, submitAvailabilityController);
 
 // Get All Notifications
 router.get('/get-all-notifications', authMiddleware, getAllNotificationController);
 
-// Delete All Notifications
+// Delete All Read Notifications
 router.delete('/delete-all-notifications', authMiddleware, deleteAllNotificationController);
 
 // Mark All Notifications As Read

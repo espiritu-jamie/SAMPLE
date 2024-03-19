@@ -1,4 +1,6 @@
 const Notification = require('../models/notificationModel');
+const userModel = require('../models/userModel');
+
 
 
 // Function to send a notification
@@ -38,30 +40,35 @@ const sendNotificationController = async (userId, type, message, data) => {
       });
     }
   };
-  
-  
+
   // delete notifications
-  const deleteAllNotificationController = async (req, res) => {
-    try {
-      const user = await userModel.findOne({ _id: req.body.userId });
-      user.notification = [];
-      user.seennotification = [];
-      const updatedUser = await user.save();
-      updatedUser.password = undefined;
-      res.status(200).send({
-        success: true,
-        message: "Notifications Deleted Successfully",
-        data: updatedUser,
-      });
-    } catch (error) {
-      console.log(error);
-      res.status(500).send({
-        success: false,
-        message: "Unable To Delete All Notifications",
-        error,
-      });
-    }
-  };
+const deleteAllNotificationController = async (req, res) => {
+  try {
+    const userId = req.body.userId;
+    const user = await userModel.findOne({ _id: userId });
+
+    // Filter out read notifications
+    const updatedNotifications = user.notification.filter(notification => notification.isRead === false);
+    
+    user.notification = updatedNotifications;
+    const updatedUser = await user.save();
+    updatedUser.password = undefined;
+
+    res.status(200).send({
+      success: true,
+      message: "Read Notifications Deleted Successfully",
+      data: updatedUser,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "Unable To Delete All Read Notifications",
+      error,
+    });
+  }
+};
+
   
   // Mark all notifications as read
   const markAllNotificationAsReadController = async (req, res) => {

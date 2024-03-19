@@ -57,41 +57,37 @@ const NotificationPage = () => {
     }
   };
 
-  // handle delete notification
-  const handleDeleteAllRead = async () => {
-    try {
-      dispatch(showLoading());
-      const res = await axios.post(
-        "/api/user/delete-all-notifications",
-        {
-          userId: user._id,
+  // handle delete all read notifications
+const handleDeleteAllRead = async () => {
+  try {
+    dispatch(showLoading());
+    const res = await axios.delete(
+      "/api/notification/delete-all-notifications", // Update endpoint
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-      dispatch(hideLoading());
-      if (res.data.success) {
-        const updatedNotifications = res.data.notifications || [];
-        const updatedUser = {
-          ...user,
-          notification: updatedNotifications.filter(notification => !notification.isRead),
-          seennotification: updatedNotifications.filter(notification => notification.isRead),
-        };
-        dispatch(setUser(updatedUser));
-        setRefreshNotifications(!refreshNotifications);
-        message.success(res.data.message);
-      } else {
-        message.error(res.data.message);
       }
-    } catch (error) {
-      dispatch(hideLoading());
-      console.error("Error deleting notifications: ", error);
-      message.error("Something went wrong while deleting notifications.");
+    );
+    dispatch(hideLoading());
+    if (res.data.success) {
+      const updatedUser = {
+        ...user,
+        notification: res.data.data.notification, // Update notifications with the response
+        seennotification: [],
+      };
+      dispatch(setUser(updatedUser));
+      setRefreshNotifications((prevState) => !prevState);
+      message.success(res.data.message);
+    } else {
+      message.error(res.data.message);
     }
-  };
+  } catch (error) {
+    dispatch(hideLoading());
+    console.error("Error deleting read notifications: ", error);
+    message.error("Something went wrong while deleting read notifications.");
+  }
+};
 
   return (
     <Layout>

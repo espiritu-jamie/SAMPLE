@@ -128,40 +128,74 @@ const Profile = () => {
     });
   };
 
+  // const handleSubmit = async () => {
+  //   const token = localStorage.getItem("token"); // Retrieve the JWT token stored in localStorage
+  
+  //   // Adjust the profileUpdateData object to match the userModel structure
+  //   const profileUpdateData = {
+  //     name: profile.name,
+  //     email: profile.email,
+  //     address: {
+  //       streetAddress: profile.streetAddress,
+  //       postalCode: profile.postalCode,
+  //     },
+  //     phoneNumber: profile.phoneNumber,
+  //   };
+
+    
+  
+  //   try {
+  //     // Sending the PUT request to the update profile endpoint
+  //     const response = await axios.put('/update-profile/:userId', profileUpdateData, {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`, // Include the JWT token in the authorization header
+  //       },
+  //     });
+  
+  //     // Handle the response from the backend
+  //     if (response.data.success) {
+  //       message.success("Profile updated successfully");
+  //       // Optionally, you might want to fetch the updated profile data here or update the UI accordingly
+  //     } else {
+  //       // Handle cases where the backend response indicates failure
+  //       message.error("Failed to update profile. Please try again.");
+  //     }
+  //   } catch (error) {
+  //     // Handle any errors that occur during the API request
+  //     console.error("Error updating profile:", error);
+  //     message.error("Failed to update profile due to an error.");
+  //   }
+  // };
+
   const handleSubmit = async () => {
     const token = localStorage.getItem("token"); // Retrieve the JWT token stored in localStorage
   
-    // Adjust the profileUpdateData object to match the userModel structure
+    // Adjust the URL to include the actual userId
+    const updateProfileUrl = `/update-profile/${profile.userId}`;
+  
     const profileUpdateData = {
-      name: profile.name, // Assuming you have a name field in your profile state
+      name: profile.name,
       email: profile.email,
       address: {
-        streetAddress: profile.streetAddress, // Make sure these fields are managed in your profile state
-        city: profile.city,
-        state: profile.state,
+        streetAddress: profile.streetAddress,
         postalCode: profile.postalCode,
       },
-      // Add any other fields you want to update that match the userModel structure
+      phoneNumber: profile.phoneNumber,
     };
   
     try {
-      // Sending the PUT request to the update profile endpoint
-      const response = await axios.put('/update-profile', profileUpdateData, {
+      const response = await axios.put(updateProfileUrl, profileUpdateData, {
         headers: {
           Authorization: `Bearer ${token}`, // Include the JWT token in the authorization header
         },
       });
   
-      // Handle the response from the backend
       if (response.data.success) {
         message.success("Profile updated successfully");
-        // Optionally, you might want to fetch the updated profile data here or update the UI accordingly
       } else {
-        // Handle cases where the backend response indicates failure
         message.error("Failed to update profile. Please try again.");
       }
     } catch (error) {
-      // Handle any errors that occur during the API request
       console.error("Error updating profile:", error);
       message.error("Failed to update profile due to an error.");
     }
@@ -174,44 +208,35 @@ const Profile = () => {
 
   return (
     <Layout>
-      <div className="profile-container">
-        <h2>Profile</h2>
-        <Form
-          form={form}
-          onFinish={handleSubmit}
-          initialValues={profile}
-          layout="vertical"
-        >
-          <Form.Item label="First Name" name="firstName">
-            <Input onChange={handleInputChange} />
-          </Form.Item>
-          <Form.Item label="Last Name" name="lastName">
-            <Input onChange={handleInputChange} />
-          </Form.Item>
-          <Form.Item label="Email" name="email">
-            <Input onChange={handleInputChange} />
-          </Form.Item>
-          <Form.Item label="Street Address" name={["address", "streetAddress"]}>
-            <Input onChange={handleInputChange} />
-          </Form.Item>
-          <Form.Item label="City" name={["address", "city"]}>
-            <Input onChange={handleInputChange} />
-          </Form.Item>
-          <Form.Item label="State" name={["address", "state"]}>
-            <Input onChange={handleInputChange} />
-          </Form.Item>
-          <Form.Item label="Postal Code" name={["address", "postalCode"]}>
-            <Input onChange={handleInputChange} />
-          </Form.Item>
-          <Form.Item label="Phone Number" name="phoneNumber">
-            <Input onChange={handleInputChange} />
-          </Form.Item>
-          <Form.Item>
-            <Button type="primary" htmlType="submit">Save</Button>
-          </Form.Item>
-        </Form>
-      </div>
-    </Layout>
+    <div className="profile-container">
+      <h2>Profile</h2>
+      <Form
+        form={form}
+        onFinish={handleSubmit}
+        initialValues={profile}
+        layout="vertical"
+      >
+        <Form.Item label="Name" name="name">
+          <Input onChange={handleInputChange} />
+        </Form.Item>
+        <Form.Item label="Email" name="email">
+          <Input onChange={handleInputChange} />
+        </Form.Item>
+        <Form.Item label="Address" name="address">
+          <Input onChange={handleInputChange} />
+        </Form.Item>
+        <Form.Item label="Postal Code" name="postalCode">
+          <Input onChange={handleInputChange} />
+        </Form.Item>
+        <Form.Item label="Phone Number" name="phoneNumber">
+          <Input onChange={handleInputChange} />
+        </Form.Item>
+        <Form.Item>
+          <Button type="primary" htmlType="submit">Save</Button>
+        </Form.Item>
+      </Form>
+    </div>
+  </Layout>
   );
 };
 

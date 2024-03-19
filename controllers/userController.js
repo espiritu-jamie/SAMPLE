@@ -53,6 +53,34 @@ const registerController = async (req, res) => {
   }
 };
 
+// const viewprofilecontroller = async (req, res) => {
+//   try {
+//     // Check if user object is available in the request
+//     if (!req.user) {
+//       return res.status(401).json({ success: false, message: 'User not authenticated' });
+//     }
+
+//     // Extract user information from the request
+//     const { firstName, lastName, email, address, phoneNumber } = req.user;
+
+//     // Construct the user profile object
+//     const userProfile = {
+//       firstName,
+//       lastName,
+//       email,
+//       address,
+//       phoneNumber
+//     };
+
+//     // Send the user profile as the response
+//     res.status(200).json({ success: true, userProfile });
+//   } catch (error) {
+//     // Handle errors
+//     console.error('Error viewing profile:', error);
+//     res.status(500).json({ success: false, message: 'Error viewing profile', error });
+//   }
+// };
+
 const viewprofilecontroller = async (req, res) => {
   try {
     // Check if user object is available in the request
@@ -61,14 +89,20 @@ const viewprofilecontroller = async (req, res) => {
     }
 
     // Extract user information from the request
-    const { firstName, lastName, email, address, phoneNumber } = req.user;
+    const { name, email, address, phoneNumber } = req.user;
 
-    // Construct the user profile object
+    // Given that address may already be an object, ensure postalCode is part of it
+    // If your user model ensures `address` is an object including `postalCode`, no need to adjust
+    // Otherwise, you might need to structure it as seen below (this depends on your actual user model)
+
+    // Construct the user profile object to reflect the updated structure
     const userProfile = {
-      firstName,
-      lastName,
+      name, // Now using a single name field instead of firstName and lastName
       email,
-      address,
+      address: {
+        ...address, // Assuming address is an object that includes street, city, etc., and postalCode
+        // If postalCode needs to be specifically added or adjusted, do that here
+      },
       phoneNumber
     };
 
@@ -84,8 +118,8 @@ const viewprofilecontroller = async (req, res) => {
 // updateprofilecontroller
 const updateprofilecontroller = async (req, res) => {
   try {
-    const userId = req.body.userId; // Extract userId from URL parameters
-    const { firstName, lastName, email, address, phoneNumber, postalCode } = req.body;
+    const userId = req.params.userId; // Extract userId from URL parameters
+    const { name, email, address, phoneNumber, postalCode } = req.body;
 
     // Check if all required fields are provided
     if (!firstName || !lastName || !email || !address || !phoneNumber || !postalCode) {
@@ -99,11 +133,11 @@ const updateprofilecontroller = async (req, res) => {
     }
 
     // Update user profile fields
-    user.name = `${firstName} ${lastName}`;
+    user.name = name;
     user.email = email;
     user.address = address;
     user.phoneNumber = phoneNumber;
-    user.address.postalCode = postalCode; // Ensure postalCode is updated separately
+    
 
     // Save changes to the user profile
     await user.save();

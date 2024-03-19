@@ -1,19 +1,24 @@
 export const employeeMenu = [
   {
     name: "Home",
-    path: "/",
+    path: "/HomePage",
     icon: "fa-solid fa-house",
+  },
+  {
+    name: "My Shifts",
+    path: "/my-shifts",
+    icon: "fa-solid fa-calendar",
   },
   {
     name: "My Availability",
     path: "/my-availability",
     icon: "fa-solid fa-list",
   },
-  {
-    name: "Enter Availability",
-    path: "/enter-availability",
-    icon: "fa-solid fa-calendar-plus",
-  },
+  // {
+  //   name: "Enter Availability",
+  //   path: "/enter-availability",
+  //   icon: "fa-solid fa-calendar-plus",
+  // },
   {
   name: "Profile",
   path: "/profile",
@@ -25,10 +30,14 @@ export const employeeMenu = [
 export const adminMenu = [
   {
     name: "Home",
-    path: "/",
+    path: "/HomePage",
     icon: "fa-solid fa-house",
   },
-
+  {
+    name: "Schedule Management",
+    path: "/admin-schedule-management",
+    icon: "fa-solid fa-calendar-plus",
+  },
   {
     name: "Employee Availability",
     path: "/admin-employee-availability",
@@ -41,17 +50,23 @@ export const adminMenu = [
   }
 ];
 
-// user menu
+// client menu
 export const userMenu = [
   {
     name: "Home",
-    path: "/",
+    path: "/HomePage",
     icon: "fa-solid fa-house",
   },
   {
     name: "My Appointments",
-    path: "/my-appointments",
+    path: "/customer-appointments",
     icon: "fa-solid fa-calendar",
+  },
+  
+  {
+    name: "Book Now",
+    path: "/book-appointment",
+    icon: "fa-solid fa-calendar-plus",
   }
 ];
 

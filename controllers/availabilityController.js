@@ -8,53 +8,106 @@ const userModel = require('../models/userModel');
 
 
 // Submit Availability Controller (Employees Only)
-const submitAvailabilityController = async (req, res) => {
-    try {
-        const { userId, date, starttime, endtime } = req.body;
-        const userRole = await getUserRole(userId);
+// const submitAvailabilityController = async (req, res) => {
+//     try {
+//         const { userId, date, starttime, endtime } = req.body;
+//         const userRole = await getUserRole(userId);
         
-        if (userRole !== 'employee') {
-            return res.status(403).send({ message: "Unauthorized - Only employees can submit availability" });
-        }
+//         if (userRole !== 'employee') {
+//             return res.status(403).send({ message: "Unauthorized - Only employees can submit availability" });
+//         }
   
-        const newAvailability = new Availability({
-            userId,
-            date: moment(date, "YYYY-MM-DD").toDate(),
-            starttime,
-            endtime,
-        });
-        await newAvailability.save();
+//         const newAvailability = new Availability({
+//             userId,
+//             date: moment(date, "YYYY-MM-DD").toDate(),
+//             starttime,
+//             endtime,
+//         });
+//         await newAvailability.save();
   
-        // Send a notification to the admin
-        const notification = new Notification({
-          userId,
-          type: "new-employee-availability",
-          message: "New employee availability submitted",
-        });
-        await notification.save();
+//         // Send a notification to the admin
+//         const notification = new Notification({
+//           userId,
+//           type: "new-employee-availability",
+//           message: "New employee availability submitted",
+//         });
+//         await notification.save();
   
-        const adminUser = await userModel.findOne({ userRole: 'admin' });
+//         const adminUser = await userModel.findOne({ userRole: 'admin' });
   
-        if (adminUser) {
-          adminUser.notification.push(notification);
-          await adminUser.save();
-        }
+//         if (adminUser) {
+//           adminUser.notification.push(notification);
+//           await adminUser.save();
+//         }
   
-        // Employee gets a notification
-        res.status(201).send({
-            success: true,
-            message: "Availability submitted successfully",
-            data: newAvailability,
-        });
+//         // Employee gets a notification
+//         res.status(201).send({
+//             success: true,
+//             message: "Availability submitted successfully",
+//             data: newAvailability,
+//         });
   
-    } catch (error) {
-        console.error("Error submitting availability:", error);
-        res.status(500).send({
-            success: false,
-            message: error.message,
-        });
-    }
-  };
+//     } catch (error) {
+//         console.error("Error submitting availability:", error);
+//         res.status(500).send({
+//             success: false,
+//             message: error.message,
+//         });
+//     }
+//   };
+
+const submitAvailabilityController = async (req, res) => {
+  try {
+      const { userId, dates, starttime, endtime } = req.body;
+      const userRole = await getUserRole(userId);
+
+      if (userRole !== 'employee') {
+          return res.status(403).send({ message: "Unauthorized - Only employees can submit availability" });
+      }
+
+      let availabilitiesProcessed = 0; // Track how many availabilities were processed
+
+      await Promise.all(dates.map(async (date) => {
+          const existingAvailability = await Availability.findOne({ userId, date });
+          if (existingAvailability) {
+              // Update existing availability
+              existingAvailability.starttime = starttime;
+              existingAvailability.endtime = endtime;
+              await existingAvailability.save();
+          } else {
+              // Create new availability
+              const newAvailability = new Availability({ userId, date, starttime, endtime });
+              await newAvailability.save();
+          }
+          availabilitiesProcessed++;
+      }));
+
+      // Assuming we want to send notifications after processing all dates
+      if (availabilitiesProcessed > 0) {
+          // Create a notification for the admin about new or updated availability
+          const notification = new Notification({
+              userId,
+              type: "new-employee-availability",
+              message: `Employee has submitted/updated availability for ${availabilitiesProcessed} dates.`,
+          });
+          await notification.save();
+
+          const adminUsers = await userModel.find({ userRole: 'admin' });
+          
+          // If there are multiple admins, consider how you want to handle notifications
+          for (const adminUser of adminUsers) {
+              adminUser.notification.push(notification);
+              await adminUser.save();
+          }
+      }
+
+      res.status(201).send({ success: true, message: "Availability submitted/updated successfully" });
+  } catch (error) {
+      console.error("Error submitting/updating availability:", error);
+      res.status(500).send({ success: false, message: error.message });
+  }
+};
+
   
   // Get All Availability Controller (Admins get all, Employees get theirs)
   const getAllAvailabilityController = async (req, res) => {

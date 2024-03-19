@@ -9,7 +9,7 @@ const {
     } = require('../controllers/availabilityController');
 
 // Submitting Availability (for employees)
-router.post('/', authMiddleware, submitAvailabilityController);
+router.post('/submit-multiple', authMiddleware, submitAvailabilityController);
 
 // Fetching All Availabilities (for admins or an employee's own)
 router.get('/', authMiddleware, getAllAvailabilityController);

@@ -34,6 +34,21 @@ const appointmentSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  assignedEmployees: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  }],
+  status: {
+    type: String,
+    enum: ['pending', 'confirmed', 'cancelled'],
+    default: 'pending',
+  },
+  cancellationReason: {
+    type: String,
+  },
+  rescheduledTo: {
+    type: Date,
+  },
 });
 
 const Appointment = mongoose.model('Appointment', appointmentSchema);

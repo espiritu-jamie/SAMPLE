@@ -4,18 +4,19 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import PublicRoute from "./components/PublicRoute";
 import Spinner from "./components/Spinner";
 import AdminAllAppointments from "./pages/admin/adminAllAppointments";
-
+import Home from "./pages/Home"
 import HomePage from "./pages/HomePage";
 import Login from "./pages/Login";
 import NotificationPage from "./pages/NotificationPage";
 import Register from "./pages/Register";
 import EmployeeAvailabilities from "./pages/employee/EmployeeAvailabilities";
 import AdminEmployeeAvailability from "./pages/admin/adminEmployeeAvailability";
-
-
+import AdminScheduleManagement from "./pages/admin/adminScheduleManagement";
+import EmployeeShiftsPage from "./pages/employee/EmployeeShifts";
 import EnterAvailabilityPage from "./pages/employee/EnterAvailability";
 import BookingPage from "./pages/customer/BookingPage";
 import CustomerAppointments from "./pages/customer/CustomerAppointments";
+
 
 
 
@@ -29,7 +30,7 @@ function App() {
         ) : (
           <Routes>
             <Route
-              path="/"
+              path="/HomePage"
               element={
                 <ProtectedRoute>
                   <HomePage />
@@ -42,6 +43,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <EnterAvailabilityPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/my-shifts"
+              element={
+                <ProtectedRoute>
+                  <EmployeeShiftsPage />
                 </ProtectedRoute>
               }
             />
@@ -60,7 +69,15 @@ function App() {
                   <AdminEmployeeAvailability />
                 </ProtectedRoute>
               }
-            />         
+            />    
+            <Route
+              path="/admin-schedule-management"
+              element={
+                <ProtectedRoute>
+                  <AdminScheduleManagement />
+                </ProtectedRoute>
+              }
+            />     
             
            <Route
               path="/admin-all-appointments"
@@ -100,11 +117,17 @@ function App() {
             <Route
               path="/login"
               element={
-                <PublicRoute>
+
                   <Login />
-                </PublicRoute> // anyone can see it 
+
               }
             />
+            <Route
+              path="/"
+              element={
+                  <Home />
+              }
+              />
             <Route
               path="/register"
               element={

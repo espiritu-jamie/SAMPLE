@@ -1,5 +1,6 @@
 const Appointment = require("../models/appointmentModel");
-const User = require("../models/userModel");
+const User = require("../models/userModel"); // If needed for role checking
+const Availability = require("../models/availabilityModel");
 const moment = require("moment");
 const { getUserRole } = require("../utils/userUtils");
 
@@ -264,35 +265,14 @@ const rescheduleAppointmentController = async (req, res) => {
 
 
 
-// Delete Appointment Controller
-const deleteAppointmentController = async (req, res) => {
-    try {
-        const { appointmentId } = req.params;
-        // Find the appointment by ID and delete it
-        await Appointment.findByIdAndDelete(appointmentId);
-        res.status(200).send({ message: 'Appointment deleted successfully' });
-    } catch (error) {
-        console.error('Error deleting appointment:', error);
-        res.status(500).send({ message: 'Internal server error' });
-    }
-};
-
-// const updateAppointmentController = async (req, res) => {
-//     try {
-//         const { appointmentId } = req.params;
-//         const updateData = req.body;
-//         const updatedAppointment = await Appointment.findByIdAndUpdate(appointmentId, updateData, { new: true });
-//         res.status(200).json({
-//             message: 'Appointment updated successfully',
-//             data: updatedAppointment
-//         });
-//     } catch (error) {
-//         console.error('Error updating appointment:', error);
-//         res.status(500).send({ message: 'Internal server error' });
-//     }
-// };
-
 module.exports = {
   submitAppointmentController,
   getAllAppointmentsController,
+  getAvailableEmployeesForAppointmentController,
+  updateAppointmentStatusController,
+  autoAssignAppointments,
+  assignEmployeesToAppointmentController,
+  cancelAppointmentController,
+  getConfirmedAppointmentsForEmployee,
+  rescheduleAppointmentController,
 };

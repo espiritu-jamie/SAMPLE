@@ -12,8 +12,6 @@ const {
     cancelAppointmentController,
     getConfirmedAppointmentsForEmployee,
     rescheduleAppointmentController,
-    deleteAppointmentController,
-    // updateAppointmentController,
     } = require('../controllers/appointmentController');
 
 // Submitting a new appointment for authenticated customers
@@ -42,13 +40,5 @@ router.patch('/update-status/:appointmentId', authMiddleware, updateAppointmentS
 
 // Rescheduling an appointment (on admin page)
 router.patch('/reschedule-appointment/:appointmentId', authMiddleware, rescheduleAppointmentController);
-
-// Deleting an appointment for authenticated customers
-router.delete('/:appointmentId', authMiddleware, deleteAppointmentController);
-
-// router.put('/:appointmentId', authMiddleware, updateAppointmentController);
-
-// // Fetching a single appointment for authenticated users
-// router.get('/:appointmentId', authMiddleware, getAppointmentByIdController);
 
 module.exports = router;

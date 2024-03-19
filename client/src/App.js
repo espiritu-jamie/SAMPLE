@@ -16,6 +16,7 @@ import EmployeeShiftsPage from "./pages/employee/EmployeeShifts";
 import EnterAvailabilityPage from "./pages/employee/EnterAvailability";
 import BookingPage from "./pages/customer/BookingPage";
 import CustomerAppointments from "./pages/customer/CustomerAppointments";
+import Profile from "./pages/employee/Profile";
 
 
 
@@ -114,6 +115,7 @@ function App() {
               }
 
             />
+            
             <Route
               path="/login"
               element={
@@ -128,6 +130,14 @@ function App() {
                   <Home />
               }
               />
+               <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              }
+            />
             <Route
               path="/register"
               element={
@@ -137,6 +147,7 @@ function App() {
               }
             />
           </Routes>
+          
         )}
       </BrowserRouter>
     </>

@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Layout from "../../components/Layout";
-import { Table, Button, message, Radio, Modal } from "antd";
+import { Table, Button, message, Radio, Input, Modal } from "antd";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
-import moment from "moment"; // Make sure you've installed moment
+import moment from "moment"; 
 
 const CustomerAppointments = () => {
   const [appointments, setAppointments] = useState([]);
   const [viewMode, setViewMode] = useState('list'); // 'list' or 'calendar'
-  // const [isEditModalVisible, setIsEditModalVisible] = useState(false);
-  // const [currentAppointment, setCurrentAppointment] = useState(null);
-
+  const [commentModalVisible, setCommentModalVisible] = useState(false);
+  const [commentText, setCommentText] = useState("");
+  const [selectedAppointmentId, setSelectedAppointmentId] = useState(null);
   useEffect(() => {
     const fetchAppointments = async () => {
       try {
@@ -63,65 +63,30 @@ const CustomerAppointments = () => {
   // };
 
   const handleDelete = (appointmentId) => {
-    Modal.confirm({
-      title: "Are you sure you want to delete this appointment?",
-      onOk() {
-        deleteAppointment(appointmentId);
-      },
-    });
+    // Implement delete functionality here
+    console.log("Delete button clicked for appointment:", appointmentId);
   };
-  
-  const deleteAppointment = async (appointmentId) => {
+  const handleComment = (appointmentId) => {
+    setSelectedAppointmentId(appointmentId);
+    setCommentModalVisible(true);
+  };
+
+  const handleCommentSubmit = async () => {
     try {
-      // Make DELETE request to delete the appointment
-      await axios.delete(`/api/appointment/${appointmentId}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-  
-      // If deletion is successful, update the local state to reflect the changes
-      setAppointments(prevAppointments =>
-        prevAppointments.filter(appointment => appointment._id !== appointmentId)
-      );
-  
-      // Show success message to the user
-      message.success("Appointment deleted successfully");
+      // You should replace this with actual backend API calls
+      console.log("Submitting comment:", commentText);
+      message.success("Comment submitted successfully");
+      setCommentModalVisible(false);
     } catch (error) {
-      // If there's an error, log it and show an error message to the user
-      console.error("Error deleting appointment:", error);
-      message.error("Failed to delete appointment");
+      console.error("Error submitting comment:", error);
+      message.error("Failed to submit comment. Please try again.");
     }
   };
-  
-  // const handleUpdateAppointment = async () => {
-  //   try {
-  //     const values = await form.validateFields();
-  //     const updatedAppointmentData = {
-  //       date: values.date.format("YYYY-MM-DD"),
-  //       starttime: values.starttime.format("HH:mm"),
-  //       endtime: values.endtime.format("HH:mm"),
-  //       phoneNumber: values.phoneNumber,
-  //       address: values.address,
-  //       specialInstructions: values.specialInstructions,
-  //     };
-  //     await axios.put(`/api/appointment/${currentAppointment._id}`, updatedAppointmentData, {
-  //       headers: {
-  //         Authorization: `Bearer ${localStorage.getItem("token")}`,
-  //       },
-  //     });
 
-  //     setAppointments(appointments.map(appointment => 
-  //       appointment._id === currentAppointment._id ? { ...appointment, ...updatedAppointmentData } : appointment
-  //     ));
-
-  //     message.success("Appointment updated successfully");
-  //     setIsEditModalVisible(false);
-  //   } catch (error) {
-  //     console.error("Failed to update appointment:", error);
-  //     message.error("Failed to update appointment");
-  //   }
-  // };
+  const handleCancelComment = () => {
+    setCommentText(""); // Reset the comment text
+    setCommentModalVisible(false);
+  };
 
   const columns = [
     {
@@ -166,6 +131,18 @@ const CustomerAppointments = () => {
           <Button onClick={() => handleDelete(record._id)} type="danger">
             Delete
           </Button>
+          
+        </>
+      ),
+    },
+    {
+      title: 'Comments',
+      key: 'comments',
+      render: (_, record) => (
+        <>
+          <Button onClick={() => handleComment(record._id)} type="primary">
+           Rate
+          </Button>
         </>
       ),
     },
@@ -202,53 +179,19 @@ const CustomerAppointments = () => {
           
           />
         )}
-        {/* <Modal
-  title="Edit Appointment"
-  visible={isEditModalVisible}
-  onOk={handleUpdateAppointment}
-  onCancel={() => setIsEditModalVisible(false)}
-  okText="Update"
-  cancelText="Cancel"
->
-  {currentAppointment && (
-    <>
-      <DatePicker
-        format="YYYY-MM-DD"
-        value={moment(currentAppointment.date, "MMMM D, YYYY")}
-        onChange={(value) => setCurrentAppointment({...currentAppointment, date: value.format("MMMM D, YYYY")})}
-      />
-      <TimePicker
-        format="HH:mm"
-        value={moment(currentAppointment.starttime, "hh:mm A")}
-        onChange={(value) => setCurrentAppointment({...currentAppointment, starttime: value.format("HH:mm")})}
-        style={{ margin: '10px 0' }}
-      />
-      <TimePicker
-        format="HH:mm"
-        value={moment(currentAppointment.endtime, "hh:mm A")}
-        onChange={(value) => setCurrentAppointment({...currentAppointment, endtime: value.format("HH:mm")})}
-        style={{ margin: '10px 0' }}
-      />
-      <Input
-        placeholder="Phone Number"
-        value={currentAppointment.phoneNumber}
-        onChange={(e) => setCurrentAppointment({...currentAppointment, phoneNumber: e.target.value})}
-      />
-      <Input
-        placeholder="Address"
-        value={currentAppointment.address}
-        onChange={(e) => setCurrentAppointment({...currentAppointment, address: e.target.value})}
-        style={{ margin: '10px 0' }}
-      />
-      <Input.TextArea
-        placeholder="Special Instructions"
-        value={currentAppointment.specialInstructions}
-        onChange={(e) => setCurrentAppointment({...currentAppointment, specialInstructions: e.target.value})}
-        rows={3}
-      />
-    </>
-  )}
-</Modal> */}
+        <Modal
+          title="Add Comment"
+          visible={commentModalVisible}
+          onOk={handleCommentSubmit}
+          onCancel={handleCancelComment}
+        >
+          <Input.TextArea
+            value={commentText}
+            onChange={(e) => setCommentText(e.target.value)}
+            rows={4}
+            placeholder="Enter your comment"
+          />
+        </Modal>
       </div>
     </Layout>
   );

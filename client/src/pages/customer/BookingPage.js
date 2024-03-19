@@ -1,7 +1,8 @@
-import { DatePicker, TimePicker, message, Input } from "antd";
+import { DatePicker, TimePicker, message, Input, InputNumber } from "antd";
 import axios from "axios";
 import React, { useState } from "react";
 import Layout from "../../components/Layout";
+
 
 const BookingPage = () => {
   const [date, setDate] = useState("");
@@ -10,6 +11,8 @@ const BookingPage = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [address, setAddress] = useState("");
   const [specialInstructions, setSpecialInstructions] = useState("");
+  const [selectedOption, setSelectedOption] = useState("");
+  const [multipliedOption, setMultipliedOption] = useState("");
 
   const handleSubmit = async () => {
     try {
@@ -17,6 +20,8 @@ const BookingPage = () => {
         message.error("Please select date, start time, and end time");
         return;
       }
+      const multipliedOption = selectedOption * 0.10;
+      setMultipliedOption(multipliedOption);
 
       const res = await axios.post(
         "/api/appointment/",
@@ -26,7 +31,8 @@ const BookingPage = () => {
           endtime,
           phoneNumber,
           address,
-          specialInstructions
+          specialInstructions,
+          setSelectedOption: multipliedOption 
         },
         {
           headers: {
@@ -52,7 +58,7 @@ const BookingPage = () => {
         <h3 className="text-center my-4">Book Your Appointment</h3>
         <div className="gray-square">
           <h4>When and where?</h4>
-          <div className="address-inputs mb-4">
+          <div className="address-inputs mb-5">
             <Input
               placeholder="Phone Number"
               className="mb-2"
@@ -68,10 +74,18 @@ const BookingPage = () => {
             <Input.TextArea
               placeholder="Special Instructions (optional)"
               rows={4}
+              className="mb-2"
               value={specialInstructions}
               onChange={(e) => setSpecialInstructions(e.target.value)}
-            />
+            /><p>Enter the Area you want to get cleaned (in sqft)</p>
+            <InputNumber
+            placeholder="Enter a number"
+            className="mb-2"
+            min={1} // You can adjust min and max values as needed
+            onChange={(value) => setSelectedOption(value)}
+          />
           </div>
+          
           <DatePicker
             className="m-2 date-picker"
             format="YYYY-MM-DD"
@@ -87,9 +101,16 @@ const BookingPage = () => {
             className="m-2 time-picker"
             onChange={(value) => setEndtime(value.format("HH:mm"))}
           />
-          <button onClick={handleSubmit} className="submit-button">
+          <button onClick={handleSubmit} className="submit-button mb-2 bg-slate-300 rounded">
             Submit Appointment
           </button>
+          <div>
+          {multipliedOption && (
+            <button className="multiplied-button rounded ">
+              Approx Cost for Cleaning: ${multipliedOption}
+            </button>
+          )}
+          </div>
         </div>
       
       

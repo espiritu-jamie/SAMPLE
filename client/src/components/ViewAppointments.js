@@ -80,6 +80,11 @@ const ViewAppointments = ({ isAdminView }) => {
       dataIndex: 'specialInstructions',
       key: 'specialInstructions',
     },
+    {
+      title: 'Status',
+      dataIndex: 'status',
+      key: 'status',
+    }
     // You can add more columns if needed.
   ];
 

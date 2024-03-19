@@ -9,6 +9,8 @@ import moment from "moment"; // Make sure you've installed moment
 const CustomerAppointments = () => {
   const [appointments, setAppointments] = useState([]);
   const [viewMode, setViewMode] = useState('list'); // 'list' or 'calendar'
+  // const [isEditModalVisible, setIsEditModalVisible] = useState(false);
+  // const [currentAppointment, setCurrentAppointment] = useState(null);
 
   useEffect(() => {
     const fetchAppointments = async () => {
@@ -37,10 +39,10 @@ const CustomerAppointments = () => {
     fetchAppointments();
   }, []);
 
-  const handleEdit = (appointmentId) => {
-    // Implement edit functionality here
-    console.log("Edit button clicked for appointment:", appointmentId);
-  };
+  // const handleEdit = (appointmentId) => {
+  //   // Implement edit functionality here
+  //   console.log("Edit button clicked for appointment:", appointmentId);
+  // };
 
   // const handleEdit = (appointmentId) => {
   //   const appointmentToEdit = appointments.find(appointment => appointment._id === appointmentId);
@@ -158,9 +160,9 @@ const CustomerAppointments = () => {
       key: 'actions',
       render: (_, record) => (
         <>
-          <Button onClick={() => handleEdit(record._id)} type="primary" style={{ marginRight: 8 }}>
+          {/* <Button onClick={() => handleEdit(record._id)} type="primary" style={{ marginRight: 8 }}>
             Edit
-          </Button>
+          </Button> */}
           <Button onClick={() => handleDelete(record._id)} type="danger">
             Delete
           </Button>

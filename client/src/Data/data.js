@@ -21,7 +21,7 @@ export const employeeMenu = [
   // },
   {
   name: "Profile",
-  path: "/profile",
+  path: "/Profile",
   icon: "fa-solid fa-user",
   },
 ];

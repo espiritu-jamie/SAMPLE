@@ -12,12 +12,7 @@ import NotificationPage from "./pages/NotificationPage";
 import Register from "./pages/Register";
 import EmployeeAvailabilities from "./pages/employee/EmployeeAvailabilities";
 import AdminEmployeeAvailability from "./pages/admin/adminEmployeeAvailability";
-
-
-
 import EnterAvailabilityPage from "./pages/employee/EnterAvailability";
-import BookingPage from "./pages/customer/BookingPage";
-import CustomerAppointments from "./pages/customer/CustomerAppointments";
 import Profile from "./pages/employee/Profile";
 
 
@@ -83,16 +78,16 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            <Route
+            {/* <Route
               path="/book-appointment"
               element={
                 <ProtectedRoute>
                   <BookingPage />
                 </ProtectedRoute> // if they are logged in 
               }
-            />
+            /> */}
             
-            <Route
+            {/* <Route
               path="/customer-appointments"
               element={
                 <ProtectedRoute>
@@ -100,22 +95,14 @@ function App() {
                 </ProtectedRoute> // if they are logged in 
               }
 
-            />
+            /> */}
             
-            <Route
-              path="/Front"
-              element={
-
-                  <Login />
-
-              }
-            />
-            <Route
+            {/* <Route
               path="/"
               element={
                   <Home />
               }
-              />
+              /> */}
                <Route
               path="/Profile"
               element={

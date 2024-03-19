@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Layout from "../../components/Layout";
-import { Table, Button, message, Radio } from "antd";
+import { Table, Button, message, Radio, Input, Modal } from "antd";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
-import moment from "moment"; // Make sure you've installed moment
+import moment from "moment"; 
 
 const CustomerAppointments = () => {
   const [appointments, setAppointments] = useState([]);
   const [viewMode, setViewMode] = useState('list'); // 'list' or 'calendar'
-
+  const [commentModalVisible, setCommentModalVisible] = useState(false);
+  const [commentText, setCommentText] = useState("");
+  const [selectedAppointmentId, setSelectedAppointmentId] = useState(null);
   useEffect(() => {
     const fetchAppointments = async () => {
       try {
@@ -45,6 +47,27 @@ const CustomerAppointments = () => {
   const handleDelete = (appointmentId) => {
     // Implement delete functionality here
     console.log("Delete button clicked for appointment:", appointmentId);
+  };
+  const handleComment = (appointmentId) => {
+    setSelectedAppointmentId(appointmentId);
+    setCommentModalVisible(true);
+  };
+
+  const handleCommentSubmit = async () => {
+    try {
+      // You should replace this with actual backend API calls
+      console.log("Submitting comment:", commentText);
+      message.success("Comment submitted successfully");
+      setCommentModalVisible(false);
+    } catch (error) {
+      console.error("Error submitting comment:", error);
+      message.error("Failed to submit comment. Please try again.");
+    }
+  };
+
+  const handleCancelComment = () => {
+    setCommentText(""); // Reset the comment text
+    setCommentModalVisible(false);
   };
 
   const columns = [
@@ -84,11 +107,23 @@ const CustomerAppointments = () => {
       key: 'actions',
       render: (_, record) => (
         <>
-          <Button onClick={() => handleEdit(record._id)} type="default" style={{ marginRight: 8 }}>
+          {/* <Button onClick={() => handleEdit(record._id)} type="primary" style={{ marginRight: 8 }}>
             Edit
-          </Button>
-          <Button onClick={() => handleDelete(record._id)} type="default" danger>
+          </Button> */}
+          <Button onClick={() => handleDelete(record._id)} type="danger">
             Delete
+          </Button>
+          
+        </>
+      ),
+    },
+    {
+      title: 'Comments',
+      key: 'comments',
+      render: (_, record) => (
+        <>
+          <Button onClick={() => handleComment(record._id)} type="primary">
+           Rate
           </Button>
         </>
       ),
@@ -123,6 +158,19 @@ const CustomerAppointments = () => {
             events={calendarEvents}
           />
         )}
+        <Modal
+          title="Add Comment"
+          visible={commentModalVisible}
+          onOk={handleCommentSubmit}
+          onCancel={handleCancelComment}
+        >
+          <Input.TextArea
+            value={commentText}
+            onChange={(e) => setCommentText(e.target.value)}
+            rows={4}
+            placeholder="Enter your comment"
+          />
+        </Modal>
       </div>
     </Layout>
   );

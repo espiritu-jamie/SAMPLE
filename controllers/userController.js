@@ -122,7 +122,7 @@ const updateprofilecontroller = async (req, res) => {
     const { name, email, address, phoneNumber, postalCode } = req.body;
 
     // Check if all required fields are provided
-    if (!firstName || !lastName || !email || !address || !phoneNumber || !postalCode) {
+    if (!name || !email || !address || !phoneNumber || !postalCode) {
       return res.status(400).send({ success: false, message: 'Missing required fields' });
     }
 

@@ -133,6 +133,26 @@ const CustomerAppointments = () => {
       key: 'specialInstructions',
     },
     {
+      title: 'Cost',
+      dataIndex: 'cost',
+      key: 'cost',
+    },
+    {
+      title: 'Status',
+      dataIndex: 'status',
+      key: 'status',
+    },
+    {
+      title: 'Cancellation Reason',
+      dataIndex: 'cancellationReason',
+      key: 'cancellationReason',
+    },
+    {
+      title: 'Payment Method',
+      dataIndex: 'paymentMethod',
+      key: 'paymentMethod',
+    },
+    {
       title: 'Actions',
       key: 'actions',
       render: (_, record) => (
@@ -156,22 +176,35 @@ const CustomerAppointments = () => {
     {
       title: 'Comments',
       key: 'comments',
-      render: (_, record) => (
-        <>
-        <Button 
-          onClick={() => handleComment(record._id)}
-          type="primary"
-          disabled={record.status === "cancelled"} // Disable the button if the appointment is canceled
-          style={{ 
-            color: record.status === "cancelled" ? "#ccc" : undefined, // Grey out text color if canceled
-            borderColor: record.status === "cancelled" ? "#ccc" : undefined // Grey out border if canceled
-          }}
-      >
-        Rate
-      </Button>
-        </>
-      ),
+      render: (_, record) => {
+        // Convert appointment date and current date to Moment objects for comparison
+        const appointmentDate = moment(record.date, "MMMM D, YYYY");
+        const currentDate = moment().startOf('day');
+
+        console.log("appointmentDate", appointmentDate);
+        console.log("currentDate", currentDate);
+        
+        // Check if the appointment date is before the current date
+        const isPastAppointment = appointmentDate.isBefore(currentDate);
+    
+        return (
+          <>
+            <Button 
+              onClick={() => handleComment(record._id)}
+              type="primary"
+              disabled={!isPastAppointment || record.status === "cancelled"} // Disable if the appointment is in the future or cancelled
+              style={{ 
+                color: (!isPastAppointment || record.status === "cancelled") ? "#ccc" : undefined,
+                borderColor: (!isPastAppointment || record.status === "cancelled") ? "#ccc" : undefined
+              }}
+            >
+              Rate
+            </Button>
+          </>
+        );
+      },
     },
+    
   ];
 
 

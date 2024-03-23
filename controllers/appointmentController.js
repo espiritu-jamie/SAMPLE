@@ -6,7 +6,7 @@ const { getUserRole } = require("../utils/userUtils");
 
 // Function to submit a new appointment
 const submitAppointmentController = async (req, res) => {
-  const { date, starttime, endtime, phoneNumber, address, specialInstructions, userId } = req.body;
+  const { userId, date, starttime, endtime, phoneNumber, address, specialInstructions, cost, paymentMethod } = req.body;
   
 
   try {
@@ -18,6 +18,8 @@ const submitAppointmentController = async (req, res) => {
       phoneNumber,
       address,
       specialInstructions,
+      cost,
+      paymentMethod,
     });
     await newAppointment.save();
 

@@ -84,6 +84,16 @@ const ViewAppointments = ({ isAdminView }) => {
       title: 'Status',
       dataIndex: 'status',
       key: 'status',
+    },
+    {
+      title: 'Cost',
+      dataIndex: 'cost',
+      key: 'cost',
+    },
+    {
+      title: 'Payment Method',
+      dataIndex: 'paymentMethod',
+      key: 'paymentMethod',
     }
     // You can add more columns if needed.
   ];

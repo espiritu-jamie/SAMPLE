@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Layout from "../../components/Layout";
-import { Table, Button, message, Radio, Input, Modal } from "antd";
+import { Table, Button, message, Radio, Input, Modal, Rate } from "antd";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import moment from "moment";
@@ -15,6 +15,10 @@ const CustomerAppointments = () => {
   const [selectedAppointmentId, setSelectedAppointmentId] = useState(null);
   const [cancelModalVisible, setCancelModalVisible] = useState(false);
   const [cancellationReason, setCancellationReason] = useState("");
+  const [rating, setRating] = useState(0);
+  const [hasRated, setHasRated] = useState(false);
+  const [existingRating, setExistingRating] = useState(0);
+  const [existingComment, setExistingComment] = useState("");
 
   const fetchAppointments = async () => {
     try {
@@ -78,22 +82,74 @@ const CustomerAppointments = () => {
     }
   };
   
-  const handleComment = (appointmentId) => {
+  const handleComment = async (appointmentId) => {
     setSelectedAppointmentId(appointmentId);
+    setHasRated(false); // Reset to default
+    setExistingRating(0); // Reset to default
+    setExistingComment(""); // Reset to default
+  
+    try {
+      // Fetch existing rating for this appointment, if any
+      const res = await axios.get(`/api/rating/${appointmentId}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+      if (res.data && res.data.data && res.data.data.length > 0) {
+        // Assuming the response has the format { data: [{ rating, comment }] }
+        const ratingData = res.data.data[0];
+        setHasRated(true);
+        setExistingRating(ratingData.rating);
+        setExistingComment(ratingData.comment);
+      }
+    } catch (error) {
+      console.error("Error fetching existing rating:", error);
+      message.error("Failed to fetch existing rating. Please try again.");
+    }
+  
+  
     setCommentModalVisible(true);
-  };
+  };  
 
   const handleCommentSubmit = async () => {
+    if (hasRated) {
+      message.info("You've already rated this appointment.");
+      return;
+    }
+
     try {
-      // You should replace this with actual backend API calls
-      console.log("Submitting comment:", commentText);
-      message.success("Comment submitted successfully");
-      setCommentModalVisible(false);
+      const res = await axios.post(
+        '/api/rating/submit', // Adjust the URL based on your API endpoint
+        {
+          appointmentId: selectedAppointmentId,
+          rating: rating,
+          comment: commentText,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        }
+      );
+  
+      if (res.status === 200 || res.status === 201) {
+        message.success("Rating submitted successfully");
+        // Update any state or perform any actions needed after successful submission
+      } else {
+        throw new Error('Failed to submit rating');
+      }
     } catch (error) {
-      console.error("Error submitting comment:", error);
-      message.error("Failed to submit comment. Please try again.");
+      console.error("Error submitting rating:", error);
+      message.error("Failed to submit rating. Please try again.");
+    } finally {
+      // Reset the modal and state regardless of success or failure
+      setCommentModalVisible(false);
+      setRating(0);
+      setCommentText("");
+      // Optionally, refetch any data that should be updated
     }
   };
+  
 
   const handleCancelComment = () => {
     setCommentText(""); // Reset the comment text
@@ -248,21 +304,29 @@ const CustomerAppointments = () => {
           />
         )}
   
-        <Modal
-          title="Add Comment"
-          visible={commentModalVisible}
-          onOk={handleCommentSubmit}
-          onCancel={() => setCommentModalVisible(false)}
-          okText="Submit Comment"
-          cancelText="Cancel"
-        >
-          <Input.TextArea
-            value={commentText}
-            onChange={(e) => setCommentText(e.target.value)}
-            rows={4}
-            placeholder="Enter your comment"
-          />
-        </Modal>
+          <Modal
+  title="Rate Appointment"
+  visible={commentModalVisible}
+  onOk={handleCommentSubmit}
+  onCancel={handleCancelComment}
+  okText="Submit Comment"
+  cancelText="Cancel"
+  okButtonProps={{ disabled: hasRated }} // Disable the OK button if the user has already rated
+>
+  <Rate
+    value={hasRated ? existingRating : rating} // Show existing rating if available
+    onChange={(value) => setRating(value)}
+    style={{ marginBottom: 16 }}
+    disabled={hasRated} // Make rate component read-only if already rated
+  />
+  <Input.TextArea
+    value={hasRated ? existingComment : commentText} // Show existing comment if available
+    onChange={(e) => setCommentText(e.target.value)}
+    rows={4}
+    placeholder="Enter your comment"
+    disabled={hasRated} // Make text area read-only if already rated
+  />
+</Modal>
   
         <Modal
           title="Cancel Appointment"

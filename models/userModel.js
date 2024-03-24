@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const Joi = require('joi');
 const zxcvbn = require('zxcvbn');
 
+
 const userMongooseSchema = new mongoose.Schema({
   userId: {
     type: String,
@@ -49,6 +50,10 @@ const userMongooseSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  dismissedAnnouncements: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Announcement'
+  }],
 });
 
 const userSchema = Joi.object({

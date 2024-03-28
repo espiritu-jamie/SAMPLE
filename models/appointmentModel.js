@@ -1,4 +1,3 @@
-// appointmentModel.js
 const mongoose = require('mongoose');
 
 const appointmentSchema = new mongoose.Schema({
@@ -49,7 +48,17 @@ const appointmentSchema = new mongoose.Schema({
   rescheduledTo: {
     type: Date,
   },
+  cost: {
+    type: Number,
+    required: true,
+  },
+  paymentMethod: {
+    type: String,
+    required: true,
+    enum: ['cheque', 'eTransfer'],
+  },
 });
 
 const Appointment = mongoose.model('Appointment', appointmentSchema);
+
 module.exports = Appointment;

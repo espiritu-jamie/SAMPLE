@@ -145,6 +145,16 @@ const AppointmentDetailsModal = ({ isVisible, onClose, appointment, fetchAppoint
         />
       );
 
+      // Inside AppointmentDetailsModal component
+        const isPastAppointment = useCallback(() => {
+            const now = moment();
+            const appointmentEnd = moment(appointment.date + ' ' + appointment.endtime, "YYYY-MM-DD HH:mm");
+            return appointmentEnd.isBefore(now);
+        }, [appointment.date, appointment.endtime]);
+
+
+        const isDisabled = isCanceled || isPastAppointment();
+
     console.log('selected employees:', selectedEmployees);
 
     return (
@@ -154,14 +164,14 @@ const AppointmentDetailsModal = ({ isVisible, onClose, appointment, fetchAppoint
             onCancel={onClose}
             footer={[
                 <Button key="back" onClick={onClose}>Close</Button>,
-                userRole === 'admin' && !isCanceled && (
+                userRole === 'admin' && !isDisabled && (
                     <Dropdown overlay={MoreActionsMenu} key="more">
                         <Button>
                             More Actions <DownOutlined />
                         </Button>
                     </Dropdown>
                 ),
-                userRole === 'admin' && !isCanceled && (
+                userRole === 'admin' && !isDisabled && (
                     <Button key="submit" type="primary" onClick={handleUpdateAssignees}>
                         {appointment?.status === 'confirmed' ? 'Update Assignment' : 'Assign'}
                     </Button>
@@ -179,41 +189,44 @@ const AppointmentDetailsModal = ({ isVisible, onClose, appointment, fetchAppoint
                 <Descriptions.Item label="Special Instructions">{appointment?.specialInstructions || 'None'}</Descriptions.Item>
                 <Descriptions.Item label="Phone Number">{appointment?.phoneNumber || 'N/A'}</Descriptions.Item>
                 <Descriptions.Item label="Address">{appointment?.address || 'N/A'}</Descriptions.Item>
+                <Descriptions.Item label="Cost">{appointment?.cost.toFixed(2) || 'N/A'}</Descriptions.Item>
+                <Descriptions.Item label="Payment Method">{appointment?.paymentMethod || 'N/A'}</Descriptions.Item>
             </Descriptions>
             {userRole === 'admin' && (
             <>
-            <Select
-                    mode="multiple"
-                    style={{ width: '100%', marginTop: 16 }}
-                    placeholder="Select available employees"
-                    value={selectedEmployees}
-                    onChange={setSelectedEmployees}
-                    maxTagCount="responsive"
-                    disabled={isCanceled}
-                >
-                    {availableEmployees.map((employee) => (
-                        <Option key={employee.id} value={employee.id}>{employee.name}</Option>
-                    ))}  
-                </Select>
-                <Input.TextArea
-                    rows={4}
-                    value={cancellationReason}
-                    onChange={(e) => setCancellationReason(e.target.value)}
-                    placeholder="Cancellation/Rescheduling Reason"
-                    style={{ marginTop: 16 }}
-                    disabled={isCanceled}
-                />
-                <DatePicker
-                    style={{ width: '100%', marginTop: 16 }}
-                    value={rescheduledDate}
-                    onChange={setRescheduledDate}
-                    placeholder="Reschedule Appointment To"
-                    disabled={isCanceled}
-                />
+                <Select
+                        mode="multiple"
+                        style={{ width: '100%', marginTop: 16 }}
+                        placeholder="Select available employees"
+                        value={selectedEmployees}
+                        onChange={setSelectedEmployees}
+                        maxTagCount="responsive"
+                        disabled={isDisabled} // Apply isDisabled here
+                    >
+                        {availableEmployees.map((employee) => (
+                            <Option key={employee.id} value={employee.id}>{employee.name}</Option>
+                        ))}  
+                    </Select>
+                    <Input.TextArea
+                        rows={4}
+                        value={cancellationReason}
+                        onChange={(e) => setCancellationReason(e.target.value)}
+                        placeholder="Cancellation/Rescheduling Reason"
+                        style={{ marginTop: 16 }}
+                        disabled={isDisabled} // Apply isDisabled here
+                    />
+                    <DatePicker
+                        style={{ width: '100%', marginTop: 16 }}
+                        value={rescheduledDate}
+                        onChange={setRescheduledDate}
+                        placeholder="Reschedule Appointment To"
+                        disabled={isDisabled} // Apply isDisabled here
+                    />
             </>
             )}
         </Modal>
     );
+    
 };
 
 export default AppointmentDetailsModal;

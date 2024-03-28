@@ -6,7 +6,7 @@ export const employeeMenu = [
   },
   {
     name: "My Schedule",
-    path: "/my-schedule",
+    path: "/my-shifts",
     icon: "fa-solid fa-calendar",
   },
   {
@@ -14,11 +14,11 @@ export const employeeMenu = [
     path: "/my-availability",
     icon: "fa-solid fa-list",
   },
-  {
-    name: "Enter Availability",
-    path: "/enter-availability",
-    icon: "fa-solid fa-calendar-plus",
-  },
+  // {
+  //   name: "Enter Availability",
+  //   path: "/enter-availability",
+  //   icon: "fa-solid fa-calendar-plus",
+  // },
   {
   name: "Profile",
   path: "/pages/Profile", // Update with the correct path for the Profile component

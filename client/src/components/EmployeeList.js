@@ -12,7 +12,7 @@ const EmployeeList = ({ employee, monthlyHoursWorked, totalHoursWorked, navigate
                 className="card-header"
                 style={{ textAlign: "center", fontWeight: "bold" }}
             >
-                {employee.firstName} {employee.lastName}
+                {employee.name}
             </div>
 
             <div className="card-body">

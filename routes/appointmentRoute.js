@@ -12,6 +12,7 @@ const {
     cancelAppointmentController,
     getConfirmedAppointmentsForEmployee,
     rescheduleAppointmentController,
+    employeeHoursAppointmentController,
     } = require('../controllers/appointmentController');
 
 // Submitting a new appointment for authenticated customers
@@ -40,5 +41,8 @@ router.patch('/update-status/:appointmentId', authMiddleware, updateAppointmentS
 
 // Rescheduling an appointment (on admin page)
 router.patch('/reschedule-appointment/:appointmentId', authMiddleware, rescheduleAppointmentController);
+
+// Tracking how many hours an employee has worked (on admin page)
+router.patch('/employee-hours', authMiddleware, employeeHoursAppointmentController);
 
 module.exports = router;

@@ -3,6 +3,7 @@ const User = require("../models/userModel"); // If needed for role checking
 const Availability = require("../models/availabilityModel");
 const moment = require("moment");
 const { getUserRole } = require("../utils/userUtils");
+const { startOfMonth, endOfMonth } = require("date-fns");
 
 // Function to submit a new appointment
 const submitAppointmentController = async (req, res) => {
@@ -256,6 +257,67 @@ const rescheduleAppointmentController = async (req, res) => {
   }
 };
 
+const employeeHoursAppointmentController = async () => {
+  // Function to get all employees for the hour tracker
+  getAllEmployees = async (res) => {
+    try {
+      const employees = await User.find({ userRole: "employee" }); // Find employees with userRole "employee"
+      res.status(200).json({ success: true, data: employees });
+    } catch (error) {
+      console.error("Error fetching employees:", error);
+      res.status(500).json({ success: false, message: `Error fetching employees: ${error.message}` });
+    }
+  },
+
+  // Function to calculate total hours worked for an employee
+  calculateHoursWorked = async (req, res) => {
+    const { employeeId } = req.params;
+
+    try {
+      const appointments = await Appointment.find({ userId: employeeId, status: 'confirmed' }); // Fetch confirmed appointments for the employee
+      let totalHours = 0;
+      appointments.forEach(appointment => {
+        totalHours += calculateDuration(appointment.startTime, appointment.endTime);
+      });
+      res.status(200).json({ success: true, totalHours });
+    } catch (error) {
+      console.error("Error calculating hours worked:", error);
+      res.status(500).json({ success: false, message: `Error calculating hours worked: ${error.message}` });
+    }
+  },
+
+  // Function to calculate monthly hours worked for an employee
+  calculateMonthlyHoursWorked = async (req, res) => {
+    const { employeeId } = req.params;
+    const startDate = startOfMonth(new Date());
+    const endDate = endOfMonth(new Date());
+
+    try {
+      const appointments = await Appointment.find({
+        userId: employeeId,
+        status: 'confirmed',
+        date: { $gte: startDate, $lte: endDate }
+      }); // Fetch confirmed appointments within the current month for the employee
+      let monthlyHours = 0;
+      appointments.forEach(appointment => {
+        monthlyHours += calculateDuration(appointment.startTime, appointment.endTime);
+      });
+      res.status(200).json({ success: true, monthlyHours });
+    } catch (error) {
+      console.error("Error calculating monthly hours worked:", error);
+      res.status(500).json({ success: false, message: `Error calculating monthly hours worked: ${error.message}` });
+    }
+  },
+
+  // Helper function to calculate duration in hours between start and end time
+  calculateDuration = (startTime, endTime) => {
+    const start = moment(startTime);
+    const end = moment(endTime);
+    const duration = end.diff(start, "hours"); // Calculate duration in hours
+    return duration;
+  }
+};
+
 
 
 
@@ -275,4 +337,5 @@ module.exports = {
   cancelAppointmentController,
   getConfirmedAppointmentsForEmployee,
   rescheduleAppointmentController,
+  employeeHoursAppointmentController,
 };

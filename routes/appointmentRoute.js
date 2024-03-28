@@ -10,6 +10,7 @@ const {
     autoAssignAppointments,
     assignEmployeesToAppointmentController,
     cancelAppointmentController,
+    deleteAppointmentController,
     getConfirmedAppointmentsForEmployee,
     rescheduleAppointmentController,
     } = require('../controllers/appointmentController');
@@ -31,6 +32,9 @@ router.post('/assign-employees', authMiddleware, assignEmployeesToAppointmentCon
 
 // Cancelling an appointment (for customers)
 router.patch('/cancel-appointment/:appointmentId', authMiddleware, cancelAppointmentController);
+
+// Deleting an appointment (for admins)
+router.delete('/:appointmentId', authMiddleware, deleteAppointmentController);
 
 // Fetching the confirmed appointments for the logged-in employee
 router.get('/confirmed-for-employee', authMiddleware, getConfirmedAppointmentsForEmployee);

@@ -601,10 +601,19 @@ const BookingPage = () => {
             <Form.Item
               name="phoneNumber"
               label="Phone Number"
-              rules={[{ required: true, message: 'Phone number is required' }]}
-            >
+              rules={[
+                { 
+                  required: true, 
+                  message: 'Phone number is required'
+                },
+                {
+                  pattern: new RegExp(/^\(\d{3}\)\d{3}-\d{4}$/),
+                  message: 'Phone number must be in the format (XXX)XXX-XXXX'
+                }
+              ]}
+          >
               <Input placeholder="Phone Number" />
-            </Form.Item>
+          </Form.Item>
             <Form.Item
               name="address"
               label="Address"

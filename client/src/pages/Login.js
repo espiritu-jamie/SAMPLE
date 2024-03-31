@@ -75,6 +75,7 @@ const Login = () => {
       dispatch(hideLoading());
       if (data.success) {
         localStorage.setItem("token", data.token);
+        localStorage.setItem("userId", data.userId);
         dispatch(setUser(data.user));
         message.success("Login Successfully");
         // Trigger an update in your app state as needed, e.g., update user role in global state here

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Table, Select, message } from 'antd';
+import { Table, Select, message, Button, Modal, Rate } from 'antd';
 import Layout from '../components/Layout';
 import moment from 'moment';
 
@@ -9,6 +9,10 @@ const { Option } = Select;
 const ViewAppointments = ({ isAdminView }) => {
   const [appointments, setAppointments] = useState([]);
   const [filter, setFilter] = useState('upcoming');
+  const [ratingsModalVisible, setRatingsModalVisible] = useState(false);
+  const [selectedAppointmentForRatings, setSelectedAppointmentForRatings] = useState(null);
+  const [ratings, setRatings] = useState([]);
+
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -80,8 +84,49 @@ const ViewAppointments = ({ isAdminView }) => {
       dataIndex: 'specialInstructions',
       key: 'specialInstructions',
     },
+    {
+      title: 'Status',
+      dataIndex: 'status',
+      key: 'status',
+    },
+    {
+      title: 'Cost',
+      dataIndex: 'cost',
+      key: 'cost',
+    },
+    {
+      title: 'Payment Method',
+      dataIndex: 'paymentMethod',
+      key: 'paymentMethod',
+    },
+    {
+      title: 'Ratings',
+      key: 'ratings',
+      render: (_, record) => (
+        isAdminView ? (
+          <Button onClick={() => handleViewRatings(record._id)}>View Ratings</Button>
+        ) : null
+      ),
+    },
     // You can add more columns if needed.
   ];
+
+  const handleViewRatings = async (appointmentId) => {
+    setSelectedAppointmentForRatings(appointmentId);
+    try {
+      const response = await axios.get(`/api/rating/${appointmentId}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+      setRatings(response.data.data);
+      setRatingsModalVisible(true);
+    } catch (error) {
+      console.error('Error fetching ratings:', error);
+      message.error('Failed to fetch ratings');
+    }
+  };
+  
 
   return (
     <Layout>
@@ -91,6 +136,28 @@ const ViewAppointments = ({ isAdminView }) => {
         <Option value="past">Past</Option>
       </Select>
       <Table dataSource={filteredAppointments} columns={columns} rowKey="_id" />
+      <Modal
+  title="View Ratings"
+  visible={ratingsModalVisible}
+  onCancel={() => setRatingsModalVisible(false)}
+  footer={[
+    <Button key="back" onClick={() => setRatingsModalVisible(false)}>
+      Close
+    </Button>,
+  ]}
+>
+  {ratings.length > 0 ? (
+    ratings.map((rating) => (
+      <div key={rating._id} style={{ marginBottom: '10px' }}>
+        <Rate disabled value={rating.rating} style={{ marginBottom: '20px' }} />
+        <p>{rating.comment}</p>
+      </div>
+    ))
+  ) : (
+    <p>No ratings available for this appointment.</p>
+  )}
+</Modal>
+
     </Layout>
   );
 };

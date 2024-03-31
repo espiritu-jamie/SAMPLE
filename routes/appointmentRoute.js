@@ -7,7 +7,6 @@ const {
     getAllAppointmentsController,
     getAvailableEmployeesForAppointmentController,
     updateAppointmentStatusController,
-    autoAssignAppointments,
     assignEmployeesToAppointmentController,
     cancelAppointmentController,
     getConfirmedAppointmentsForEmployee,
@@ -22,9 +21,6 @@ router.get('/', authMiddleware, getAllAppointmentsController);
 
 // Fetching available employees for a specific appointment
 router.get('/available-employees', authMiddleware, getAvailableEmployeesForAppointmentController);
-
-// Auto-assigning appointments to employees (for admins)
-router.post('/auto-assign', authMiddleware, autoAssignAppointments);
 
 // Manually assigning an appointment to an employee (for admins)
 router.post('/assign-employees', authMiddleware, assignEmployeesToAppointmentController);

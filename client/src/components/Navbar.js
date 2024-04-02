@@ -18,7 +18,7 @@ const Navbar = () => {
         <ul className="navbar-menu">
           <li><button onClick={() => navigateTo("/")}>Home</button></li>
           <li><button onClick={() => navigateTo("/about")}>About Us</button></li>
-          <li><button onClick={() => navigateTo("/book-appointment")}>Book Now</button></li>
+          <li><button onClick={() => navigateTo("/contact")}>Contact</button></li>
           <li><button onClick={() => navigateTo("/login")}>Login</button></li>
         </ul>
       </div>

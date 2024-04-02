@@ -8,8 +8,8 @@ const AboutMe = () => {
       <Navbar />
       <div className="hero-section">
         <img className="hero-image rounded-full" src="/Cleaning2.jpg" alt="hero_bg" />
-        <div className="content-container">
-          <div className="text-container">
+        <div className="content-container flex-col">
+          <div className="text-container ">
             <h1 className="headline">About <span className="accent-text">JKL Cleaning Service</span></h1>
             <p className="description-text">
               JKL Cleaning Service is committed to providing the highest quality cleaning services to our customers.
@@ -21,6 +21,7 @@ const AboutMe = () => {
             <button className="view-more-button" >Contact Us</button>
           </div>
         </div>
+        
       </div>
     </div>
   );

@@ -17,6 +17,7 @@ import EnterAvailabilityPage from "./pages/employee/EnterAvailability";
 import BookingPage from "./pages/customer/BookingPage";
 import CustomerAppointments from "./pages/customer/CustomerAppointments";
 import AboutMe from "./pages/About";
+import Contact from "./pages/Contact";
 
 
 
@@ -133,6 +134,12 @@ function App() {
               path="/about"
               element={
                   <AboutMe />
+              }
+              />
+              <Route
+              path="/contact"
+              element={
+                  <Contact />
               }
               />
             <Route

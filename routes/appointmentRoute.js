@@ -11,6 +11,8 @@ const {
     cancelAppointmentController,
     getConfirmedAppointmentsForEmployee,
     rescheduleAppointmentController,
+    getFullDaysController,
+    getBookedSlotsController,
     } = require('../controllers/appointmentController');
 
 // Submitting a new appointment for authenticated customers
@@ -36,5 +38,11 @@ router.patch('/update-status/:appointmentId', authMiddleware, updateAppointmentS
 
 // Rescheduling an appointment (on admin page)
 router.patch('/reschedule-appointment/:appointmentId', authMiddleware, rescheduleAppointmentController);
+
+// Fetching full days for a specific month
+router.get('/full-days', authMiddleware, getFullDaysController);
+
+// Fetching booked slots for a specific day
+router.get('/booked-slots', authMiddleware, getBookedSlotsController);
 
 module.exports = router;

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Form, Input, Select, Button, message } from "antd";
 import axios from "axios";
 import { useDispatch } from "react-redux";
-import { showLoading, hideLoading } from "../redux/features/alertSlice";
+import { showLoading, hideLoading } from "../../redux/features/alertSlice";
 
 const { Option } = Select;
 

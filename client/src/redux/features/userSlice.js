@@ -12,4 +12,6 @@ export const userSlice = createSlice({
   },
 });
 
+console.log(userSlice);
+
 export const { setUser } = userSlice.actions;

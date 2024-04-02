@@ -1,29 +1,52 @@
+import React, { useState, useEffect } from "react";
 import { Badge, message } from "antd";
-import React from "react";
 import { useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
 import "../styles/LayoutStyles.css";
 import { adminMenu, employeeMenu, userMenu } from "./../Data/data";
 
-
 const Layout = ({ children }) => {
   const { user } = useSelector((state) => state.user);
+  const [notifications, setNotifications] = useState([]);
   const location = useLocation();
   const navigate = useNavigate();
 
-  // logout function
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      try {
+        const { data } = await axios.get('/api/notification/get-all-notifications', {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        if (data.success) {
+          const currentUserId = localStorage.getItem('userId');
+          // Only include notifications that have not been read or dismissed by the current user
+          const newNotifications = data.data.filter(notification => 
+            !notification.readBy.some(read => read.userId === currentUserId) &&
+            !notification.dismissedBy.some(dismissed => dismissed.userId === currentUserId)
+          );
+          setNotifications(newNotifications);
+        }
+      } catch (error) {
+        console.error("Failed to fetch notifications:", error);
+        message.error("Unable to load notifications.");
+      }
+    };
+
+    if (localStorage.getItem("token")) {
+      fetchNotifications();
+    }
+  }, [localStorage.getItem('fetchTrigger')]); // Reacting to changes in local storage to re-fetch notifications
+
   const handleLogout = () => {
     localStorage.clear();
     message.success("Logout Successfully");
     navigate("/");
   };
 
-
-
-  // rendering menu list
-
-  const SidebarMenu =
-  user?.userRole === "admin"
+  const SidebarMenu = user?.userRole === "admin"
     ? adminMenu.filter((menu) => menu.name !== "Profile")
     : user?.userRole === "employee"
     ? employeeMenu.filter((menu) => menu.name !== "Profile")
@@ -31,7 +54,7 @@ const Layout = ({ children }) => {
 
   return (
     <>
-      <div className={`main`}>
+      <div className="main">
         <div className="layout">
           <div className="sidebar">
             <div className="logo">
@@ -60,14 +83,7 @@ const Layout = ({ children }) => {
           <div className="content">
             <div className="header">
               <div className="header-content" style={{ cursor: "pointer" }}>
-                <Badge
-                  count={
-                    user && user.notification ? user.notification.length : 0
-                  }
-                  onClick={() => {
-                    navigate("/notification");
-                  }}
-                >
+                <Badge count={notifications.length} onClick={() => navigate("/notification")}>
                   <i className="fa-solid fa-bell"></i>
                 </Badge>
               </div>

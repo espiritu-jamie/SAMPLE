@@ -9,7 +9,7 @@ const {
 } = require('../controllers/userController');
 const { 
     getAllNotificationController, 
-    deleteAllNotificationController,
+
     markNotificationAsReadController,
     markNotificationAsUnreadController
 } = require('../controllers/notificationController');
@@ -26,8 +26,6 @@ router.post('/getUserData', authMiddleware, authController);
 // Get All Notifications for a User
 router.get('/get-all-notifications', authMiddleware, getAllNotificationController);
 
-// Delete All Notifications for a User
-router.post('/delete-all-notifications', authMiddleware, deleteAllNotificationController);
 
 router.put('/mark-as-read/:notificationId', authMiddleware, markNotificationAsReadController);
 router.put('/mark-as-unread/:notificationId', authMiddleware, markNotificationAsUnreadController);

@@ -20,10 +20,10 @@ export const employeeMenu = [
   //   icon: "fa-solid fa-calendar-plus",
   // },
   {
-  name: "Profile",
-  path: "/pages/Profile", // Update with the correct path for the Profile component
-  icon: "fa-solid fa-user",
-  },
+    name: "Profile",
+    path: "/profile",
+    icon: "fa-solid fa-user",
+    },
 ];
 
 // admin menu

@@ -8,8 +8,41 @@ const { getUserRole } = require("../utils/userUtils");
 // Function to submit a new appointment
 const submitAppointmentController = async (req, res) => {
   const { userId, date, starttime, endtime, phoneNumber, address, specialInstructions, cost, paymentMethod } = req.body;
-  
+
   try {
+    // Convert the start and end times into moment objects for easier comparison
+    const startTimeMoment = moment(`${date} ${starttime}`, 'YYYY-MM-DD HH:mm');
+    const endTimeMoment = moment(`${date} ${endtime}`, 'YYYY-MM-DD HH:mm');
+
+    // Check for overlapping appointments
+    const overlappingAppointments = await Appointment.find({
+      date: moment(date, "YYYY-MM-DD").toDate(),
+      $or: [
+        { starttime: { $lt: endtime }, endtime: { $gt: starttime } }, // This checks for any overlap
+      ],
+      status: { $ne: 'cancelled' } // Ignore cancelled appointments in the overlap check
+    });
+
+    if (overlappingAppointments.length > 0) {
+      return res.status(400).json({
+        success: false,
+        message: 'There is already an appointment scheduled for the selected time slot. Please choose another time.',
+      });
+    }
+
+    // Check the total number of appointments for the day
+    const dayAppointments = await Appointment.countDocuments({
+      date: moment(date, "YYYY-MM-DD").toDate(),
+      status: { $ne: 'cancelled' } // Ignore cancelled appointments in the count
+    });
+
+    if (dayAppointments >= 5) {
+      return res.status(400).json({
+        success: false,
+        message: 'The maximum number of appointments for this day has been reached. Please select another day.',
+      });
+    }
+
     const newAppointment = new Appointment({
       userId,
       date: moment(date, "YYYY-MM-DD").toDate(),
@@ -353,13 +386,38 @@ const rescheduleAppointmentController = async (req, res) => {
   }
 };
 
+const getFullDaysController = async (req, res) => {
+  try {
+    const appointments = await Appointment.aggregate([
+      { $match: { status: { $ne: 'cancelled' } } },
+      { $group: { _id: "$date", count: { $sum: 1 } } },
+      { $match: { count: { $gte: 5 } } }
+    ]);
 
+    const fullDays = appointments.map(appointment => appointment._id);
+    res.json({ success: true, fullDays });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
 
+const getBookedSlotsController = async (req, res) => {
+  const { date } = req.query;
+  
+  try {
+    // Fetch appointments that are not cancelled for a specific date
+    const appointments = await Appointment.find({
+      date: moment(date, "YYYY-MM-DD").toDate(),
+      status: { $ne: 'cancelled' }
+    }, 'starttime endtime'); // Assuming you want to exclude cancelled appointments
 
-
-
-
-
+    // Map appointments to their start time for simplicity
+    const bookedSlots = appointments.map(appointment => `${appointment.starttime} - ${appointment.endtime}`);
+    res.json({ success: true, bookedSlots });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
 
 
 
@@ -372,4 +430,6 @@ module.exports = {
   cancelAppointmentController,
   getConfirmedAppointmentsForEmployee,
   rescheduleAppointmentController,
+  getFullDaysController,
+  getBookedSlotsController,
 };

@@ -2,7 +2,8 @@
 import React from 'react';
 import { useNavigate } from "react-router-dom";
 import '../styles/NavbarStyles.css';
-import About from '../pages/About';
+import { Link } from 'react-router-dom';
+
 
 const Navbar = () => {
   const navigate = useNavigate();

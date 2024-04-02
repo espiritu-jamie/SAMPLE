@@ -1,4 +1,19 @@
 // Home.js
+// import React from 'react';
+// import Navbar from '../components/Navbar';
+// import '../styles/HomeStyles.css';
+
+// const Home = () => {
+//   return (
+//     <div className="home-container">
+//       <Navbar />
+//       <div className="hero-section">
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default Home;
 import React from 'react';
 import Navbar from '../components/Navbar';
 import '../styles/HomeStyles.css';
@@ -8,17 +23,14 @@ const Home = () => {
     <div className="home-container">
       <Navbar />
       <div className="hero-section">
-        <img className="hero-image" src="/Cleaning1.jpg" alt="hero_bg" />
-        <div className="content-container">
-          <div className="text-container">
-            <p className="choice-text">Wide Options of Choice</p>
-            <h1 className="headline">About <span className="accent-text">Us</span></h1>
-            <p className="description-text">
-              The Best Cleaning Service in Town.
-              <br /> What are you waiting for?
-            </p>
-            <button className="view-more-button">View More</button>
-          </div>
+        <div className="hero-content">
+          {/* Place your content here */}
+          <h1>Welcome to Our Website</h1>
+          <p>This is a great place to introduce visitors to your site.</p>
+        </div>
+        <div className="hero-image">
+          {/* Replace 'image-url.jpg' with the path to your image */}
+          <img src="/cleaning-made-easy.jpg"/>
         </div>
       </div>
     </div>

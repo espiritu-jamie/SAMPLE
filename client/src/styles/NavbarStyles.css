@@ -14,8 +14,9 @@
   }
   
   .navbar-logo {
-    width: 100px; /* Adjust as needed */
+    width: 120px; /* Adjust as needed */
     height: auto;
+    border-radius: 50%; /* Circular shape */  
   }
   
   .navbar-brand {

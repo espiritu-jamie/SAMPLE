@@ -3,8 +3,6 @@ import React from 'react';
 import Navbar from '../components/Navbar';
 import '../styles/HomeStyles.css';
 
-
-
 const About = () => {
   return (
     <div className="home-container">
@@ -19,7 +17,7 @@ const About = () => {
               The Best Cleaning Service in Town.
               <br /> What are you waiting for?
             </p>
-            <button className="view-more-button">HALLOW</button>
+            <button className="view-more-button">View More</button>
           </div>
         </div>
       </div>

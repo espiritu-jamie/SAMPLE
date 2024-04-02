@@ -19,6 +19,14 @@ const notificationSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
     },
+    readBy: [{
+        userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+        readAt: { type: Date, default: Date.now }
+    }],
+    dismissedBy: [{
+        userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+        dismissedAt: { type: Date, default: Date.now }
+    }],
     createdAt: {
         type: Date,
         default: Date.now,

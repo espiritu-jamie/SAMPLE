@@ -17,7 +17,7 @@ const loginController = async (req, res) => {
       return res.status(401).send('Invalid Password');
     }
     const token = jwt.sign({id: user._id}, process.env.JWT_SECRET,{expiresIn:"1d"},);
-    res.status(200).send({ message: "Login Success", success: true, token });
+    res.status(200).send({ message: "Login Success", success: true, token, userId: user._id });
   } catch (error) {
     console.log(error);
     console.log(process.env.JWT_SECRET);
@@ -44,6 +44,7 @@ const registerController = async (req, res) => {
     res.status(201).json({
       success: true,
       newUser,
+      userId: newUser._id,
     });
   } catch (error) {
     res.status(400).json({

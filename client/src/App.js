@@ -98,7 +98,7 @@ function App() {
               }
             />
             <Route
-              path="/book-appointment"
+              path="/book-now"
               element={
                 <ProtectedRoute>
                   <BookingPage />
@@ -107,7 +107,7 @@ function App() {
             />
             
             <Route
-              path="/customer-appointments"
+              path="/my-appointments"
               element={
                 <ProtectedRoute>
                   <CustomerAppointments />
@@ -151,5 +151,4 @@ function App() {
     </>
   );
 }
-
 export default App;

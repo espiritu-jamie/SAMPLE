@@ -16,7 +16,7 @@ import EmployeeShiftsPage from "./pages/employee/EmployeeShifts";
 import EnterAvailabilityPage from "./pages/employee/EnterAvailability";
 import BookingPage from "./pages/customer/BookingPage";
 import CustomerAppointments from "./pages/customer/CustomerAppointments";
-
+import AdminHoursTracking from "./pages/admin/adminHoursTracking";
 
 
 
@@ -84,6 +84,15 @@ function App() {
               element={
                 <ProtectedRoute>
                   <AdminAllAppointments />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/admin-hours-tracker"
+              element={
+                <ProtectedRoute>
+                  <AdminHoursTracking />
                 </ProtectedRoute>
               }
             />

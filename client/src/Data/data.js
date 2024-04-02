@@ -47,6 +47,11 @@ export const adminMenu = [
     name: "All Appointments",
     path: "/admin-all-appointments",
     icon: "fa-solid fa-calendar",
+  },
+  {
+    name: "Hours Tracking",
+    path: "/admin-hours-tracker",
+    icon: "fa-solid fa-calendar",
   }
 ];
 

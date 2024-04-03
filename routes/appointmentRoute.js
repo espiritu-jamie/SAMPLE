@@ -30,7 +30,6 @@ router.post('/assign-employees', authMiddleware, assignEmployeesToAppointmentCon
 // Cancelling an appointment (for customers)
 router.patch('/cancel-appointment/:appointmentId', authMiddleware, cancelAppointmentController);
 
-
 // Fetching the confirmed appointments for the logged-in employee
 router.get('/confirmed-for-employee', authMiddleware, getConfirmedAppointmentsForEmployee);
 

@@ -1,136 +1,118 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Card, Tabs, Select } from 'antd';
+import { Table, Radio } from 'antd';
 import Layout from '../../components/Layout';
-
-const { Option } = Select;
+import MyCalendar from '../../components/MyCalendar';
+import moment from 'moment';
 
 const AdminEmployeeAvailability = () => {
-  const [availabilities, setAvailabilities] = useState([]);
-  const [sortOrder, setSortOrder] = useState('earliest');
-  const [sortMode, setSortMode] = useState('byEmployee'); // Default sort mode
+    const [availabilities, setAvailabilities] = useState([]);
+    const [sortMode, setSortMode] = useState('byEmployee');
 
-  useEffect(() => {
+    useEffect(() => {
+        fetchAvailabilities();
+    }, [sortMode]);
+
     const fetchAvailabilities = async () => {
-      const token = localStorage.getItem('token');
-      const headers = {
-        Authorization: `Bearer ${token}`,
-      };
-
-      try {
-        const response = await axios.get('/api/availability', { headers });
-        setAvailabilities(response.data.data);
-      } catch (error) {
-        console.error('Error fetching availabilities:', error);
-      }
-    };
-
-    fetchAvailabilities();
-  }, []);
-
-  const getSortedAvailabilities = () => {
-    // Sort availabilities based on the selected sort order and mode
-    return availabilities.slice().sort((a, b) => {
-      const dateA = new Date(a.date);
-      const dateB = new Date(b.date);
-
-      const dateStringA = dateA.toISOString().split('T')[0];
-      const dateStringB = dateB.toISOString().split('T')[0];
-
-      if (dateStringA === dateStringB) {
-        const timeA = a.starttime;
-        const timeB = b.starttime;
-
-        return sortOrder === 'earliest' ? timeA.localeCompare(timeB) : timeB.localeCompare(timeA);
-      } else {
-        return sortOrder === 'earliest' ? dateA - dateB : dateB - dateA;
-      }
-    });
-  };
-  const formatTime = (time) => {
-    const options = {
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: true,
-    };
-    return new Date(time).toLocaleTimeString('en-US', options);
-  };
-
-  const formatDateWithDayOfWeek = (date) => {
-    const options = {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    };
-    return new Date(date).toLocaleDateString('en-US', options);
-  };
-
-
-  const tabsItems = () => {
-    const items = [];
-    if (sortMode === 'byEmployee') {
-      // Organize by employee
-      const byEmployee = getSortedAvailabilities().reduce((acc, availability) => {
-        const name = availability.user?.name || 'Unknown';
-        if (!acc[name]) {
-          acc[name] = [];
+        const token = localStorage.getItem('token');
+        try {
+            const response = await axios.get('/api/availability', {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            setAvailabilities(response.data.data);
+        } catch (error) {
+            console.error('Error fetching availabilities:', error);
         }
-        acc[name].push(availability);
-        return acc;
-      }, {});
-  
-      Object.entries(byEmployee)
-        .sort(([name1], [name2]) => name1.localeCompare(name2))
-        .forEach(([name, availabilities]) => {
-  
-        items.push({
-          label: name,
-          key: name,
-          children: availabilities.map((availability, index) => (
-            <Card key={index}>
-              Date: {formatDateWithDayOfWeek(availability.date)} <br />
-              Start Time: {formatTime(availability.starttime)} <br />
-              End Time: {formatTime(availability.endtime)} <br />
-            </Card>
-          )),
-        });
-      });
-    } else {
-      // Unified list for sorting by date/time
-      items.push({
-        label: 'All Availabilities',
-        key: 'all',
-        children: getSortedAvailabilities().map((availability, index) => (
-          <Card key={index}>
-            Employee: {availability.user?.name || 'Unknown'} <br />
-            Date: {formatDateWithDayOfWeek(availability.date)} <br />
-            Start Time: {formatTime(availability.starttime)} <br />
-            End Time: {formatTime(availability.endtime)} <br />
-          </Card>
-        )),
-      });
-    }
-    return items;
-  };
-  
+    };
 
-  return (
-    <Layout>
-      <div>
-        <h2>Employee Availabilities</h2>
-        <Select defaultValue="byEmployee" style={{ width: 200, marginRight: 20 }} onChange={setSortMode}>
-          <Option value="byEmployee">Sort by Employee</Option>
-          <Option value="byDate">Sort by Date</Option>
-        </Select>
-        <Select defaultValue="earliest" style={{ width: 200 }} onChange={value => setSortOrder(value)}>
-          <Option value="earliest">Earliest First</Option>
-          <Option value="latest">Latest First</Option>
-        </Select>
-        <Tabs items={tabsItems()} />
-      </div>
-    </Layout>
-  );
+    const getSortedAvailabilitiesByEmployee = () => {
+        const groupedByEmployee = availabilities.reduce((acc, current) => {
+            const employeeName = current.user?.name || 'Unknown';
+            if (!acc[employeeName]) {
+                acc[employeeName] = [];
+            }
+            acc[employeeName].push(current);
+            return acc;
+        }, {});
+
+        const sortedEmployeeNames = Object.keys(groupedByEmployee).sort();
+
+        return sortedEmployeeNames.map(name => ({
+            key: name,
+            name: name,
+            children: groupedByEmployee[name].map((availability, index) => ({
+                key: `${name}_${index}`,
+                date: moment.utc(availability.date).format('LL'),
+                starttime: moment(availability.starttime, 'HH:mm').format('hh:mm A'),
+                endtime: moment(availability.endtime, 'HH:mm').format('hh:mm A'),
+            })),
+        }));
+    };
+
+    const columns = [
+        {
+            title: 'Employee Name',
+            dataIndex: 'name',
+            key: 'name',
+        },
+        {
+            title: 'Date',
+            dataIndex: 'date',
+            key: 'date',
+            sorter: (a, b) => moment(a.date).unix() - moment(b.date).unix(),
+            // Sort dates using moment.js by converting them to UNIX timestamps
+        },
+        {
+            title: 'Start Time',
+            dataIndex: 'starttime',
+            key: 'starttime',
+        },
+        {
+            title: 'End Time',
+            dataIndex: 'endtime',
+            key: 'endtime',
+        },
+    ];
+
+    return (
+        <Layout>
+            <div>
+                <h2>Employee Availabilities</h2>
+                <Radio.Group defaultValue="byEmployee" style={{ marginBottom: 20 }} onChange={e => setSortMode(e.target.value)}>
+                    <Radio.Button value="byEmployee">List</Radio.Button>
+                    <Radio.Button value="byDate">Calendar</Radio.Button>
+                </Radio.Group>
+                {sortMode === 'byDate' ? (
+                    <MyCalendar events={availabilities.map(availability => {
+                        // Directly use moment.utc to handle the date in UTC
+                        const eventDateStart = moment.utc(availability.date);
+                        const eventDateEnd = moment.utc(availability.date);
+
+                        // Adjust the time part using UTC methods
+                        const start = eventDateStart.add(moment.duration(availability.starttime)).toISOString();
+                        const end = eventDateEnd.add(moment.duration(availability.endtime)).toISOString();
+
+                        return {
+                            title: `${availability.user?.name}: ${moment.utc(availability.starttime, 'HH:mm').format('hh:mm A')} - ${moment.utc(availability.endtime, 'HH:mm').format('hh:mm A')}`,
+                            start: start,
+                            end: end,
+                            allDay: false,
+                        };
+                    })} />
+                ) : (
+                    <Table
+                        columns={columns}
+                        dataSource={getSortedAvailabilitiesByEmployee()}
+                        expandable={{
+                            rowExpandable: record => record.children && record.children.length > 0,
+                        }}
+                    />
+                )}
+            </div>
+        </Layout>
+    );
 };
 
 export default AdminEmployeeAvailability;

@@ -5,6 +5,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import "../styles/LayoutStyles.css";
 import { adminMenu, employeeMenu, userMenu } from "./../Data/data";
 
+
 const Layout = ({ children }) => {
   const { user } = useSelector((state) => state.user);
   const location = useLocation();
@@ -14,8 +15,9 @@ const Layout = ({ children }) => {
   const handleLogout = () => {
     localStorage.clear();
     message.success("Logout Successfully");
-    navigate("/login");
+    navigate("/");
   };
+
 
 
   // rendering menu list
@@ -33,7 +35,7 @@ const Layout = ({ children }) => {
         <div className="layout">
           <div className="sidebar">
             <div className="logo">
-              <h6>JKL Cleaning Service</h6>
+              <h6><img src="/jkl.png" alt="logo" className="navbar-logo" /></h6>
               <hr />
             </div>
             <div className="menu">
@@ -51,7 +53,7 @@ const Layout = ({ children }) => {
               })}
               <div className="menu-item" onClick={handleLogout}>
                 <i className="fa-solid fa-right-from-bracket"></i>
-                <Link to="/login">Logout</Link>
+                <Link to="/">Logout</Link>
               </div>
             </div>
           </div>

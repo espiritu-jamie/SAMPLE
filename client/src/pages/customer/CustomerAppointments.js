@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Layout from "../../components/Layout";
-import { Table, Button, message, Radio, Input, Modal } from "antd";
+import { Table, Button, message, Radio, Input, Modal, Rate } from "antd";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
-import moment from "moment"; 
+import moment from "moment";
+import "../../styles/CustomerAppointmentsStyles.css";
 
 const CustomerAppointments = () => {
   const [appointments, setAppointments] = useState([]);
@@ -12,58 +13,143 @@ const CustomerAppointments = () => {
   const [commentModalVisible, setCommentModalVisible] = useState(false);
   const [commentText, setCommentText] = useState("");
   const [selectedAppointmentId, setSelectedAppointmentId] = useState(null);
+  const [cancelModalVisible, setCancelModalVisible] = useState(false);
+  const [cancellationReason, setCancellationReason] = useState("");
+  const [rating, setRating] = useState(0);
+  const [hasRated, setHasRated] = useState(false);
+  const [existingRating, setExistingRating] = useState(0);
+  const [existingComment, setExistingComment] = useState("");
+
+  const fetchAppointments = async () => {
+    try {
+      const res = await axios.get("/api/appointment", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+
+      const formattedAppointments = res.data.data.map((appointment) => ({
+        ...appointment,
+        date: moment(appointment.date).format("MMMM D, YYYY"),
+        starttime: moment(appointment.starttime, "HH:mm").format("hh:mm A"),
+        endtime: moment(appointment.endtime, "HH:mm").format("hh:mm A"),
+        status: appointment.status
+      }));
+
+      setAppointments(formattedAppointments);
+    } catch (error) {
+      message.error("Error fetching appointments");
+      console.error("Error fetching appointments:", error);
+    }
+  };
+
   useEffect(() => {
-    const fetchAppointments = async () => {
-      try {
-        const res = await axios.get("/api/appointment", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
-
-        // Format the date and times immediately after fetching
-        const formattedAppointments = res.data.data.map((appointment) => ({
-          ...appointment,
-          date: moment(appointment.date).format("MMMM D, YYYY"),
-          starttime: moment(appointment.starttime, "HH:mm").format("hh:mm A"),
-          endtime: moment(appointment.endtime, "HH:mm").format("hh:mm A"),
-        }));
-
-        setAppointments(formattedAppointments);
-      } catch (error) {
-        message.error("Error fetching appointments");
-        console.error("Error fetching appointments:", error);
-      }
-    };
-
     fetchAppointments();
   }, []);
 
-  const handleEdit = (appointmentId) => {
-    // Implement edit functionality here
-    console.log("Edit button clicked for appointment:", appointmentId);
-  };
-
-  const handleDelete = (appointmentId) => {
-    // Implement delete functionality here
-    console.log("Delete button clicked for appointment:", appointmentId);
-  };
-  const handleComment = (appointmentId) => {
+  const promptCancelAppointment = (appointmentId) => {
     setSelectedAppointmentId(appointmentId);
-    setCommentModalVisible(true);
+    setCancelModalVisible(true);
   };
 
-  const handleCommentSubmit = async () => {
+  const handleCancelAppointment = async () => {
+    if (!selectedAppointmentId || !cancellationReason.trim()) {
+      message.error("A cancellation reason is required.");
+      return;
+    }
+
     try {
-      // You should replace this with actual backend API calls
-      console.log("Submitting comment:", commentText);
-      message.success("Comment submitted successfully");
-      setCommentModalVisible(false);
+      const res = await axios.patch(`/api/appointment/cancel-appointment/${selectedAppointmentId}`, {
+        cancellationReason,
+      }, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+
+      if (res.status === 200 || res.status === 204) {
+        message.success("Appointment cancelled successfully");
+        fetchAppointments();
+        setCancelModalVisible(false);
+        setSelectedAppointmentId(null);
+        setCancellationReason("");
+      } else {
+        message.error("Failed to cancel the appointment. Please try again.");
+      }
     } catch (error) {
-      console.error("Error submitting comment:", error);
-      message.error("Failed to submit comment. Please try again.");
+      console.error("Error cancelling appointment:", error);
+      message.error("An error occurred while cancelling the appointment. Please try again.");
     }
   };
+  
+  const handleComment = async (appointmentId) => {
+    setSelectedAppointmentId(appointmentId);
+    setHasRated(false); // Reset to default
+    setExistingRating(0); // Reset to default
+    setExistingComment(""); // Reset to default
+  
+    try {
+      // Fetch existing rating for this appointment, if any
+      const res = await axios.get(`/api/rating/${appointmentId}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+      if (res.data && res.data.data && res.data.data.length > 0) {
+        // Assuming the response has the format { data: [{ rating, comment }] }
+        const ratingData = res.data.data[0];
+        setHasRated(true);
+        setExistingRating(ratingData.rating);
+        setExistingComment(ratingData.comment);
+      }
+    } catch (error) {
+      console.error("Error fetching existing rating:", error);
+      message.error("Failed to fetch existing rating. Please try again.");
+    }
+  
+  
+    setCommentModalVisible(true);
+  };  
+
+  const handleCommentSubmit = async () => {
+    if (hasRated) {
+      message.info("You've already rated this appointment.");
+      return;
+    }
+
+    try {
+      const res = await axios.post(
+        '/api/rating/submit', // Adjust the URL based on your API endpoint
+        {
+          appointmentId: selectedAppointmentId,
+          rating: rating,
+          comment: commentText,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        }
+      );
+  
+      if (res.status === 200 || res.status === 201) {
+        message.success("Rating submitted successfully");
+        // Update any state or perform any actions needed after successful submission
+      } else {
+        throw new Error('Failed to submit rating');
+      }
+    } catch (error) {
+      console.error("Error submitting rating:", error);
+      message.error("Failed to submit rating. Please try again.");
+    } finally {
+      // Reset the modal and state regardless of success or failure
+      setCommentModalVisible(false);
+      setRating(0);
+      setCommentText("");
+      // Optionally, refetch any data that should be updated
+    }
+  };
+  
 
   const handleCancelComment = () => {
     setCommentText(""); // Reset the comment text
@@ -103,39 +189,91 @@ const CustomerAppointments = () => {
       key: 'specialInstructions',
     },
     {
+      title: 'Cost',
+      dataIndex: 'cost',
+      key: 'cost',
+    },
+    {
+      title: 'Status',
+      dataIndex: 'status',
+      key: 'status',
+    },
+    {
+      title: 'Cancellation Reason',
+      dataIndex: 'cancellationReason',
+      key: 'cancellationReason',
+    },
+    {
+      title: 'Payment Method',
+      dataIndex: 'paymentMethod',
+      key: 'paymentMethod',
+    },
+    {
       title: 'Actions',
       key: 'actions',
       render: (_, record) => (
         <>
-          <Button onClick={() => handleEdit(record._id)} type="primary" style={{ marginRight: 8 }}>
-            Edit
-          </Button>
-          <Button onClick={() => handleDelete(record._id)} type="danger">
-            Delete
-          </Button>
-          
-        </>
+      <Button 
+        onClick={() => promptCancelAppointment(record._id)} 
+        type="primary"
+        danger
+        disabled={record.status === "cancelled"} // Disable the button if the appointment is canceled
+        style={{ 
+          marginRight: 8,
+          color: record.status === "cancelled" ? "#ccc" : undefined, // Optional: grey out text color
+          borderColor: record.status === "cancelled" ? "#ccc" : undefined // Optional: grey out border color
+        }}
+      >
+        Cancel Appointment
+      </Button>
+    </>
       ),
     },
     {
       title: 'Comments',
       key: 'comments',
-      render: (_, record) => (
-        <>
-          <Button onClick={() => handleComment(record._id)} type="primary">
-           Rate
-          </Button>
-        </>
-      ),
+      render: (_, record) => {
+        // Convert appointment date and current date to Moment objects for comparison
+        const appointmentDate = moment(record.date, "MMMM D, YYYY");
+        const currentDate = moment().startOf('day');
+
+        console.log("appointmentDate", appointmentDate);
+        console.log("currentDate", currentDate);
+        
+        // Check if the appointment date is before the current date
+        const isPastAppointment = appointmentDate.isBefore(currentDate);
+    
+        return (
+          <>
+            <Button 
+              onClick={() => handleComment(record._id)}
+              type="primary"
+              disabled={!isPastAppointment || record.status === "cancelled"} // Disable if the appointment is in the future or cancelled
+              style={{ 
+                color: (!isPastAppointment || record.status === "cancelled") ? "#ccc" : undefined,
+                borderColor: (!isPastAppointment || record.status === "cancelled") ? "#ccc" : undefined
+              }}
+            >
+              Rate
+            </Button>
+          </>
+        );
+      },
     },
+    
   ];
+
 
   const calendarEvents = appointments.map((appointment) => ({
     title: `Appointment with ${appointment.phoneNumber}`,
     start: moment(appointment.date, "MMMM D, YYYY").toISOString(),
     end: moment(appointment.date, "MMMM D, YYYY").toISOString(),
     allDay: true,
+    color: appointment.status === "cancelled" ? "#cccccc" : "#378006",
   }));
+
+
+  
 
   return (
     <Layout>
@@ -149,8 +287,15 @@ const CustomerAppointments = () => {
           <Radio.Button value="list">List View</Radio.Button>
           <Radio.Button value="calendar">Calendar View</Radio.Button>
         </Radio.Group>
+        
         {viewMode === 'list' ? (
-          <Table dataSource={appointments} columns={columns} rowKey="_id" />
+          <Table 
+            dataSource={appointments}
+            columns={columns}
+            rowKey="_id"
+            rowClassName={(record) => record.status === "cancelled" ? 'greyed-out' : ''}
+        
+          />
         ) : (
           <FullCalendar
             plugins={[dayGridPlugin]}
@@ -158,22 +303,54 @@ const CustomerAppointments = () => {
             events={calendarEvents}
           />
         )}
+  
+          <Modal
+  title="Rate Appointment"
+  visible={commentModalVisible}
+  onOk={handleCommentSubmit}
+  onCancel={handleCancelComment}
+  okText="Submit Comment"
+  cancelText="Cancel"
+  okButtonProps={{ disabled: hasRated }} // Disable the OK button if the user has already rated
+>
+  <Rate
+    value={hasRated ? existingRating : rating} // Show existing rating if available
+    onChange={(value) => setRating(value)}
+    style={{ marginBottom: 16 }}
+    disabled={hasRated} // Make rate component read-only if already rated
+  />
+  <Input.TextArea
+    value={hasRated ? existingComment : commentText} // Show existing comment if available
+    onChange={(e) => setCommentText(e.target.value)}
+    rows={4}
+    placeholder="Enter your comment"
+    disabled={hasRated} // Make text area read-only if already rated
+  />
+</Modal>
+  
         <Modal
-          title="Add Comment"
-          visible={commentModalVisible}
-          onOk={handleCommentSubmit}
-          onCancel={handleCancelComment}
+          title="Cancel Appointment"
+          visible={cancelModalVisible}
+          onOk={handleCancelAppointment}
+          onCancel={() => {
+            setCancelModalVisible(false);
+            setCancellationReason(""); // Reset the cancellation reason if the modal is cancelled
+          }}
+          okText="Confirm Cancellation"
+          cancelText="Go Back"
         >
           <Input.TextArea
-            value={commentText}
-            onChange={(e) => setCommentText(e.target.value)}
             rows={4}
-            placeholder="Enter your comment"
+            value={cancellationReason}
+            onChange={(e) => setCancellationReason(e.target.value)}
+            placeholder="Please provide a reason for cancellation."
           />
         </Modal>
       </div>
     </Layout>
   );
 };
+  
+
 
 export default CustomerAppointments;

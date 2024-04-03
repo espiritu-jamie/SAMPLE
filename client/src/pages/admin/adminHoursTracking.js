@@ -1,65 +1,64 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Table } from 'antd';
 import Layout from '../../components/Layout';
 import moment from 'moment';
 
 const AdminHoursTracking = () => {
-    const [trackedHours, setTrackedHours] = useState([]);
+    const [hoursWorked, setHoursWorked] = useState([]);
 
     useEffect(() => {
-        fetchHoursTracking();
+        fetchHoursWorked();
     }, []);
 
-    const fetchHoursTracking = async () => {
+    const fetchHoursWorked = async () => {
         const token = localStorage.getItem('token');
         try {
-            const [availabilitiesResponse, appointmentsResponse] = await Promise.all([
-                axios.get('/api/admin-employee-availability', {
-                    headers: { Authorization: `Bearer ${token}` },
-                }),
-                axios.get('/api/admin-all-appointments', {
-                    headers: { Authorization: `Bearer ${token}` },
-                }),
-            ]);
-
-            const availabilities = availabilitiesResponse.data.data;
-            const appointments = appointmentsResponse.data.data;
-
-            const hoursWorked = calculateHoursWorked(availabilities, appointments);
-            setTrackedHours(hoursWorked);
+            const response = await axios.get('/api/availability', {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            calculateHoursWorked(response.data.data);
         } catch (error) {
-            console.error('Error fetching tracked hours:', error);
+            console.error('Error fetching hours worked:', error);
         }
     };
 
-    const calculateHoursWorked = (availabilities, appointments) => {
-        let employeeHours = {};
-        
-        appointments.forEach(appointment => {
-            const { userId, date, starttime, endtime } = appointment;
-            const appointmentDuration = moment.duration(moment(endtime, "HH:mm").diff(moment(starttime, "HH:mm"))).asHours();
-            
-            // Find if the appointment is within the employee's availability
-            const isAvailable = availabilities.some(availability => 
-                availability.user._id === userId._id && 
-                moment(availability.date).isSame(date, 'day') &&
-                moment(starttime, "HH:mm").isSameOrAfter(moment(availability.starttime, "HH:mm")) && 
-                moment(endtime, "HH:mm").isSameOrBefore(moment(availability.endtime, "HH:mm"))
-            );
-            
-            if (isAvailable) {
-                if (!employeeHours[userId.name]) {
-                    employeeHours[userId.name] = 0;
-                }
-                employeeHours[userId.name] += appointmentDuration;
+    const calculateHoursWorked = (availabilities) => {
+        const hoursByEmployee = availabilities.reduce((acc, current) => {
+            const employeeName = current.user?.name || 'Unknown';
+            const startTime = moment.utc(current.starttime, 'HH:mm');
+            const endTime = moment.utc(current.endtime, 'HH:mm');
+            const duration = moment.duration(endTime.diff(startTime));
+            const hours = duration.asHours();
+
+            if (!acc[employeeName]) {
+                acc[employeeName] = {
+                    totalHours: 0,
+                    entries: [],
+                };
             }
-        });
-        
-        return Object.entries(employeeHours).map(([name, hours]) => ({
-            name,
-            hours: hours.toFixed(2) // Convert to a string with 2 decimal places
-        }));
+
+            acc[employeeName].totalHours += hours;
+            acc[employeeName].entries.push({
+                date: moment.utc(current.date).format('LL'),
+                hoursWorked: hours.toFixed(2),
+            });
+
+            return acc;
+        }, {});
+
+        setHoursWorked(Object.keys(hoursByEmployee).map(name => ({
+            key: name,
+            name: name,
+            totalHours: hoursByEmployee[name].totalHours.toFixed(2),
+            children: hoursByEmployee[name].entries.map((entry, index) => ({
+                key: `${name}_${index}`,
+                date: entry.date,
+                hoursWorked: entry.hoursWorked,
+            })),
+        })));
     };
 
     const columns = [
@@ -70,16 +69,33 @@ const AdminHoursTracking = () => {
         },
         {
             title: 'Total Hours Worked',
-            dataIndex: 'hours',
-            key: 'hours',
-            sorter: (a, b) => a.hours - b.hours,
+            dataIndex: 'totalHours',
+            key: 'totalHours',
         },
     ];
 
+    const expandedRowRender = record => {
+        const columns = [
+            { title: 'Date', dataIndex: 'date', key: 'date' },
+            { title: 'Hours Worked', dataIndex: 'hoursWorked', key: 'hoursWorked' },
+        ];
+
+        return <Table columns={columns} dataSource={record.children} pagination={false} />;
+    };
+
     return (
         <Layout>
-            <h2>Hours Tracking</h2>
-            <Table dataSource={trackedHours} columns={columns} rowKey="name" />
+            <div>
+                <h2>Employee Hours Worked</h2>
+                <Table
+                    columns={columns}
+                    dataSource={hoursWorked}
+                    expandable={{
+                        expandedRowRender,
+                        rowExpandable: record => record.children && record.children.length > 0,
+                    }}
+                />
+            </div>
         </Layout>
     );
 };

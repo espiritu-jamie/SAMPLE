@@ -58,7 +58,7 @@ const Layout = ({ children }) => {
         <div className="layout">
           <div className="sidebar">
             <div className="logo">
-              <h6>JKL Cleaning Service</h6>
+              <h6><img src="/jkl.png" alt="logo" className="navbar-logo" /></h6>
               <hr />
             </div>
             <div className="menu">

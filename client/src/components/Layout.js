@@ -58,6 +58,7 @@ const Layout = ({ children }) => {
         <div className="layout">
           <div className="sidebar">
             <div className="logo">
+            <img src="/jkl.png" alt="JKL Cleaning Service Logo" style={{ maxWidth: '60%', maxHeight: '220px', margin: '20px auto 0px', display: 'block', borderRadius: '50%' }} />
               <h6>JKL Cleaning Service</h6>
               <hr />
             </div>

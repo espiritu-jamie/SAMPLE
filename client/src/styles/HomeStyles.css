@@ -87,4 +87,43 @@
       padding: 16px 32px;
     }
   }
+
+  .hero-section {
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    padding: 0 50px; /* Match the navbar padding */
+    height: 500px; /* Or adjust based on your design needs */
+    position: relative; /* For positioning hero content absolutely within */
+  }
   
+  .hero-image img {
+    width: 100%; /* Make the image responsive */
+    height: auto; /* Maintain aspect ratio */
+  }
+  
+  .text-container {
+    background-color: rgba(255, 255, 255, 0.8); /* Subtle white background */
+    padding: 32px;
+    border-radius: 16px; /* Rounded corners */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Soft shadow */
+  }
+  
+  .hero-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .hero-content h1 {
+    color: #000000; /* Black text color */
+    font-size: 2.5em; /* Adjust size as needed */
+    font-weight: bold;
+    margin-bottom: 0.5em; /* Space between the title and tagline */
+  }
+  
+  .hero-content p {
+    color: #000000; /* Black text color */
+    font-size: 1.2em; /* Adjust size as needed */
+  }

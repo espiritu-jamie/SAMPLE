@@ -428,6 +428,7 @@ module.exports = {
   updateAppointmentStatusController,
   assignEmployeesToAppointmentController,
   cancelAppointmentController,
+  deleteAppointmentController,
   getConfirmedAppointmentsForEmployee,
   rescheduleAppointmentController,
   getFullDaysController,

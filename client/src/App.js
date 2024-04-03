@@ -5,6 +5,7 @@ import PublicRoute from "./components/PublicRoute";
 import Spinner from "./components/Spinner";
 import AdminAllAppointments from "./pages/admin/adminAllAppointments";
 import Home from "./pages/Home"
+import About from "./pages/About"
 import HomePage from "./pages/HomePage";
 import Login from "./pages/Login";
 import NotificationPage from "./pages/NotificationPage";
@@ -37,7 +38,10 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            
+            <Route
+              path="/about"
+              element={<About />}
+            />
             <Route
               path="/enter-availability"
               element={

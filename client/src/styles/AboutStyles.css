@@ -1,33 +1,39 @@
+/* Styles for the content container */
+.content-container {
+  margin-top: 20px; /* Add margin between sections */
+}
 
-  /* Styles for the content container */
-  .content-container {
-    margin-top: 20px; /* Add margin between sections */
-  }
-  
-  /* Styles for the text container */
-  .text-container {
-    margin: auto;
-    max-width: 80%;
+/* Styles for the text container */
+.text-container {
+  margin: auto;
+  max-width: 80%;
 
-  }
-  
-  /* Styles for the headline */
-  .headline {
-    font-size: 2.5rem; /* Adjust font size as needed */
-    color: #333; /* Adjust color as needed */
-  }
-  
-  
-  /* Styles for the description text */
-  .description-text {
-    margin-top: 20px; /* Adjust margin as needed */
-    font-size: 1.2rem; /* Adjust font size as needed */
-    color: #666; /* Adjust color as needed */
-  }
-  
-  
-  
-  .view-more-button:hover {
-    background-color: #e5b037; /* Adjust hover background color as needed */
-  }
-  
+}
+.hero-image {
+  max-height: 100%; /* Adjust the value as needed */
+  max-width: 100%; /* Ensure the image doesn't exceed the container width */
+}
+/* Styles for the headline */
+.headline {
+  font-size: 2.5rem; /* Adjust font size as needed */
+  color: #333; /* Adjust color as needed */
+}
+
+
+/* Styles for the description text */
+.description-text {
+  margin-top: 20px; /* Adjust margin as needed */
+  font-size: 1.2rem; /* Adjust font size as needed */
+  color: #666; /* Adjust color as needed */
+}
+.Golden {
+  margin-top: 20px; /* Adjust margin as needed */
+  font-size: 1.2rem; /* Adjust font size as needed */
+  color:  #2b4159; /* Adjust color as needed */
+}
+
+
+
+.view-more-button:hover {
+  background-color: #e5b037; /* Adjust hover background color as needed */
+}

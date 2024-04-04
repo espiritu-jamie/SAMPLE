@@ -92,10 +92,9 @@ const Login = () => {
 
   return (
     <>
-    <div className="login-container">
+    <div className="login-container bg-cover bg-center" style={{ backgroundImage: "url('/login2.jpg')" }}>
       <Navbar />
       <div className="register-page">
-        <img className="hero-image rounded-full" src="/login2.jpg" alt="hero_bg" />
         <Form layout="vertical" onFinish={submitHandler}>
           <h1><img src="/jkl.png" alt="logo" className="navbar-logo" />Login</h1>
           <Form.Item label="Email" name="email" rules={[{ required: true, message: 'Please input your email!' }]}>

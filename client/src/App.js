@@ -33,7 +33,7 @@ function App() {
             <Route
               path="/HomePage"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute allowedRoles={['admin', 'employee', 'general']}>
                   <HomePage />
                 </ProtectedRoute>
               }
@@ -45,7 +45,7 @@ function App() {
             <Route
               path="/enter-availability"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute allowedRoles={['employee']}>
                   <EnterAvailabilityPage />
                 </ProtectedRoute>
               }
@@ -53,7 +53,7 @@ function App() {
             <Route
               path="/my-shifts"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute allowedRoles={['employee']}>
                   <EmployeeShiftsPage />
                 </ProtectedRoute>
               }
@@ -61,7 +61,7 @@ function App() {
             <Route
               path="/my-availability"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute allowedRoles={['employee']}>
                   <EmployeeAvailabilities />
                 </ProtectedRoute>
               }
@@ -69,7 +69,7 @@ function App() {
             <Route
               path="/admin-employee-availability"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute allowedRoles={['admin']}>
                   <AdminEmployeeAvailability />
                 </ProtectedRoute>
               }
@@ -77,7 +77,7 @@ function App() {
             <Route
               path="/admin-schedule-management"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute allowedRoles={['admin']}>
                   <AdminScheduleManagement />
                 </ProtectedRoute>
               }
@@ -86,7 +86,7 @@ function App() {
            <Route
               path="/admin-all-appointments"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute allowedRoles={['admin']}>
                   <AdminAllAppointments />
                 </ProtectedRoute>
               }
@@ -95,7 +95,7 @@ function App() {
             <Route
               path="/notification"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute allowedRoles={['admin', 'employee', 'general']}>
                   <NotificationPage />
                 </ProtectedRoute> // if they are logged in 
               }
@@ -103,7 +103,7 @@ function App() {
             <Route
               path="/book-now"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute allowedRoles={['general']}>
                   <BookingPage />
                 </ProtectedRoute> // if they are logged in 
               }
@@ -112,7 +112,7 @@ function App() {
             <Route
               path="/my-appointments"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute allowedRoles={['general']}>
                   <CustomerAppointments />
                 </ProtectedRoute> // if they are logged in 
               }

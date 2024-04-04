@@ -79,7 +79,7 @@ const Login = () => {
         dispatch(setUser(data.user));
         message.success("Login Successfully");
         // Trigger an update in your app state as needed, e.g., update user role in global state here
-        navigate("/HomePage", { replace: true }); // Use navigate to change the route without reloading the page
+        navigate("/HomePage", { replace: true }, 100); // Use navigate to change the route without reloading the page
 
       } else {
         message.error(data.message);

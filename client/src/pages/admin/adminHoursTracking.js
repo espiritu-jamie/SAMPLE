@@ -27,7 +27,6 @@ const AdminHoursTracking = () => {
     };
 
     const calculateHoursWorked = (availabilities) => {
-        console.log(availabilities); 
         const now = moment();
         let monthsSet = new Set();
     
@@ -35,89 +34,85 @@ const AdminHoursTracking = () => {
         const allMonthsOfYear = [];
         const currentYear = now.year();
         for (let month = 0; month < 12; month++) {
+            // Format as "Month YYYY"
             const monthYearFormat = moment().month(month).year(currentYear).format('MMMM YYYY');
             allMonthsOfYear.push(monthYearFormat);
         }
     
-        // Object to hold the accumulated hours worked by each employee per month
         const hoursByEmployee = availabilities.reduce((acc, current) => {
-            const userId = current.user?._id || 'Unknown';
-            const userName = current.user?.name || 'Unknown';
-    
+            const userId = current.user?._id|| 'Unknown';
+            const userName = current.user?.name || 'Unknown'; // Assuming name is within the user object
+            console.log('employeeId:', userId);
+            console.log(current.assignedEmployees);
+            console.log(acc);            
             const startTime = moment.utc(current.starttime, 'HH:mm');
             const endTime = moment.utc(current.endtime, 'HH:mm');
             const appointmentDate = moment.utc(current.date);
+
+            const assignedEmployeeNames = current.assignedEmployees.map(employee => employee.name);
+            console.log('Assigned Employee Names:', assignedEmployeeNames);
+            console.log('Current assigned: ', current.assignedEmployees);
+            
+            if (!acc[userId]) {
+                acc[userId] = {
+                    name: userName, // Store the name
+                    totalHours: 0,
+                    months: {},
+                };
+            }
+
+            if (appointmentDate.isAfter(now)) {
+                return acc;
+            }
+            
+            const duration = moment.duration(endTime.diff(startTime));
+            const hours = duration.asHours();
             const monthYear = appointmentDate.format('MMMM YYYY');
             monthsSet.add(monthYear);
-    
-            // Get the names of the assigned employees for this appointment
-            const assignedEmployeeNames = current.assignedEmployees.map(employee => employee.name);
-    
-            // Ensure that the month and year are represented in the data structure
-            if (!acc[monthYear]) {
-                acc[monthYear] = {};
+
+            if (!acc[userId]) {
+                acc[userId] = {
+                    totalHours: 0,
+                    months: {},
+                };
             }
-    
-            // Iterate over each assigned employee
-            assignedEmployeeNames.forEach(name => {
-                if (!acc[monthYear][name]) {
-                    acc[monthYear][name] = { totalHours: 0, details: [] };
-                }
-    
-                if (appointmentDate.isBefore(now)) {
-                    const duration = moment.duration(endTime.diff(startTime));
-                    const hours = duration.asHours();
-                    acc[monthYear][name].totalHours += hours;
-                    // Store appointment details for expanded row display
-                    acc[monthYear][name].details.push({
-                        date: appointmentDate.format('YYYY-MM-DD'),
-                        hoursWorked: hours,
-                        employeeId: userId, // Or any other identifier you wish to use
-                    });
-                }
-            });
-    
+
+            if (!acc[userId].months[monthYear]) {
+                acc[userId].months[monthYear] = {
+                    monthYear: monthYear,
+                    hoursWorked: 0,
+                };
+            }
+
+            acc[userId].totalHours += hours;
+            acc[userId].months[monthYear].hoursWorked += hours;
+
             return acc;
         }, {});
-    
-        // Add all possible months to the months filter
+
         allMonthsOfYear.forEach(monthYear => monthsSet.add(monthYear));
-    
-        // Create a filter for the months
+
         const monthsFilter = Array.from(monthsSet).map(monthYear => ({
             text: monthYear,
             value: monthYear,
         }));
-    
-        // Set the months filter state
         setMonthsFilter(monthsFilter);
-    
-        // Transform the accumulated hours into a structure suitable for the table display
-        const transformedData = Object.entries(hoursByEmployee).flatMap(([monthYear, employees]) => {
-            return Object.entries(employees).map(([name, data]) => {
-                if (!name || !data) {
-                    console.error('Invalid data structure:', name, data);
-                    return; // Skip this entry
-                }
-                return {
-                    key: `${monthYear}-${name}`,
-                    name,
-                    totalHours: data.totalHours.toFixed(2),
-                    months: [{ monthYear, ...data }],
-                };
-            }).filter(Boolean); // Filter out any undefined entries
-        });
-        
+
+        const transformedData = Object.keys(hoursByEmployee).map(userId => ({
+            key: userId,
+            userId,
+            totalHours: hoursByEmployee[userId].totalHours.toFixed(2),
+            months: Object.values(hoursByEmployee[userId].months),
+        }));
+
         setHoursWorked(transformedData);
-        
     };
-    
 
     const columns = [
         {
-            title: 'Employee Name',
-            dataIndex: 'name',
-            key: 'name',
+            title: 'Employee ID',
+            dataIndex: 'userId', // Changed from '_id' to 'userId'
+            key: 'userId',
         },
         {
             title: 'Total Hours Worked',

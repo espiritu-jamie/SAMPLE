@@ -17,6 +17,7 @@ import EnterAvailabilityPage from "./pages/employee/EnterAvailability";
 import BookingPage from "./pages/customer/BookingPage";
 import CustomerAppointments from "./pages/customer/CustomerAppointments";
 import AdminHoursTracking from "./pages/admin/adminHoursTracking";
+import EmployeeHoursWorked from "./pages/employee/EmployeeHoursWorked";
 
 
 
@@ -59,6 +60,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <EmployeeAvailabilities />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/hours-worked"
+              element={
+                <ProtectedRoute>
+                  <EmployeeHoursWorked />
                 </ProtectedRoute>
               }
             />

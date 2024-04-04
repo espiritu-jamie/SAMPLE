@@ -18,20 +18,26 @@ const EmployeeHoursWorked = () => {
             const response = await axios.get('/api/appointment/confirmed-for-employee', {
                 headers: { Authorization: `Bearer ${token}` },
             });
-            const appointmentsData = response.data.data.map(appointment => ({
+    
+            // Filter appointments for past dates
+            const currentDate = moment();
+            const pastAppointmentsData = response.data.data.filter(appointment => moment(appointment.date).isBefore(currentDate));
+    
+            const appointmentsData = pastAppointmentsData.map(appointment => ({
                 id: appointment._id,
                 date: moment(appointment.date).format('YYYY-MM-DD'),
                 starttime: moment(appointment.starttime, 'HH:mm').format('HH:mm'),
                 endtime: moment(appointment.endtime, 'HH:mm').format('HH:mm'),
                 totalHours: calculateTotalHours(appointment.starttime, appointment.endtime),
             }));
+    
             setPastAppointments(appointmentsData);
             setTotalHours(calculateTotalSum(appointmentsData));
         } catch (error) {
             console.error('Error fetching past appointments:', error);
         }
     };
-
+    
     const calculateTotalHours = (startTime, endTime) => {
         const start = moment(startTime, 'HH:mm');
         const end = moment(endTime, 'HH:mm');

@@ -1,6 +1,6 @@
 /* Diagonal split background between #2b4159 and white */
 .aboutme-container {
-  background: linear-gradient(to bottom right, white 60%, #2b4159 40% 100%);
+  background: linear-gradient(to bottom right, white 50%, #2b4159 50% 100%);
   background-repeat: no-repeat;
   min-height: 140vh; /* Ensure it covers the full height of the viewport */
 }
@@ -34,12 +34,12 @@
   color: #2b4159; /* Using the existing color scheme */
   margin-top: 30px; /* Space above subheadings */
   margin-bottom: 10px; /* Space below subheadings for separation */
-  margin-left: 20px; /* Indentation for subheadings */
+  margin-left: 0px; /* Indentation for subheadings */
 }
 
 /* Styles for the description list */
 .description-list {
-  margin: 10px;
+  margin: 15px;
   list-style-type: disc; /* Or another preferred style */
   color: #2b4159; /* Matching the description text color */
   padding-left: 40px; /* Indentation for the list items */

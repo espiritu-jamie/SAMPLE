@@ -20,6 +20,7 @@ import CustomerAppointments from "./pages/customer/CustomerAppointments";
 import Profile from "./pages/employee/Profile";
 import AboutMe from "./pages/About";
 import Contact from "./pages/Contact";
+import AdminHoursTracking from "./pages/admin/adminHoursTracking";
 
 
 
@@ -91,6 +92,14 @@ function App() {
               element={
                 <ProtectedRoute allowedRoles={['admin']}>
                   <AdminAllAppointments />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/hours-worked"
+              element={
+                <ProtectedRoute allowedRoles={['admin']}>
+                  <AdminHoursTracking />
                 </ProtectedRoute>
               }
             />

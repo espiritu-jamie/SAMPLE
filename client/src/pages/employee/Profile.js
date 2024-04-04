@@ -195,7 +195,6 @@ const Profile = () => {
                       required: true,
                       message: 'Please input your Postal Code!',
                     },
-                    { validator: numericValidator },
                   ]}>
                     <Input name="postalCode" onChange={handleInputChange} placeholder="Enter your postal code" />
                   </Form.Item>

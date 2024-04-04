@@ -2,7 +2,6 @@ const bcrypt = require("bcryptjs");
 const userModel = require('../models/userModel');
 const jwt = require("jsonwebtoken");
 
-
 // login callback
 const loginController = async (req, res) => {
   try {
@@ -16,7 +15,7 @@ const loginController = async (req, res) => {
     if (!match) {
       return res.status(401).send('Invalid Password');
     }
-    const token = jwt.sign({id: user._id}, process.env.JWT_SECRET,{expiresIn:"1d"},);
+    const token = jwt.sign({id: user._id}, process.env.JWT_SECRET, {expiresIn: "1d"});
     res.status(200).send({ message: "Login Success", success: true, token, userId: user._id });
   } catch (error) {
     console.log(error);
@@ -25,7 +24,7 @@ const loginController = async (req, res) => {
   }
 };
 
-//Register Callback
+// Register Callback
 const registerController = async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -44,7 +43,6 @@ const registerController = async (req, res) => {
     res.status(201).json({
       success: true,
       newUser,
-      userId: newUser._id,
     });
   } catch (error) {
     res.status(400).json({
@@ -75,7 +73,7 @@ const viewprofilecontroller = async (req, res) => {
       return res.status(404).send({ success: false, message: 'User not found' });
     }
 
-    // Since the example shows you are using `req.user` for user data,
+    // Since the example shows you are using req.user for user data,
     // the rest of the function might not need significant changes.
 
     // const { name, email, address, phoneNumber } = req.user;
@@ -96,18 +94,29 @@ const viewprofilecontroller = async (req, res) => {
   }
 };
 
-
 // updateprofilecontroller
 const updateProfileController = async (req, res) => {
   console.log("updateProfileController");
   try {
     const userId = req.params.userId; // Extract userId from URL parameters
     const { name, email, address, phoneNumber } = req.body;
-    console.log(name, email, address, phoneNumber);
+    // console.log(name, email, address, phoneNumber);
+
+    const missingFields = [];
 
     // Check if all required fields are provided
-    if (!name || !email || !address || !phoneNumber) {
-      return res.status(400).send({ success: false, message: 'Missing required fields' });
+    if (!name) {
+      missingFields.push('name');
+    }
+    if (!email) {
+      missingFields.push('email');
+    }
+    if (!address) {
+      missingFields.push('address');
+    }
+
+    if (missingFields.length > 0) {
+      return res.status(400).send({ success: false, message: `Missing required fields: ${missingFields.join(', ')}` });
     }
 
     // Find the user by userId
@@ -122,7 +131,6 @@ const updateProfileController = async (req, res) => {
     user.address = address;
     user.phoneNumber = phoneNumber;
 
-
     // Save changes to the user profile
     await user.save();
 
@@ -133,7 +141,6 @@ const updateProfileController = async (req, res) => {
     res.status(500).send({ success: false, message: 'Error updating profile', error: error.message });
   }
 };
-
 
 const authController = async (req, res) => {
   try {
@@ -160,9 +167,4 @@ const authController = async (req, res) => {
   }
 };
 
-
-
-
 module.exports = { loginController, registerController, viewprofilecontroller, updateProfileController, authController };
-
-

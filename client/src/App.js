@@ -18,6 +18,8 @@ import BookingPage from "./pages/customer/BookingPage";
 import CustomerAppointments from "./pages/customer/CustomerAppointments";
 import Profile from "./pages/employee/Profile";
 
+import AdminHoursTracking from "./pages/admin/adminHoursTracking";
+import EmployeeHoursWorked from "./pages/employee/EmployeeHoursWorked";
 
 
 
@@ -64,6 +66,14 @@ function App() {
               }
             />
             <Route
+              path="/hours-worked"
+              element={
+                <ProtectedRoute>
+                  <EmployeeHoursWorked />
+                </ProtectedRoute>
+              }
+            />
+            <Route
               path="/admin-employee-availability"
               element={
                 <ProtectedRoute>
@@ -85,6 +95,15 @@ function App() {
               element={
                 <ProtectedRoute>
                   <AdminAllAppointments />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/admin-hours-tracker"
+              element={
+                <ProtectedRoute>
+                  <AdminHoursTracking />
                 </ProtectedRoute>
               }
             />

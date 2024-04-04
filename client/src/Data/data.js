@@ -25,6 +25,16 @@ export const employeeMenu = [
   //   path: "/enter-availability",
   //   icon: "fa-solid fa-calendar-plus",
   // },
+  {
+  name: "Profile",
+  path: "/pages/Profile", // Update with the correct path for the Profile component
+  icon: "fa-solid fa-user",
+  },
+  {
+    name: "Hours Worked",
+    path: "/hours-worked",
+    icon: "fa-solid fa-calendar",
+  },
 ];
 
 // admin menu
@@ -47,6 +57,11 @@ export const adminMenu = [
   {
     name: "All Appointments",
     path: "/admin-all-appointments",
+    icon: "fa-solid fa-calendar",
+  },
+  {
+    name: "Hours Tracking",
+    path: "/admin-hours-tracker",
     icon: "fa-solid fa-calendar",
   }
 ];

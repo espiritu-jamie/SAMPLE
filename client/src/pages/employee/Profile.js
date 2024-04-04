@@ -11,7 +11,7 @@ const Profile = () => {
 
   // State for managing the form data
   const [form] = Form.useForm();
-  // correctly set the default params of profile -----debug
+  // correctly set the default params of profile.
   const [profile, setProfile] = useState({
     name: '',
     email: '',
@@ -27,7 +27,7 @@ const Profile = () => {
   // Accessing the current user from Redux store
   const { user } = useSelector((state) => state.user);
 
-  // useEffect hook to fetch the user's profile data when the component mounts.  -----debug
+  // useEffect hook to fetch the user's profile data when the component mounts. 
   useEffect(() => {
     if (user) {
       fetchUserProfile();
@@ -38,12 +38,12 @@ const Profile = () => {
   const fetchUserProfile = () => {
     const token = localStorage.getItem("token"); // Retrieving token from localStorage
 
-    // Retrieve the user's ID from the Redux store's user state. This ID is necessary to construct the URL. -----debug
+    // Retrieve the user's ID from the Redux store's user state. This ID is necessary to construct the URL. 
     const userId = user._id;
 
     // Make a GET request to the server using axios to fetch the profile information of the user.
     // The URL includes the userId to specify which user's profile to retrieve.
-    // The Authorization header is included in the request to provide the JWT token for authentication.  -----debug
+    // The Authorization header is included in the request to provide the JWT token for authentication. 
     axios.get(`/api/user/view-profile/${userId}`, { headers: { Authorization: `Bearer ${token}` } })
       .then((response) => {
         const userProfile = response.data.userProfile;
@@ -53,7 +53,7 @@ const Profile = () => {
         if (userProfile) {
           // Update the component's state with the fetched profile data. Each piece of information is
           // extracted from the userProfile object. Default values ('') are provided in case any piece of
-          // information is missing from the userProfile to prevent undefined values in the state.  -----debug
+          // information is missing from the userProfile to prevent undefined values in the state.  
           setProfile({
             name: userProfile.name || '',
             email: userProfile.email || '',
@@ -77,7 +77,7 @@ const Profile = () => {
     // represents the current state. A new state object is returned, created by spreading the
     // properties of 'prevProfile' into a new object and then updating the property corresponding
     // to the 'name' of the input field that triggered the change event with the new 'value'.
-    // This approach ensures that the state update is based on the most recent state and avoids direct state mutations.  -----debug
+    // This approach ensures that the state update is based on the most recent state and avoids direct state mutations.  
     setProfile(prevProfile => ({
       ...prevProfile,
       [name]: value, // Dynamically updating the right profile attribute based on input name
@@ -88,12 +88,12 @@ const Profile = () => {
   const handleSubmit = async () => {
     const token = localStorage.getItem("token"); // Retrieve the JWT token stored in localStorage
 
-    // added the user.id from the user saved in the redux store -----debug
+    // added the user.id from the user saved in the redux store 
     const userId = user._id;
-    const updateProfileUrl = `/api/user/update-profile/${userId}`; // -----debug
+    const updateProfileUrl = `/api/user/update-profile/${userId}`; // 
 
     // Prepare the profile update data to be sent in the PUT request payload.
-    // This object structure should align with what the server expects for the profile update endpoint.  -----debug
+    // This object structure should align with what the server expects for the profile update endpoint.  
     const profileUpdateData = {
       name: profile.name,
       email: profile.email,

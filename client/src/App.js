@@ -17,9 +17,10 @@ import EmployeeShiftsPage from "./pages/employee/EmployeeShifts";
 import EnterAvailabilityPage from "./pages/employee/EnterAvailability";
 import BookingPage from "./pages/customer/BookingPage";
 import CustomerAppointments from "./pages/customer/CustomerAppointments";
-import AboutMe from "./pages/About";
-import Contact from "./pages/Contact";
+import Profile from "./pages/employee/Profile";
 
+import AdminHoursTracking from "./pages/admin/adminHoursTracking";
+import EmployeeHoursWorked from "./pages/employee/EmployeeHoursWorked";
 
 
 
@@ -152,6 +153,14 @@ function App() {
                 <PublicRoute>
                   <Register />
                 </PublicRoute>
+              }
+            />
+            <Route
+              path="/my-profile"
+              element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
               }
             />
           </Routes>

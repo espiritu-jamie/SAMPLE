@@ -422,24 +422,40 @@ const getBookedSlotsController = async (req, res) => {
 
 const getAllConfirmedAppointmentsForEmployees = async (req, res) => {
   try {
-      // Fetch all confirmed appointments
-      const confirmedAppointments = await Appointment.find({
-          status: 'confirmed',
-          date: { $lt: new Date() } // Only past appointments
-      }).populate('userId', 'name').populate('assignedEmployees', 'name');
+    const userId = req.body.userId; // Assuming req.user is populated with the authenticated user's information
+    const userRole = await getUserRole(userId);
 
-      return res.status(200).json({
-          success: true,
-          data: confirmedAppointments,
-      });
+    let confirmedAppointments;
+
+    if (userRole === 'admin') {
+      // Fetch all confirmed appointments
+      confirmedAppointments = await Appointment.find({ status: 'confirmed' })
+        .populate('userId', 'name')
+        .populate('assignedEmployees', 'name');
+    } else {
+      // Fetch confirmed appointments for the logged-in employee
+      confirmedAppointments = await Appointment.find({
+        assignedEmployees: userId,
+        status: 'confirmed',
+      })
+        .populate('userId', 'name')
+        .populate('assignedEmployees', 'name');
+    }
+
+    return res.status(200).json({
+      success: true,
+      data: confirmedAppointments,
+    });
   } catch (error) {
-      console.error("Error fetching confirmed appointments for all employees:", error);
-      return res.status(500).json({
-          success: false,
-          message: `Error fetching confirmed appointments for all employees: ${error.message}`,
-      });
+    console.error("Error fetching confirmed appointments for all employees:", error);
+    return res.status(500).json({
+      success: false,
+      message: `Error fetching confirmed appointments for all employees: ${error.message}`,
+    });
   }
 };
+
+
 
 
 module.exports = {

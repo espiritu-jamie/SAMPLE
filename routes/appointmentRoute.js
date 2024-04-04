@@ -47,6 +47,6 @@ router.get('/full-days', authMiddleware, getFullDaysController);
 router.get('/booked-slots', authMiddleware, getBookedSlotsController);
 
 // Fetching all past confirmed appointments for all employees
-router.get('/confirmed-for-employees', authMiddleware, getAllConfirmedAppointmentsForEmployees);
+router.get('/confirmed-for-employees', authMiddleware, getAllConfirmedAppointmentsForEmployees); // Corrected endpoint
 
 module.exports = router;

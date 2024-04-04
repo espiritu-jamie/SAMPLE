@@ -1,0 +1,61 @@
+.contact-page-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: linear-gradient(to top right, #C9A959 60%, white 40%);
+    min-height: 100vh;
+    padding-top: 2rem;
+  }
+  
+  .contact-container {
+    background-color: #faf5ea;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    padding: 2rem;
+    margin: 1rem;
+    text-align: center;
+    width: 80%;
+    max-width: 980px;
+  }
+  
+  .contact-details-container {
+    display: flex;
+    justify-content: center; /* Changed to center to make sure the details are centered */
+    align-items: center; /* Added to vertically center the details in the container */
+    flex-direction: row; /* Stack the contact details on top of each other */
+    gap: 1rem; /* Space between contact detail sections */
+    width: 100%;
+  }
+  
+  .contact-detail {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 1rem;
+    width: 80%; /* Set width to 80% of parent container */
+    max-width: 350px; /* Adjust to manage the size */
+    margin: 20px auto; /* Added auto to horizontally center the details */
+    text-align: center;
+  }
+  
+  .contact-method {
+    margin-bottom: 0.5rem;
+    color: #2b4159
+  }
+  
+  .contact-description {
+    margin-bottom: 1rem;
+    color: #2b4159
+  }
+  
+  .contact-info {
+    font-weight: bold;
+    color: #2b4159;
+  }
+  
+  @media (max-width: 600px) {
+    .contact-detail {
+      width: 90%; /* Increase width for small screens if desired */
+    }
+  }
+  

@@ -62,6 +62,7 @@ const Profile = () => {
             phoneNumber: userProfile.phoneNumber || ''
           });
         }
+        console.log('user: ', userProfile);
         setLoading(false); // Setting loading to false after fetching data
       })
       .catch((error) => {
@@ -190,21 +191,54 @@ const Profile = () => {
               </Row>
               <Row gutter={[24, 16]}>
                 <Col xs={24} sm={12}>
-                  <Form.Item label="Postal Code" name="postalCode" rules={[
-                    {
-                      required: true,
-                      message: 'Please input your Postal Code!',
-                    },
-                  ]}>
-                    <Input name="postalCode" onChange={handleInputChange} placeholder="Enter your postal code" />
-                  </Form.Item>
+                <Form.Item
+  label="Postal Code"
+  name="postalCode"
+  rules={[
+    {
+      required: true,
+      message: 'Please input your Postal Code!',
+    },
+    () => ({
+      validator(_, value) {
+        // Regular expression to match Canadian postal code format A1A1A1
+        const pattern = /^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/;
+        if (!value || pattern.test(value.toUpperCase())) {
+          return Promise.resolve();
+        }
+        return Promise.reject(new Error('Postal Code must be in the format A1A1A1'));
+      },
+    }),
+  ]}
+>
+  <Input name="postalCode" onChange={handleInputChange} placeholder="Enter your postal code" />
+</Form.Item>
+
                 </Col>
                 <Col xs={24} sm={12}>
-                  <Form.Item label="Phone Number" name="phoneNumber" rules={[
-                    { validator: numericValidator },
-                  ]}>
-                    <Input name="phoneNumber" onChange={handleInputChange} placeholder="Enter your phone number" />
-                  </Form.Item>
+                <Form.Item
+  label="Phone Number"
+  name="phoneNumber"
+  rules={[
+    {
+      required: true,
+      message: 'Please input your phone number!',
+    },
+    () => ({
+      validator(_, value) {
+        // Regular expression to match the phone number format (403)403-4003
+        const pattern = /^\(\d{3}\)\d{3}-\d{4}$/;
+        if (!value || pattern.test(value)) {
+          return Promise.resolve();
+        }
+        return Promise.reject(new Error('Phone Number must be in the format (403)403-4003'));
+      },
+    }),
+  ]}
+>
+  <Input name="phoneNumber" onChange={handleInputChange} placeholder="Enter your phone number" />
+</Form.Item>
+
                 </Col>
               </Row>
               <Row justify="center" style={{ marginTop: '20px' }}>

@@ -83,7 +83,8 @@ const viewprofilecontroller = async (req, res) => {
       _id: user._id,
       name: user.name,
       email: user.email,
-      address: user.address
+      address: user.address,
+      phoneNumber: user.phoneNumber
     };
 
     // Send the user profile as the response

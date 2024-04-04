@@ -93,7 +93,7 @@ const AboutMe = () => {
     <li>Meticulous attention to detail for thorough cleaning.</li>
     <li>Deep roots in Calgary, Alberta, with 15 years of industry expertise.</li>
   </ul>
-            <button className="view-more-button" onClick={() => navigateTo("/contact")}>Contact</button>
+            <button className="view-more-button" onClick={() => navigateTo("/register")}>Book Now</button>
           </div>
         </div>
 </div>

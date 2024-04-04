@@ -15,7 +15,7 @@ const Contact = () => {
         
         <div className="contact-details-container"> {/* Container for email and phone information */}
           <div className="contact-detail email-container"> {/* Individual container for email */}
-            <h2 className="contact-method">Send us a mail</h2>
+            <h2 className="contact-method">Send us an email</h2>
             <p className="contact-description">
               Pen us your concerns or requests. We'll make sure to sweep up a response in no time!
             </p>

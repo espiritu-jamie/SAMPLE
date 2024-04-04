@@ -8,7 +8,7 @@ const Home = () => {
   <Navbar />
   <div className="hero-section">
     <img className="hero-image rounded-full" src="/ThreeCleaners.jpg" alt="hero_bg" />
-    <div className="content-container flex-col">
+    <div className=" flex-col">
       <div className="text-logo-container">
         <div className="text-box">
           <p><b>JKL CLEANING SERVICES</b>We Treat Your House Like Ours</p>

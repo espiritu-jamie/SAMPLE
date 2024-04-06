@@ -3,7 +3,7 @@
   padding: 20px;
   height: 100vh;
   background-color: #fff;
-  color: #3d3d3d;
+  color: black;
 }
 
 .layout {
@@ -15,10 +15,10 @@
   height: auto;
   width: 300px;
   border-radius: 8px;
-  background-color: #ADD8E6;
+  background-color: #2b4159;
   box-shadow: 0 0 2px rgba(0, 0, 0, 0.1);
   margin-right: 20px;
-  color: #3d3d3d;
+  color: White;
   font-size: 1.1rem;
   font-weight: 600;
 }
@@ -33,7 +33,7 @@
   margin-bottom: 20px;
   border-radius: 8px;
   box-shadow: 0 0 2px rgba(0, 0, 0, 0.1);
-  background-color: #F0E68C;
+  background-color: #C9A959;
   display: flex;
   align-items: center;
   padding: 0 20px;
@@ -73,11 +73,11 @@
 }
 
 .menu-item:hover {
-  background-color: #F0E68C;
+  background-color: #C9A959;
 }
 
 .menu-item a {
-  color: #3d3d3d;
+  color: white;
   text-decoration: none;
   margin-left: 20px;
 }
@@ -85,7 +85,7 @@
 .menu-item i {
   font-size: 1.2rem;
   margin-right: 20px;
-  color: #3d3d3d;
+  color: white;
 }
 
 .active {

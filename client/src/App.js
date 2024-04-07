@@ -16,12 +16,10 @@ import EmployeeShiftsPage from "./pages/employee/EmployeeShifts";
 import EnterAvailabilityPage from "./pages/employee/EnterAvailability";
 import BookingPage from "./pages/customer/BookingPage";
 import CustomerAppointments from "./pages/customer/CustomerAppointments";
-import Profile from "./pages/employee/Profile";
 import AboutMe from "./pages/About";
 import Contact from "./pages/Contact";
-
+import Profile from "./pages/employee/Profile";
 import AdminHoursTracking from "./pages/admin/adminHoursTracking";
-// import EmployeeHoursWorked from "./pages/employee/EmployeeHoursWorked";
 
 
 
@@ -71,6 +69,14 @@ function App() {
               }
             />
             <Route
+              path="/my-profile"
+              element={
+                <ProtectedRoute allowedRoles={['employee']}>
+                  <Profile />
+                </ProtectedRoute>
+              }
+            />
+            <Route
               path="/admin-employee-availability"
               element={
                 <ProtectedRoute allowedRoles={['admin']}>
@@ -96,14 +102,13 @@ function App() {
               }
             />
             <Route
-              path="/hours-worked"
+              path="/admin-hours-tracking"
               element={
                 <ProtectedRoute allowedRoles={['admin']}>
                   <AdminHoursTracking />
                 </ProtectedRoute>
               }
             />
-            
             <Route
               path="/notification"
               element={
@@ -162,14 +167,6 @@ function App() {
                 <PublicRoute>
                   <Register />
                 </PublicRoute>
-              }
-            />
-            <Route
-              path="/my-profile"
-              element={
-                <ProtectedRoute allowedRoles={['employee']}>
-                  <Profile />
-                </ProtectedRoute>
               }
             />
           </Routes>

@@ -54,6 +54,7 @@ const Profile = () => {
           // Update the component's state with the fetched profile data. Each piece of information is
           // extracted from the userProfile object. Default values ('') are provided in case any piece of
           // information is missing from the userProfile to prevent undefined values in the state.  
+          console.log('userProfile: ', userProfile);
           setProfile({
             name: userProfile.name || '',
             email: userProfile.email || '',
@@ -121,6 +122,14 @@ const Profile = () => {
       console.error("Error updating profile:", error);
       message.error("Failed to update profile due to an error.");
     }
+  };
+
+  // Custom numeric validator for form fields
+  const numericValidator = (_, value) => {
+    if (!value || /^\d*$/.test(value)) {
+      return Promise.resolve();
+    }
+    return Promise.reject(new Error('Please enter a numeric value'));
   };
 
 

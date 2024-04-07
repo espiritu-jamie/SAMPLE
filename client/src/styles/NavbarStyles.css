@@ -1,47 +1,89 @@
 /* NavbarStyles.css */
 .navbar {
-    padding-top: 16px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding-top: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%; /* Full width */
+  padding: 0 50px; /* Adjust padding as needed */
+  position: relative; /* Set position to relative */
+}
+
+.navbar-logo {
+  width: 120px; /* Adjust as needed */
+  height: auto;
+  border-radius: 50%; /* Circular shape */  
+  order: 2; /* Change order to 2 */
+}
+
+.navbar-brand {
+  font-size: 24px;
+  color: #2b4159;
+  font-weight: bold;
+  display: none; /* Hide on smaller screens */
+}
+
+.navbar-menu {
+  display: flex;
+  list-style: none;
+  gap: 16px;
+}
+
+.navbar-menu button {
+  background-color: #f0c040; /* A pleasant yellow */
+  color: #333;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 20px; /* Slightly rounded corners */
+  cursor: pointer;
+  text-transform: uppercase;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+
+/* NavbarStyles.css */
+.navbar-menu button {
+  background-color: transparent; /* Make background transparent */
+  color: #C9A959; /* Adjust text color as needed */
+  padding: 20px; /* Adjust padding as needed */
+  border: none;
+  border-radius: 0; /* Remove rounded corners */
+  cursor: pointer;
+  text-transform: uppercase;
+  font-weight: normal; /* Adjust font weight as needed */
+}
+
+/* Add vertical gap between items */
+.navbar-menu li {
+  margin-bottom: 0px; /* Adjust vertical gap as needed */
+}
+
+/* Remove vertical gap for horizontal layout */
+@media (min-width: 200000px) { /* Adjust breakpoint as needed */
+  .navbar-menu li {
+    margin-bottom: 0;
   }
-  
-  .navbar-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 16px;
-  }
-  
-  .navbar-logo {
-    width: 80px; /* Adjust as needed */
-    height: auto;
-  }
-  
-  .navbar-brand {
-    font-size: 24px;
-    color: #333;
-    font-weight: bold;
-    display: none; /* Hide on smaller screens */
-  }
-  
-  .navbar-menu {
-    display: flex;
-    list-style: none;
-    gap: 16px;
-  }
-  
-  .navbar-menu button {
-    background-color: #f0c040; /* A pleasant yellow */
-    color: #333;
-    padding: 8px 16px;
-    border: none;
-    border-radius: 20px; /* Slightly rounded corners */
-    cursor: pointer;
-    text-transform: uppercase;
-    font-weight: bold;
-    transition: background-color 0.3s;
-  }
-  
-  .navbar-menu button:hover {
-    background-color: #e5b037; /* Darker yellow on hover */
-  }
-  
+}
+
+.navbar-container::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 50%; /* Adjust based on how much area you want colored */
+  background-color: #2b4159; /* The slant color */
+  transform: skewX(-20deg); /* Creates the slant */
+  z-index: -1; /* Ensures the slant is behind the content */
+}
+
+.navbar {
+  padding-top: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+

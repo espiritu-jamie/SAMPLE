@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Layout from "../../components/Layout";
-import { Table, Button, message, Radio, Input, Modal, Rate } from "antd";
-import FullCalendar from "@fullcalendar/react";
-import dayGridPlugin from "@fullcalendar/daygrid";
+import { Table, Button, message, Radio, Input, Modal, Rate, Select } from "antd";
+// import FullCalendar from "@fullcalendar/react";
+// import dayGridPlugin from "@fullcalendar/daygrid";
 import moment from "moment";
 import "../../styles/CustomerAppointmentsStyles.css";
 
+const { Option } = Select;
+
 const CustomerAppointments = () => {
   const [appointments, setAppointments] = useState([]);
-  const [viewMode, setViewMode] = useState('list'); // 'list' or 'calendar'
+  const [filter, setFilter] = useState("all");
+  // const [viewMode, setViewMode] = useState('list'); 
   const [commentModalVisible, setCommentModalVisible] = useState(false);
   const [commentText, setCommentText] = useState("");
   const [selectedAppointmentId, setSelectedAppointmentId] = useState(null);
@@ -19,6 +22,10 @@ const CustomerAppointments = () => {
   const [hasRated, setHasRated] = useState(false);
   const [existingRating, setExistingRating] = useState(0);
   const [existingComment, setExistingComment] = useState("");
+
+  const handleFilterChange = value => {
+    setFilter(value);
+  };
 
   const fetchAppointments = async () => {
     try {
@@ -265,44 +272,53 @@ const CustomerAppointments = () => {
 
 
   const calendarEvents = appointments.map((appointment) => ({
-    title: `Appointment with ${appointment.phoneNumber}`,
-    start: moment(appointment.date, "MMMM D, YYYY").toISOString(),
-    end: moment(appointment.date, "MMMM D, YYYY").toISOString(),
-    allDay: true,
-    color: appointment.status === "cancelled" ? "#cccccc" : "#378006",
+    id: appointment._id,
+    title: `Appointment: ${appointment.phoneNumber} - ${appointment.status.toUpperCase()}`,
+    start: moment(appointment.date, "MMMM D, YYYY").format('YYYY-MM-DD') + 'T' + appointment.starttime,
+    end: moment(appointment.date, "MMMM D, YYYY").format('YYYY-MM-DD') + 'T' + appointment.endtime,
+    allDay: false,
+    extendedProps: {
+      ...appointment
+    },
+    color: appointment.status === 'confirmed' ? '#33CC33' : appointment.status === 'cancelled' ? 'red' : 'blue', 
+    textColor: 'white',
   }));
 
+  console.log("calendarEvents", calendarEvents);
+  
 
+  const getFilteredAppointments = () => {
+    const now = moment();
+    return appointments.filter(appointment => {
+      const appointmentDate = moment(appointment.date, "MMMM D, YYYY");
+      if (filter === "past") {
+        return appointmentDate.isBefore(now);
+      } else if (filter === "upcoming") {
+        return appointmentDate.isSameOrAfter(now);
+      }
+      return true; // If filter is "all", return all appointments
+    });
+  };
   
 
   return (
     <Layout>
       <div className="container">
         <h3 className="text-center my-4">My Appointments</h3>
-        <Radio.Group
-          value={viewMode}
-          onChange={(e) => setViewMode(e.target.value)}
-          style={{ marginBottom: 20 }}
-        >
-          <Radio.Button value="list">List View</Radio.Button>
-          <Radio.Button value="calendar">Calendar View</Radio.Button>
-        </Radio.Group>
-        
-        {viewMode === 'list' ? (
+          <Select defaultValue="all" style={{ width: 200, marginBottom: 20 }} onChange={handleFilterChange}>
+            <Option value="all">All</Option>
+            <Option value="upcoming">Upcoming</Option>
+            <Option value="past">Past</Option>
+          </Select>
           <Table 
-            dataSource={appointments}
+            dataSource={getFilteredAppointments()}
             columns={columns}
             rowKey="_id"
             rowClassName={(record) => record.status === "cancelled" ? 'greyed-out' : ''}
+            scroll={{ x: 'max-content' }}
+
         
           />
-        ) : (
-          <FullCalendar
-            plugins={[dayGridPlugin]}
-            initialView="dayGridMonth"
-            events={calendarEvents}
-          />
-        )}
   
           <Modal
   title="Rate Appointment"

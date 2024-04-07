@@ -1,0 +1,63 @@
+/* Diagonal split background between #2b4159 and white */
+.aboutme-container {
+  background: linear-gradient(to bottom right, white 50%, #2b4159 50% 100%);
+  background-repeat: no-repeat;
+  min-height: 140vh; /* Ensure it covers the full height of the viewport */
+}
+
+/* Ensuring content is readable and well-presented against the background */
+.content-container {
+  margin-top: 20px;
+  background-color: rgba(255, 255, 255, 0.5); /* Light transparency for the content background */
+  padding: 20px;
+  border-radius: 10px;
+}
+
+/* Ensuring text readability and visual appeal */
+.text-container {
+  margin: 50px auto; /* Centering the text container */
+  max-width: 60%;
+  background-color: #faf5ea ; /* Light transparency for the text container */
+  box-shadow: 10px 10px 25px rgba(0, 0, 0, 0.2); /* Adding shadow for depth */
+
+}
+
+.headline, .description-text {
+  color: #2b4159; /* Adjusting text color for better contrast */
+}
+
+.view-more-button {
+  margin: 30px 30px; /* Space between text and button */
+}
+.subheading {
+  font-size: 2rem;
+  color: #2b4159; /* Using the existing color scheme */
+  margin-top: 30px; /* Space above subheadings */
+  margin-bottom: 10px; /* Space below subheadings for separation */
+  margin-left: 0px; /* Indentation for subheadings */
+}
+
+/* Styles for the description list */
+.description-list {
+  margin: 15px;
+  list-style-type: disc; /* Or another preferred style */
+  color: #2b4159; /* Matching the description text color */
+  padding-left: 40px; /* Indentation for the list items */
+}
+
+.accent-text {
+  color: #C9A959; /* Highlight color */
+}
+
+.view-more-button {
+  background-color: #2b4159; /* Button background color */
+  color: white; /* Button text color */
+  padding: 10px 20px; /* Button padding */
+  border: none; /* Remove border */
+  cursor: pointer; /* Cursor indication for clickable element */
+  border-radius: 5px; /* Rounded corners for the button */
+}
+
+.view-more-button:hover {
+  background-color: #C9A959; /* Button hover background color */
+}

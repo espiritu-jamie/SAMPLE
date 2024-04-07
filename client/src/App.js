@@ -93,14 +93,6 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            <Route
-              path="/hours-worked"
-              element={
-                <ProtectedRoute allowedRoles={['admin']}>
-                  <AdminHoursTracking />
-                </ProtectedRoute>
-              }
-            />
             
             <Route
               path="/notification"

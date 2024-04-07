@@ -60,7 +60,7 @@ const viewprofilecontroller = async (req, res) => {
     // }
 
     // Log the userId received from the frontend
-    const userId = req.params.userId; // Extract the userId from the URL parameter
+    const userId = req.body.userId; // Extract the userId from the URL parameter
 
     // Optionally, compare the userId with req.user._id (if your logic requires)
     // This depends on your application's requirements

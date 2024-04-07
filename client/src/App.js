@@ -162,7 +162,6 @@ function App() {
                 </PublicRoute>
               }
             />
-                </ProtectedRoute>
           </Routes>
         )}
       </BrowserRouter>

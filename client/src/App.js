@@ -21,6 +21,8 @@ import AboutMe from "./pages/About";
 import Contact from "./pages/Contact";
 
 
+
+
 function App() {
   const { loading } = useSelector((state) => state.alerts);
   return (
@@ -91,6 +93,14 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            {/* <Route
+              path="/hours-worked"
+              element={
+                <ProtectedRoute allowedRoles={['admin']}>
+                  <AdminHoursTracking />
+                </ProtectedRoute>
+              }
+            /> */}
             
             <Route
               path="/notification"

@@ -123,14 +123,6 @@ const Profile = () => {
     }
   };
 
-  // Custom numeric validator for form fields
-  const numericValidator = (_, value) => {
-    if (!value || /^\d*$/.test(value)) {
-      return Promise.resolve();
-    }
-    return Promise.reject(new Error('Please enter a numeric value'));
-  };
-
 
   if (error) return <div>Error: {error}</div>;
 

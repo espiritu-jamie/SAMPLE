@@ -5,7 +5,6 @@ import PublicRoute from "./components/PublicRoute";
 import Spinner from "./components/Spinner";
 import AdminAllAppointments from "./pages/admin/adminAllAppointments";
 import Home from "./pages/Home"
-import About from "./pages/About"
 import HomePage from "./pages/HomePage";
 import Login from "./pages/Login";
 import NotificationPage from "./pages/NotificationPage";
@@ -17,9 +16,12 @@ import EmployeeShiftsPage from "./pages/employee/EmployeeShifts";
 import EnterAvailabilityPage from "./pages/employee/EnterAvailability";
 import BookingPage from "./pages/customer/BookingPage";
 import CustomerAppointments from "./pages/customer/CustomerAppointments";
+import Profile from "./pages/employee/Profile";
 import AboutMe from "./pages/About";
 import Contact from "./pages/Contact";
 
+import AdminHoursTracking from "./pages/admin/adminHoursTracking";
+// import EmployeeHoursWorked from "./pages/employee/EmployeeHoursWorked";
 
 
 
@@ -42,7 +44,7 @@ function App() {
             />
             <Route
               path="/about"
-              element={<About />}
+              element={<AboutMe />}
             />
             <Route
               path="/enter-availability"
@@ -93,14 +95,14 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            {/* <Route
+            <Route
               path="/hours-worked"
               element={
                 <ProtectedRoute allowedRoles={['admin']}>
                   <AdminHoursTracking />
                 </ProtectedRoute>
               }
-            /> */}
+            />
             
             <Route
               path="/notification"
@@ -160,6 +162,14 @@ function App() {
                 <PublicRoute>
                   <Register />
                 </PublicRoute>
+              }
+            />
+            <Route
+              path="/my-profile"
+              element={
+                <ProtectedRoute allowedRoles={['employee']}>
+                  <Profile />
+                </ProtectedRoute>
               }
             />
           </Routes>

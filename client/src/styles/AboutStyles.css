@@ -2,7 +2,7 @@
 .aboutme-container {
   background: linear-gradient(to bottom right, white 50%, #2b4159 50% 100%);
   background-repeat: no-repeat;
-  min-height: 140vh; /* Ensure it covers the full height of the viewport */
+  min-height: 150vh; /* Ensure it covers the full height of the viewport */
 }
 
 /* Ensuring content is readable and well-presented against the background */
@@ -17,7 +17,7 @@
 .text-container {
   margin: 50px auto; /* Centering the text container */
   max-width: 60%;
-  background-color: #faf5ea ; /* Light transparency for the text container */
+  background-color: #fffaef ; /* Light transparency for the text container */
   box-shadow: 10px 10px 25px rgba(0, 0, 0, 0.2); /* Adding shadow for depth */
 
 }

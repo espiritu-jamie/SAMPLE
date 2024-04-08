@@ -5,6 +5,11 @@ export const employeeMenu = [
     icon: "fa-solid fa-house",
   },
   {
+    name: "My Profile",
+    path: "/my-profile",
+    icon: "fa-solid fa-user",
+  },
+  {
     name: "My Schedule",
     path: "/my-shifts",
     icon: "fa-solid fa-calendar",
@@ -14,6 +19,7 @@ export const employeeMenu = [
     path: "/my-availability",
     icon: "fa-solid fa-list",
   },
+
   // {
   //   name: "Enter Availability",
   //   path: "/enter-availability",
@@ -45,7 +51,7 @@ export const adminMenu = [
   },
   {
     name: "Hours Worked",
-    path: "/hours-worked",
+    path: "/admin-hours-tracking",
     icon: "fa-solid fa-calendar",
   },
 ];

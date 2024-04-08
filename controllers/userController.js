@@ -2,7 +2,6 @@ const bcrypt = require("bcryptjs");
 const userModel = require('../models/userModel');
 const jwt = require("jsonwebtoken");
 
-
 // login callback
 const loginController = async (req, res) => {
   try {
@@ -16,7 +15,7 @@ const loginController = async (req, res) => {
     if (!match) {
       return res.status(401).send('Invalid Password');
     }
-    const token = jwt.sign({id: user._id}, process.env.JWT_SECRET,{expiresIn:"1d"},);
+    const token = jwt.sign({id: user._id}, process.env.JWT_SECRET, {expiresIn: "1d"});
     res.status(200).send({ message: "Login Success", success: true, token, userId: user._id });
   } catch (error) {
     console.log(error);
@@ -25,7 +24,7 @@ const loginController = async (req, res) => {
   }
 };
 
-//Register Callback
+// Register Callback
 const registerController = async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -44,7 +43,6 @@ const registerController = async (req, res) => {
     res.status(201).json({
       success: true,
       newUser,
-      userId: newUser._id,
     });
   } catch (error) {
     res.status(400).json({
@@ -170,9 +168,4 @@ const authController = async (req, res) => {
   }
 };
 
-
-
-
-module.exports = { loginController, registerController, authController };
-
-
+module.exports = { loginController, registerController, viewprofilecontroller, updateProfileController, authController };

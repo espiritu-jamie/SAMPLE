@@ -1,19 +1,19 @@
 /* FullCalendar header styles */
 .fc .fc-col-header-cell-cushion {
-    color: #3d3d3d !important; /* Change the text color to black */
+    color: #2b4159 !important; /* Change the text color to black */
     text-decoration: none !important; /* Remove underline */
   }
   
   /* FullCalendar event styles */
   .fc .fc-event-title, 
   .fc .fc-event-time {
-    color: #3d3d3d !important; /* Change the text color to black */
+    color: #2b4159 !important; /* Change the text color to black */
     text-decoration: none !important; /* Remove underline */
   }
   
   /* FullCalendar day number styles */
   .fc .fc-daygrid-day-number {
-    color: #3d3d3d !important; /* Change the text color to black */
+    color: #2b4159 !important; /* Change the text color to black */
     text-decoration: none !important; /* Remove underline */
   }
   

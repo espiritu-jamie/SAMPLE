@@ -5,7 +5,6 @@ import PublicRoute from "./components/PublicRoute";
 import Spinner from "./components/Spinner";
 import AdminAllAppointments from "./pages/admin/adminAllAppointments";
 import Home from "./pages/Home"
-import About from "./pages/About"
 import HomePage from "./pages/HomePage";
 import Login from "./pages/Login";
 import NotificationPage from "./pages/NotificationPage";
@@ -19,7 +18,8 @@ import BookingPage from "./pages/customer/BookingPage";
 import CustomerAppointments from "./pages/customer/CustomerAppointments";
 import AboutMe from "./pages/About";
 import Contact from "./pages/Contact";
-
+import Profile from "./pages/employee/Profile";
+import AdminHoursTracking from "./pages/admin/adminHoursTracking";
 
 
 
@@ -42,7 +42,7 @@ function App() {
             />
             <Route
               path="/about"
-              element={<About />}
+              element={<AboutMe />}
             />
             <Route
               path="/enter-availability"
@@ -65,6 +65,14 @@ function App() {
               element={
                 <ProtectedRoute allowedRoles={['employee']}>
                   <EmployeeAvailabilities />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/my-profile"
+              element={
+                <ProtectedRoute allowedRoles={['employee']}>
+                  <Profile />
                 </ProtectedRoute>
               }
             />
@@ -93,7 +101,14 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            
+            <Route
+              path="/admin-hours-tracking"
+              element={
+                <ProtectedRoute allowedRoles={['admin']}>
+                  <AdminHoursTracking />
+                </ProtectedRoute>
+              }
+            />
             <Route
               path="/notification"
               element={

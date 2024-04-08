@@ -79,7 +79,7 @@ const Login = () => {
         dispatch(setUser(data.user));
         message.success("Login Successfully");
         // Trigger an update in your app state as needed, e.g., update user role in global state here
-        navigate("/HomePage", { replace: true }); // Use navigate to change the route without reloading the page
+        navigate("/HomePage", { replace: true }, 100); // Use navigate to change the route without reloading the page
 
       } else {
         message.error(data.message);
@@ -93,6 +93,7 @@ const Login = () => {
   return (
     <>
       <div className="register-page">
+        <img className="hero-image rounded-full" src="/login2.jpg" alt="hero_bg" />
         <Form layout="vertical" onFinish={submitHandler}>
           <h1>Login</h1>
           <Form.Item label="Email" name="email" rules={[{ required: true, message: 'Please input your email!' }]}>

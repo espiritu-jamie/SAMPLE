@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../styles/LayoutStyles.css";
-import { adminMenu, employeeMenu, userMenu } from "../Data/data";
+import { adminMenu, employeeMenu, userMenu } from "./../Data/data";
 
 const Layout = ({ children }) => {
   const { user } = useSelector((state) => state.user);
@@ -46,13 +46,17 @@ const Layout = ({ children }) => {
     navigate("/");
   };
 
-  const SidebarMenu = user?.userRole === "admin"
-    ? adminMenu.filter((menu) => menu.name !== "Profile")
-    : user?.userRole === "employee"
-    ? employeeMenu.filter((menu) => menu.name !== "Profile")
-    : userMenu;
+  // const SidebarMenu = user?.userRole === "admin"
+  //   ? adminMenu.filter((menu) => menu.name !== "Profile")
+  //   : user?.userRole === "employee"
+  //   ? employeeMenu.filter((menu) => menu.name !== "Profile")
+  //   : userMenu;
 
-    console.log(SidebarMenu);
+  const SidebarMenu = user?.userRole === "admin"
+  ? adminMenu
+  : user?.userRole === "employee"
+  ? employeeMenu
+  : userMenu;
 
   return (
     <>
@@ -60,6 +64,7 @@ const Layout = ({ children }) => {
         <div className="layout">
           <div className="sidebar">
             <div className="logo">
+            <img src="/jkl.png" alt="JKL Cleaning Service Logo" style={{ maxWidth: '60%', maxHeight: '220px', margin: '20px auto 0px', display: 'block', borderRadius: '50%' }} />
               <h6>JKL Cleaning Service</h6>
               <hr />
             </div>

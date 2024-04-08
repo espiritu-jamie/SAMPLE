@@ -27,7 +27,7 @@ const Contact = () => {
             <p className="contact-description">
               Got questions or need immediate assistance? Call us now. Our team is always ready to mop up your worries!
             </p>
-            <p className="contact-info">(403) 403-4003</p>
+            <p className="contact-info">(587) 897-6290</p>
           </div>
           </div>
         </div>

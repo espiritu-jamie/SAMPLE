@@ -134,4 +134,3 @@ userMongooseSchema.validateUser = async function (user) {
 
 const User = mongoose.model('User', userMongooseSchema);
 module.exports = User;
-

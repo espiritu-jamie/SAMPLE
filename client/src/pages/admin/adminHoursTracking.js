@@ -4,130 +4,149 @@ import { Table } from 'antd';
 import Layout from '../../components/Layout';
 import moment from 'moment';
 
+/**
+ * AdminHoursTracking is a React component that fetches and displays the hours worked by employees.
+ * It utilizes the Ant Design Table component to render the data in a user-friendly manner.
+ * The component fetches employee availability data from an API, calculates the total hours worked
+ * by each employee, and provides filters for viewing total hours worked by month.
+ */
 const AdminHoursTracking = () => {
+    // State to store the processed hours worked data for display
     const [hoursWorked, setHoursWorked] = useState([]);
+    // State to store the filter options for months
     const [monthsFilter, setMonthsFilter] = useState([]);
 
     useEffect(() => {
         fetchHoursWorked();
     }, []);
 
+    
+    /**
+     * fetchHoursWorked makes an API call to fetch employee availability data.
+     * It then processes this data to calculate hours worked using calculateHoursWorked function.
+     */
     const fetchHoursWorked = async () => {
         const token = localStorage.getItem('token');
         try {
-            const response = await axios.get('/api/appointment/confirmed-appointments', { // Update the URL to include the status query
+            const response = await axios.get('/api/appointment', {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
             });
-            console.log('Fetched hours worked:', response.data.data);
             calculateHoursWorked(response.data.data);
         } catch (error) {
             console.error('Error fetching hours worked:', error);
         }
     };
-    
 
-    const calculateHoursWorked = (appointments) => {
+    const calculateHoursWorked = (availabilities) => {
         const now = moment();
         let monthsSet = new Set();
-        
+    
         // Generate all months for the current year or a range of years
         const allMonthsOfYear = [];
         const currentYear = now.year();
         for (let month = 0; month < 12; month++) {
+            // Format as "Month YYYY"
             const monthYearFormat = moment().month(month).year(currentYear).format('MMMM YYYY');
             allMonthsOfYear.push(monthYearFormat);
         }
-        
-        const hoursByEmployee = appointments.reduce((acc, appointment) => {
-            const appointmentDate = moment.utc(appointment.date);
+    
+        const hoursByEmployee = availabilities.reduce((acc, current) => {
+            const userId = current.user?._id|| 'Unknown';
+            const userName = current.user?.name || 'Unknown'; // Assuming name is within the user object
+            console.log('employeeId:', userId);
+            console.log(current.assignedEmployees);
+            console.log(acc);            
+            const startTime = moment.utc(current.starttime, 'HH:mm');
+            const endTime = moment.utc(current.endtime, 'HH:mm');
+            const appointmentDate = moment.utc(current.date);
+
+            const assignedEmployeeNames = current.assignedEmployees.map(employee => employee.name);
+            console.log('Assigned Employee Names:', assignedEmployeeNames);
+            console.log('Current assigned: ', current.assignedEmployees);
+            
+            if (!acc[userId]) {
+                acc[userId] = {
+                    name: userName, // Store the name
+                    totalHours: 0,
+                    months: {},
+                };
+            }
+
             if (appointmentDate.isAfter(now)) {
+                // Skip future appointments
                 return acc;
             }
             
-            const startTime = moment.utc(appointment.starttime, 'HH:mm');
-            const endTime = moment.utc(appointment.endtime, 'HH:mm');
             const duration = moment.duration(endTime.diff(startTime));
             const hours = duration.asHours();
+            // Format monthYear to full month name and year
             const monthYear = appointmentDate.format('MMMM YYYY');
             monthsSet.add(monthYear);
-            
-            appointment.assignedEmployees.forEach(employee => {
-                const userId = employee._id.toString();
-                const userName = employee.name;
-                
-                if (!acc[userId]) {
-                    acc[userId] = {
-                        name: userName, // Store the name
-                        totalHours: 0,
-                        months: {},
-                    };
-                }
-                
-                if (!acc[userId].months[monthYear]) {
-                    acc[userId].months[monthYear] = {
-                        monthYear,
-                        hoursWorked: 0,
-                    };
-                }
-                
-                acc[userId].totalHours += hours;
-                acc[userId].months[monthYear].hoursWorked += hours;
-            });
-            
+
+            if (!acc[userId]) {
+                acc[userId] = {
+                    totalHours: 0,
+                    months: {},
+                };
+            }
+
+            if (!acc[userId].months[monthYear]) {
+                acc[userId].months[monthYear] = {
+                    monthYear: monthYear,
+                    hoursWorked: 0,
+                };
+            }
+
+            acc[userId].totalHours += hours;
+            acc[userId].months[monthYear].hoursWorked += hours;
+
             return acc;
         }, {});
-        
+
         allMonthsOfYear.forEach(monthYear => monthsSet.add(monthYear));
-    
+
         const monthsFilter = Array.from(monthsSet).map(monthYear => ({
-            text: monthYear,
+            text: monthYear, // Already in "Month YYYY" format
             value: monthYear,
         }));
         setMonthsFilter(monthsFilter);
-    
+
         const transformedData = Object.keys(hoursByEmployee).map(userId => ({
             key: userId,
-            name: hoursByEmployee[userId].name,
+            userId,
             totalHours: hoursByEmployee[userId].totalHours.toFixed(2),
-            months: Object.values(hoursByEmployee[userId].months).map(month => ({
-                ...month,
-                hoursWorked: month.hoursWorked.toFixed(2),
-            })),
+            months: Object.values(hoursByEmployee[userId].months),
         }));
-    
+
         setHoursWorked(transformedData);
     };
-    
+
     const columns = [
         {
-            title: 'Employee Name',
-            dataIndex: 'name',
-            key: 'name',
+            title: 'Employee ID',
+            dataIndex: 'userId', // Changed from '_id' to 'userId'
+            key: 'userId',
         },
         {
             title: 'Total Hours Worked',
             dataIndex: 'totalHours',
             key: 'totalHours',
             filters: monthsFilter,
-            onFilter: (value, record) => record.months.some(month => month.monthYear === value),
+            onFilter: (value, record) => {
+                return record.months.some(month => month.monthYear === value);
+            },
         },
     ];
 
-    const expandedRowRender = (record) => {
+    const expandedRowRender = record => {
         const columns = [
-            { title: 'Month-Year', dataIndex: 'monthYear', key: 'monthYear' },
+            { title: 'Date', dataIndex: 'date', key: 'date' },
             { title: 'Hours Worked', dataIndex: 'hoursWorked', key: 'hoursWorked' },
         ];
 
-        const data = record.months.map(month => ({
-            key: month.monthYear,
-            monthYear: month.monthYear,
-            hoursWorked: month.hoursWorked,
-        }));
-
-        return <Table columns={columns} dataSource={data} pagination={false} />;
+        return <Table columns={columns} dataSource={record.children} pagination={false} />;
     };
 
     return (
@@ -139,7 +158,7 @@ const AdminHoursTracking = () => {
                     dataSource={hoursWorked}
                     expandable={{
                         expandedRowRender,
-                        rowExpandable: record => record.months && record.months.length > 0,
+                        rowExpandable: record => record.children && record.children.length > 0,
                     }}
                 />
             </div>

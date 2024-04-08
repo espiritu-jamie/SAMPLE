@@ -1,0 +1,30 @@
+.register-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* Adjust the colors and positions in the linear-gradient to match your image */
+    background: linear-gradient(
+        to top right,
+        #C9A959 35%, 
+        #2b4159 0 45%, 
+        white 0 45%
+      );
+    height: auto;
+    padding-top: 4px;
+}
+
+.h1 {
+    color: #2b4159;
+}
+
+.login-card {
+    background-color: #faf5ea;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    padding: 2rem;
+    margin: 1rem;
+    text-align: center;
+    width: 100%;
+    max-width: 465px;
+    position: relative; /* Added for positioning the logo absolutely within this container */
+}

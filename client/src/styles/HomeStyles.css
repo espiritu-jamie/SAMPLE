@@ -87,4 +87,94 @@
       padding: 16px 32px;
     }
   }
+  .top-image {
+    position: absolute;
+    top: 60%; /* Adjust these values to position the new image as desired */
+    left: 24%;
+    transform: translate(-50%, -50%); /* Center the image based on its own dimensions */
+    z-index: 2; /* Ensure it appears on top of the foreground image */
+    max-width: 500px; /* Example size, adjust as needed */
+    max-height: 500px; /* Example size, adjust as needed */
+    border-radius: 500px; /* Rounded corners */
+  }
+
+  .text-logo-container {
+    display: flex;
+    align-items: center; /* Keeps items vertically aligned */
+    justify-content: flex-end; /* Aligns children to the right */
+    flex-wrap: wrap; /* Ensures flexibility in layout */
+  }
+
+  .text-box {
+    background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent background for better readability */
+    padding: 1rem; /* Padding around the text */
+    border-radius: 10px; /* Rounded corners for the text background */
+    margin-right: 20px; /* Ensures space between the text box and the logo */
+    z-index: 2; /* Keeps the text on top */
+    position: relative; /* Needed for z-index to take effect */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    max-width: 400px; /* Ensures text box does not stretch too wide */
+    order: 2; /* Positions the text box to the right */
+    margin-left: 500px;
+  }
   
+  .text-box p {
+    color:#2b4159; /* Dark color for text for contrast against the light background */
+    font-size: 2rem; /* Adjusts the size of the text for readability */
+    line-height: 1.6; /* Improves readability of the text */
+    text-align: justify; /* Ensures the text is evenly aligned on both sides */
+  }
+  
+  .text-box b { /* Styling specifically for bold text */
+    color: #C9A959; /* A standout color for key text elements; adjust as needed */
+    font-size: 4rem; /* Slightly larger font size for emphasis */
+    display: block; /* Makes the bold text appear on its own line */
+    margin-bottom: 0.5rem; /* Space after the bold line */
+  }
+
+  .feature-container {
+    display: flex;
+    justify-content: space-around; /* Distributes space evenly between the divs */
+    align-items: flex-start; /* Aligns items to the start of the flex container */
+    margin-top: 28%; /* Space below the hero section */
+
+  }
+  
+  .feature {
+    flex-basis: 30%; /* Each div takes up roughly a third of the container's width */
+    text-align: center; /* Centers the text and image within each div */
+  }
+  
+  .feature img {
+    width: 200%; /* Makes the image responsive within its container */
+    max-width: 300px; /* Limits image size */
+    height: auto; /* Maintains aspect ratio */
+    margin-bottom: 10px; /* Space between the image and the text */
+    border-radius: 20px;
+  }
+  
+  .feature p {
+    color:  #C9A959; /* Stylish text color */
+    font-size: 1rem; /* Appropriate text size */
+  }
+  
+  .text-bottom {
+    position: absolute; /* Allows precise positioning within the home-container */
+    top: 80%; /* Example - adjusts vertical position; 50% from the top of the home-container */
+    left: 50%; /* Example - adjusts horizontal position; 50% from the left of the home-container */
+    transform: translate(-50%, -50%); /* Centers the element at the specified top and left */
+    display: flex;
+    justify-content: center; /* Continues to center the text horizontally */
+    margin-top: 0; /* Adjust or remove as needed given absolute positioning */
+    color:#2b4159 ;
+    font-size: 2rem; /* Adjusts the size of the text for readability */
+  }
+
+  .gold-rectangle {
+    position: absolute;
+    bottom: -50px; /* Aligns the rectangle at the bottom of the home-container */
+    left: 0;
+    width: 100%; /* Stretches across the full width */
+    height: 50px; /* Adjust the height as desired */
+    background-color: #C9A959;
+  }

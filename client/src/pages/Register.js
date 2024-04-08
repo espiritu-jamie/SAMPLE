@@ -4,6 +4,8 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { hideLoading, showLoading } from "../redux/features/alertSlice";
+import Navbar from '../components/Navbar';
+import '../styles/LoginStyles.css';
 
 const Register = () => {
   const navigate = useNavigate();
@@ -28,9 +30,11 @@ const Register = () => {
   };
 
   return (
-    <>
+    <div className="home-container">
+    <Navbar />
       <div className="register-page">
-        <Form layout="vertical" onFinish={submitHandler}>
+
+        <Form className="login-card" layout="vertical" onFinish={submitHandler}>
           <h1>Register</h1>
           <Form.Item
             label="Name"
@@ -75,8 +79,9 @@ const Register = () => {
             <button className="btn btn-primary" type="submit">Register</button>
           </div>
         </Form>
+        </div>
       </div>
-    </>
+
   );
 };
 

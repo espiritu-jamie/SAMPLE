@@ -1,25 +1,34 @@
 import React from 'react';
 import Navbar from '../components/Navbar';
-import '../styles/HomeStyles.css';
+import '../styles/ContactStyles.css';
 
 const Contact = () => {
   return (
-    <div className="Contact-container">
+    <div>
       <Navbar />
-      <div className="hero-section">
-        <img className="hero-image rounded-full" src="/login.jpg" alt="hero_bg" />
-        <div className="content-container">
-          <div className="text-container">
-            <h1 className="headline">Contact Us</h1>
-            <p className="description-text">
-              At JKL Cleaning Service, we value open communication with our customers. Your feedback, questions, and concerns are important to us as they help us serve you better. Whether you have inquiries about our services, want to provide feedback, or need assistance with a cleaning project, we encourage you to reach out to us. Our dedicated team is here to assist you and ensure your experience with us is nothing short of exceptional.
+      <div className="contact-page-container"> {/* Wrapper for the entire contact section */}
+        <div className="contact-container"> {/* Container for the Contact Us header and description */}
+          <h1 className="headline"><span className="accent-text">Contact</span> Us</h1>
+          <p className="description-text">
+            If you have any questions about JKL Cleaning Service or wish to inquire about our services and pricing, please feel free to reach out. We're here to help with any inquiries or assistance you might need.
+          </p>
+        
+        <div className="contact-details-container"> {/* Container for email and phone information */}
+          <div className="contact-detail email-container"> {/* Individual container for email */}
+            <h2 className="contact-method">Send us an email</h2>
+            <p className="contact-description">
+              Pen us your concerns or requests. We'll make sure to sweep up a response in no time!
             </p>
-            <p className="description-text">
-              For any inquiries or assistance, please don't hesitate to contact us at:
-              <br />
-              Phone Number: XXX XXX XXXX
+            <p className="contact-info"><u>info@jklCleaning.com</u></p>
+          </div>
+
+          <div className="contact-detail phone-container"> {/* Individual container for phone */}
+            <h2 className="contact-method">Talk with us</h2>
+            <p className="contact-description">
+              Got questions or need immediate assistance? Call us now. Our team is always ready to mop up your worries!
             </p>
-            {/* You can add more contact information here, like email, address, etc. */}
+            <p className="contact-info">(403) 403-4003</p>
+          </div>
           </div>
         </div>
       </div>

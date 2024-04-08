@@ -3,7 +3,7 @@
   padding: 20px;
   height: 100vh;
   background-color: #fff;
-  color: #3d3d3d;
+  color: #2b4159;
 }
 
 .layout {
@@ -13,19 +13,21 @@
 .sidebar {
   min-height: 760px;
   height: auto;
-  width: 300px;
+
+  flex: 0 0 290px;
   border-radius: 8px;
-  background-color: #ADD8E6;
+  background-color: #2b4159;
   box-shadow: 0 0 2px rgba(0, 0, 0, 0.1);
   margin-right: 20px;
-  color: #3d3d3d;
+  color: #2b4159;
   font-size: 1.1rem;
   font-weight: 600;
 }
 
 .content {
-  width: 100%;
+  width: 80%;
   height: 100%;
+  color: #2b4159;
 }
 
 .header {
@@ -33,7 +35,7 @@
   margin-bottom: 20px;
   border-radius: 8px;
   box-shadow: 0 0 2px rgba(0, 0, 0, 0.1);
-  background-color: #F0E68C;
+  background-color: #C9A959;
   display: flex;
   align-items: center;
   padding: 0 20px;
@@ -52,14 +54,14 @@
 .logo h6 {
   font-size: 1.5rem;
   text-align: center;
-  margin: 20px 0px;
-  color: #253D5B;
+  margin: 20px 20px;
+  color: #fae6b5;
   font-weight: 700;
   letter-spacing: 2px;
 }
 
 .menu {
-  margin-top: 50px;
+  margin-top: 10px;
 }
 
 .menu-item {
@@ -73,19 +75,19 @@
 }
 
 .menu-item:hover {
-  background-color: #F0E68C;
+  background-color: #C9A959;
 }
 
 .menu-item a {
-  color: #3d3d3d;
+  color: #f7ebcc;
   text-decoration: none;
   margin-left: 20px;
 }
 
 .menu-item i {
   font-size: 1.2rem;
-  margin-right: 20px;
-  color: #3d3d3d;
+  margin-left: 10px;
+  color: #f7ebcc;
 }
 
 .active {
@@ -109,13 +111,13 @@
 .header-content i {
   margin-right: 20px;
   font-size: 1.2rem;
-  color: #3d3d3d;
+  color: #2b4159;
 }
 
 .header-content a {
   text-decoration: none;
   font-size: 1.1rem;
-  color: #3d3d3d;
+  color: #2b4159;
   margin: 0 10px;
   text-transform: uppercase;
   font-weight: 600;

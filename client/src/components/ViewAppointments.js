@@ -135,7 +135,7 @@ const ViewAppointments = ({ isAdminView }) => {
         <Option value="upcoming">Upcoming</Option>
         <Option value="past">Past</Option>
       </Select>
-      <Table dataSource={filteredAppointments} columns={columns} rowKey="_id" />
+      <Table dataSource={filteredAppointments} columns={columns} rowKey="_id" scroll={{ x: 'max-content' }}/>
       <Modal
   title="View Ratings"
   visible={ratingsModalVisible}

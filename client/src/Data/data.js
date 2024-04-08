@@ -5,6 +5,11 @@ export const employeeMenu = [
     icon: "fa-solid fa-house",
   },
   {
+    name: "My Profile",
+    path: "/my-profile",
+    icon: "fa-solid fa-user",
+  },
+  {
     name: "My Schedule",
     path: "/my-shifts",
     icon: "fa-solid fa-calendar",
@@ -14,21 +19,12 @@ export const employeeMenu = [
     path: "/my-availability",
     icon: "fa-solid fa-list",
   },
+
   // {
   //   name: "Enter Availability",
   //   path: "/enter-availability",
   //   icon: "fa-solid fa-calendar-plus",
   // },
-  {
-  name: "Profile",
-  path: "/pages/Profile", // Update with the correct path for the Profile component
-  icon: "fa-solid fa-user",
-  },
-  {
-    name: "Hours Worked",
-    path: "/hours-worked",
-    icon: "fa-solid fa-calendar",
-  },
 ];
 
 // admin menu
@@ -54,10 +50,10 @@ export const adminMenu = [
     icon: "fa-solid fa-calendar",
   },
   {
-    name: "Hours Tracking",
-    path: "/admin-hours-tracker",
+    name: "Hours Worked",
+    path: "/admin-hours-tracking",
     icon: "fa-solid fa-calendar",
-  }
+  },
 ];
 
 // user menu

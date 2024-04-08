@@ -419,42 +419,28 @@ const getBookedSlotsController = async (req, res) => {
   }
 };
 
-
-const getAllConfirmedAppointmentsForEmployees = async (req, res) => {
+const getAllConfirmedAppointments = async (req, res) => {
   try {
-    const userId = req.body.userId; // Assuming req.user is populated with the authenticated user's information
-    const userRole = await getUserRole(userId);
-
-    let confirmedAppointments;
-
-    if (userRole === 'admin') {
-      // Fetch all confirmed appointments
-      confirmedAppointments = await Appointment.find({ status: 'confirmed' })
-        .populate('userId', 'name')
-        .populate('assignedEmployees', 'name');
-    } else {
-      // Fetch confirmed appointments for the logged-in employee
-      confirmedAppointments = await Appointment.find({
-        assignedEmployees: userId,
-        status: 'confirmed',
+    // Fetch all appointments with status 'confirmed' and populate the assignedEmployees
+    const confirmedAppointments = await Appointment.find({ status: 'confirmed' })
+      .populate({
+        path: 'assignedEmployees',
+        select: 'name', // Adjust the select to fetch relevant information of employees
       })
-        .populate('userId', 'name')
-        .populate('assignedEmployees', 'name');
-    }
+      .populate('userId', 'name email'); // Optionally populate other needed fields
 
     return res.status(200).json({
       success: true,
       data: confirmedAppointments,
     });
   } catch (error) {
-    console.error("Error fetching confirmed appointments for all employees:", error);
+    console.error("Error fetching confirmed appointments:", error);
     return res.status(500).json({
       success: false,
-      message: `Error fetching confirmed appointments for all employees: ${error.message}`,
+      message: `Error fetching confirmed appointments: ${error.message}`,
     });
   }
 };
-
 
 
 
@@ -469,5 +455,5 @@ module.exports = {
   rescheduleAppointmentController,
   getFullDaysController,
   getBookedSlotsController,
-  getAllConfirmedAppointmentsForEmployees,
+  getAllConfirmedAppointments,
 };

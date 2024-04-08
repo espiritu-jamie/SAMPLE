@@ -13,7 +13,7 @@ const {
     rescheduleAppointmentController,
     getFullDaysController,
     getBookedSlotsController,
-    getAllConfirmedAppointmentsForEmployees
+    getAllConfirmedAppointments,
     } = require('../controllers/appointmentController');
 
 // Submitting a new appointment for authenticated customers
@@ -46,7 +46,7 @@ router.get('/full-days', authMiddleware, getFullDaysController);
 // Fetching booked slots for a specific day
 router.get('/booked-slots', authMiddleware, getBookedSlotsController);
 
-// Fetching all past confirmed appointments for all employees
-router.get('/confirmed-for-employees', authMiddleware, getAllConfirmedAppointmentsForEmployees); // Corrected endpoint
+// Fetching all confirmed appointments
+router.get('/confirmed-appointments', authMiddleware, getAllConfirmedAppointments);
 
 module.exports = router;

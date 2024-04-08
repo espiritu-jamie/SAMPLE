@@ -5,9 +5,7 @@ const authMiddleware = require('../middlewares/authMiddleware');
 const {
     loginController,
     registerController,
-    authController,
-    viewprofilecontroller,
-    updateProfileController,
+    authController
 } = require('../controllers/userController');
 const { 
     getAllNotificationController, 
@@ -28,12 +26,6 @@ router.post('/getUserData', authMiddleware, authController);
 // Get All Notifications for a User
 router.get('/get-all-notifications', authMiddleware, getAllNotificationController);
 
-
-// Route to update user profile
-router.put('/update-profile/:userId', authMiddleware, updateProfileController);
-
-// Route to view user profile
-router.get('/view-profile/:userId', authMiddleware, viewprofilecontroller); // Ensure the route handles userId parameter
 
 router.put('/mark-as-read/:notificationId', authMiddleware, markNotificationAsReadController);
 router.put('/mark-as-unread/:notificationId', authMiddleware, markNotificationAsUnreadController);

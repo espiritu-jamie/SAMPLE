@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../styles/LayoutStyles.css";
-import { adminMenu, employeeMenu, userMenu } from "../Data/data";
+import { adminMenu, employeeMenu, userMenu } from "./../Data/data";
 
 const Layout = ({ children }) => {
   const { user } = useSelector((state) => state.user);
@@ -51,8 +51,6 @@ const Layout = ({ children }) => {
     : user?.userRole === "employee"
     ? employeeMenu.filter((menu) => menu.name !== "Profile")
     : userMenu;
-
-    console.log(SidebarMenu);
 
   return (
     <>

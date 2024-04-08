@@ -28,7 +28,7 @@ const AdminHoursTracking = () => {
     const fetchHoursWorked = async () => {
         const token = localStorage.getItem('token');
         try {
-            const response = await axios.get('/api/availability', {
+            const response = await axios.get('/api/appointment', {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -39,88 +39,90 @@ const AdminHoursTracking = () => {
         }
     };
 
-    /**
-     * calculateHoursWorked processes the fetched availability data to calculate the total hours worked
-     * by each employee and organizes the data for rendering.
-     * @param {Array} availabilities - The fetched availability data from the API.
-     */
     const calculateHoursWorked = (availabilities) => {
-        const now = moment(); // Current time to filter past confirmed appointments
+        const now = moment();
         let monthsSet = new Set();
-    
     
         // Generate all months for the current year or a range of years
         const allMonthsOfYear = [];
         const currentYear = now.year();
         for (let month = 0; month < 12; month++) {
             // Format as "Month YYYY"
-            // Format as "Month YYYY"
             const monthYearFormat = moment().month(month).year(currentYear).format('MMMM YYYY');
             allMonthsOfYear.push(monthYearFormat);
         }
     
         const hoursByEmployee = availabilities.reduce((acc, current) => {
-            const employeeName = current.user?.name || 'Unknown';
+            const userId = current.user?._id|| 'Unknown';
+            const userName = current.user?.name || 'Unknown'; // Assuming name is within the user object
+            console.log('employeeId:', userId);
+            console.log(current.assignedEmployees);
+            console.log(acc);            
             const startTime = moment.utc(current.starttime, 'HH:mm');
             const endTime = moment.utc(current.endtime, 'HH:mm');
             const appointmentDate = moment.utc(current.date);
+
+            const assignedEmployeeNames = current.assignedEmployees.map(employee => employee.name);
+            console.log('Assigned Employee Names:', assignedEmployeeNames);
+            console.log('Current assigned: ', current.assignedEmployees);
             
+            if (!acc[userId]) {
+                acc[userId] = {
+                    name: userName, // Store the name
+                    totalHours: 0,
+                    months: {},
+                };
+            }
+
             if (appointmentDate.isAfter(now)) {
                 // Skip future appointments
                 return acc;
             }
-    
+            
             const duration = moment.duration(endTime.diff(startTime));
             const hours = duration.asHours();
             // Format monthYear to full month name and year
             const monthYear = appointmentDate.format('MMMM YYYY');
             monthsSet.add(monthYear);
-    
-      
-    
-            if (!acc[employeeName]) {
-                acc[employeeName] = {
+
+            if (!acc[userId]) {
+                acc[userId] = {
                     totalHours: 0,
                     months: {},
                 };
             }
-    
-            if (!acc[employeeName].months[monthYear]) {
-                acc[employeeName].months[monthYear] = {
+
+            if (!acc[userId].months[monthYear]) {
+                acc[userId].months[monthYear] = {
                     monthYear: monthYear,
                     hoursWorked: 0,
                 };
             }
-    
-            acc[employeeName].totalHours += hours;
-            acc[employeeName].months[monthYear].hoursWorked += hours;
-    
+
+            acc[userId].totalHours += hours;
+            acc[userId].months[monthYear].hoursWorked += hours;
+
             return acc;
         }, {});
+
         allMonthsOfYear.forEach(monthYear => monthsSet.add(monthYear));
-        
-    
-        // Transform monthsSet into filters for the table
+
         const monthsFilter = Array.from(monthsSet).map(monthYear => ({
             text: monthYear, // Already in "Month YYYY" format
             value: monthYear,
         }));
         setMonthsFilter(monthsFilter);
-    
-        // Transform the data structure into a format suitable for rendering
-        const transformedData = Object.keys(hoursByEmployee).map(name => ({
-            key: name,
-            name: name,
-            totalHours: hoursByEmployee[name].totalHours.toFixed(2),
-            months: Object.values(hoursByEmployee[name].months).map(month => ({
-                monthYear: month.monthYear, // Already in "Month YYYY" format
-                hoursWorked: month.hoursWorked.toFixed(2),
-            })),
+
+        const transformedData = Object.keys(hoursByEmployee).map(userId => ({
+            key: userId,
+            userId,
+            totalHours: hoursByEmployee[userId].totalHours.toFixed(2),
+            months: Object.values(hoursByEmployee[userId].months),
         }));
 
         setHoursWorked(transformedData);
     };
-    // Columns configuration for the Ant Design Table
+
     const columns = [
         {
             title: 'Employee ID',

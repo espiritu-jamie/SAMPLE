@@ -61,6 +61,7 @@ import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { hideLoading, showLoading } from "../redux/features/alertSlice";
 import { setUser } from "../redux/features/userSlice";
+import Navbar from '../components/Navbar';
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -91,7 +92,9 @@ const Login = () => {
   };
 
   return (
-    <>
+    <div className="home-container">
+    <Navbar />
+    
       <div className="register-page">
         <img className="hero-image rounded-full" src="/login2.jpg" alt="hero_bg" />
         <Form layout="vertical" onFinish={submitHandler}>
@@ -108,7 +111,8 @@ const Login = () => {
           </div>
         </Form>
       </div>
-    </>
+    </div>
+
   );
 };
 

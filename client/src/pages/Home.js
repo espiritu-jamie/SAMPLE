@@ -11,7 +11,7 @@ const Home = () => {
     <div className="content-container flex-col">
       <div className="text-logo-container">
         <div className="text-box">
-          <p><b>JKL CLEANING SERVICES</b>We Treat Your House Like Ours</p>
+          <p><b>JKL CLEANING SERVICE</b>We Treat Your House Like Ours</p>
         </div>
         <img src="/jkl.png" alt="JKL Logo" className="top-image" />
       </div>

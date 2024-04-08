@@ -48,10 +48,12 @@ const AdminHoursTracking = () => {
         const now = moment(); // Current time to filter past confirmed appointments
         let monthsSet = new Set();
     
+    
         // Generate all months for the current year or a range of years
         const allMonthsOfYear = [];
         const currentYear = now.year();
         for (let month = 0; month < 12; month++) {
+            // Format as "Month YYYY"
             // Format as "Month YYYY"
             const monthYearFormat = moment().month(month).year(currentYear).format('MMMM YYYY');
             allMonthsOfYear.push(monthYearFormat);
@@ -115,15 +117,15 @@ const AdminHoursTracking = () => {
                 hoursWorked: month.hoursWorked.toFixed(2),
             })),
         }));
-    
+
         setHoursWorked(transformedData);
     };
     // Columns configuration for the Ant Design Table
     const columns = [
         {
-            title: 'Employee Name',
-            dataIndex: 'name',
-            key: 'name',
+            title: 'Employee ID',
+            dataIndex: 'userId', // Changed from '_id' to 'userId'
+            key: 'userId',
         },
         {
             title: 'Total Hours Worked',

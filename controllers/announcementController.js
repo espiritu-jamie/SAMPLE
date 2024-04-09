@@ -1,5 +1,6 @@
 const Announcement = require("../models/announcementModel");
 const User = require("../models/userModel");
+const Notification = require("../models/notificationModel");
 
 // Function to create a new announcement
 const createAnnouncementController = async (req, res) => {
@@ -10,12 +11,30 @@ const createAnnouncementController = async (req, res) => {
       title,
       content,
       targetRoles,
+  
     });
     await newAnnouncement.save();
 
+    // Fetch users who belong to the targetRoles
+    const targetUsers = await User.find({ userRole: { $in: targetRoles } });
+
+    // Prepare and send a notification to each targeted user
+    const notificationPromises = targetUsers.map(user => {
+      return new Notification({
+        userId: user._id,
+        type: 'announcement',
+        message: `New Announcement: ${title}`,
+
+
+      }).save();
+    });
+
+    // Wait for all notifications to be saved
+    await Promise.all(notificationPromises);
+
     return res.status(201).json({
       success: true,
-      message: "Announcement created successfully",
+      message: "Announcement created successfully and notifications sent",
       data: newAnnouncement,
     });
   } catch (error) {
@@ -27,30 +46,7 @@ const createAnnouncementController = async (req, res) => {
   }
 };
 
-// Function to get announcements for a user based on their role
-// const getAnnouncementsForUserController = async (req, res) => {
-//   try {
-    
-//     const userId = req.body.userId; // Ensure this matches how userId is passed
-//     const userRole = await getUserRole(userId);
 
-//     // Fetch announcements targeted at the user's role
-//     const announcements = await Announcement.find({
-//       targetRoles: { $in: [userRole] },
-//     });
-
-//     return res.status(200).json({
-//       success: true,
-//       data: announcements,
-//     });
-//   } catch (error) {
-//     console.error("Error fetching announcements:", error);
-//     return res.status(500).json({
-//       success: false,
-//       message: `Error fetching announcements: ${error.message}`,
-//     });
-//   }
-// };
 const getAnnouncementsForUserController = async (req, res) => {
   try {
     const userId = req.body.userId;

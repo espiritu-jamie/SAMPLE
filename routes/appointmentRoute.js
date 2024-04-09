@@ -7,12 +7,13 @@ const {
     getAllAppointmentsController,
     getAvailableEmployeesForAppointmentController,
     updateAppointmentStatusController,
-    autoAssignAppointments,
     assignEmployeesToAppointmentController,
     cancelAppointmentController,
-    deleteAppointmentController,
     getConfirmedAppointmentsForEmployee,
     rescheduleAppointmentController,
+    getFullDaysController,
+    getBookedSlotsController,
+    getAllConfirmedAppointments,
     } = require('../controllers/appointmentController');
 
 // Submitting a new appointment for authenticated customers
@@ -24,17 +25,11 @@ router.get('/', authMiddleware, getAllAppointmentsController);
 // Fetching available employees for a specific appointment
 router.get('/available-employees', authMiddleware, getAvailableEmployeesForAppointmentController);
 
-// Auto-assigning appointments to employees (for admins)
-router.post('/auto-assign', authMiddleware, autoAssignAppointments);
-
 // Manually assigning an appointment to an employee (for admins)
 router.post('/assign-employees', authMiddleware, assignEmployeesToAppointmentController);
 
 // Cancelling an appointment (for customers)
 router.patch('/cancel-appointment/:appointmentId', authMiddleware, cancelAppointmentController);
-
-// Deleting an appointment (for admins)
-router.delete('/:appointmentId', authMiddleware, deleteAppointmentController);
 
 // Fetching the confirmed appointments for the logged-in employee
 router.get('/confirmed-for-employee', authMiddleware, getConfirmedAppointmentsForEmployee);
@@ -44,5 +39,14 @@ router.patch('/update-status/:appointmentId', authMiddleware, updateAppointmentS
 
 // Rescheduling an appointment (on admin page)
 router.patch('/reschedule-appointment/:appointmentId', authMiddleware, rescheduleAppointmentController);
+
+// Fetching full days for a specific month
+router.get('/full-days', authMiddleware, getFullDaysController);
+
+// Fetching booked slots for a specific day
+router.get('/booked-slots', authMiddleware, getBookedSlotsController);
+
+// Fetching all confirmed appointments
+router.get('/confirmed-appointments', authMiddleware, getAllConfirmedAppointments);
 
 module.exports = router;

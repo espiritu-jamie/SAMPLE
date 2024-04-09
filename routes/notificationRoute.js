@@ -3,28 +3,34 @@ const router = express.Router();
 const authMiddleware = require('../middlewares/authMiddleware');
 const { 
     getAllNotificationController, 
-    deleteAllNotificationController,
-    markAllNotificationAsReadController,
+    dismissNotificationController,
     markNotificationAsReadController,
-    markNotificationAsUnreadController, // Add this line
+    markNotificationAsUnreadController,
+    markAllNotificationsAsReadController,
+    dismissAllNotificationsController,
+    markAllNotificationsAsUnreadController,
 } = require('../controllers/notificationController');
 
-// Send Notification through submitting availability
-// router.post('/', authMiddleware, submitAvailabilityController);
 
 // Get All Notifications
 router.get('/get-all-notifications', authMiddleware, getAllNotificationController);
 
 // Delete All Read Notifications
-router.delete('/delete-all-notifications', authMiddleware, deleteAllNotificationController);
+router.put('/dismiss-notification/:notificationId', authMiddleware, dismissNotificationController);
 
 // Mark All Notifications As Read
-router.put('/mark-all-notification-as-read', authMiddleware, markAllNotificationAsReadController);
+router.put('/mark-all-as-read', authMiddleware, markAllNotificationsAsReadController);
 
 // Mark Notification As Read
-router.put('/mark-notification-as-read/:notificationId', authMiddleware, markNotificationAsReadController);
+router.put('/mark-as-read/:notificationId', authMiddleware, markNotificationAsReadController);
+
+// Delete All Notifications
+router.put('/dismiss-all-notifications', authMiddleware, dismissAllNotificationsController);
 
 // Mark Notification As Unread
-router.put('/mark-notification-as-unread/:notificationId', authMiddleware, markNotificationAsUnreadController);
+router.put('/mark-as-unread/:notificationId', authMiddleware, markNotificationAsUnreadController);
+
+// Mark All Notifications As Unread
+router.put('/mark-all-as-unread', authMiddleware, markAllNotificationsAsUnreadController);
 
 module.exports = router;

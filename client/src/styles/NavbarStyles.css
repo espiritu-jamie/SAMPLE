@@ -33,19 +33,6 @@
   gap: 16px;
 }
 
-.navbar-menu button {
-  background-color: #f0c040; /* A pleasant yellow */
-  color: #333;
-  padding: 8px 16px;
-  border: none;
-  border-radius: 20px; /* Slightly rounded corners */
-  cursor: pointer;
-  text-transform: uppercase;
-  font-weight: bold;
-  transition: background-color 0.3s;
-}
-
-
 /* NavbarStyles.css */
 .navbar-menu button {
   background-color: transparent; /* Make background transparent */
@@ -55,7 +42,13 @@
   border-radius: 0; /* Remove rounded corners */
   cursor: pointer;
   text-transform: uppercase;
-  font-weight: normal; /* Adjust font weight as needed */
+  font-size: larger;
+
+}
+
+.active-link {
+  text-decoration: underline;
+  color: #C9A959;
 }
 
 /* Add vertical gap between items */

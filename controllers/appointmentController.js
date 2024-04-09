@@ -419,29 +419,6 @@ const getBookedSlotsController = async (req, res) => {
   }
 };
 
-const getAllConfirmedAppointments = async (req, res) => {
-  try {
-    // Fetch all appointments with status 'confirmed' and populate the assignedEmployees
-    const confirmedAppointments = await Appointment.find({ status: 'confirmed' })
-      .populate({
-        path: 'assignedEmployees',
-        select: 'name', // Adjust the select to fetch relevant information of employees
-      })
-      .populate('userId', 'name email'); // Optionally populate other needed fields
-
-    return res.status(200).json({
-      success: true,
-      data: confirmedAppointments,
-    });
-  } catch (error) {
-    console.error("Error fetching confirmed appointments:", error);
-    return res.status(500).json({
-      success: false,
-      message: `Error fetching confirmed appointments: ${error.message}`,
-    });
-  }
-};
-
 
 
 module.exports = {
@@ -455,5 +432,4 @@ module.exports = {
   rescheduleAppointmentController,
   getFullDaysController,
   getBookedSlotsController,
-  getAllConfirmedAppointments,
 };

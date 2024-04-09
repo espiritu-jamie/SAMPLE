@@ -1,105 +1,19 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Table } from 'antd';
+import { Table, Select } from 'antd';
 import Layout from '../../components/Layout';
 import moment from 'moment';
 
+const { Option } = Select;
+
 const AdminHoursTracking = () => {
     const [hoursWorked, setHoursWorked] = useState([]);
-    const [monthsFilter, setMonthsFilter] = useState([]);
+    const [filter, setFilter] = useState('overall'); // Set 'overall' as the default filter
+    const [selectedYear, setSelectedYear] = useState(moment().year()); // Default to current year
+    const [selectedMonth, setSelectedMonth] = useState(moment().month()); // Default to current month
+    const [selectedWeek, setSelectedWeek] = useState(moment().isoWeek()); // Default to current ISO week
 
-    useEffect(() => {
-        fetchHoursWorked();
-    }, []);
-
-    const fetchHoursWorked = async () => {
-        const token = localStorage.getItem('token');
-        try {
-            const response = await axios.get('/api/appointment/confirmed-appointments', { // Update the URL to include the status query
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-            console.log('Fetched hours worked:', response.data.data);
-            calculateHoursWorked(response.data.data);
-        } catch (error) {
-            console.error('Error fetching hours worked:', error);
-        }
-    };
-    
-
-    const calculateHoursWorked = (appointments) => {
-        const now = moment();
-        let monthsSet = new Set();
-        
-        // Generate all months for the current year or a range of years
-        const allMonthsOfYear = [];
-        const currentYear = now.year();
-        for (let month = 0; month < 12; month++) {
-            const monthYearFormat = moment().month(month).year(currentYear).format('MMMM YYYY');
-            allMonthsOfYear.push(monthYearFormat);
-        }
-        
-        const hoursByEmployee = appointments.reduce((acc, appointment) => {
-            const appointmentDate = moment.utc(appointment.date);
-            if (appointmentDate.isAfter(now)) {
-                return acc;
-            }
-            
-            const startTime = moment.utc(appointment.starttime, 'HH:mm');
-            const endTime = moment.utc(appointment.endtime, 'HH:mm');
-            const duration = moment.duration(endTime.diff(startTime));
-            const hours = duration.asHours();
-            const monthYear = appointmentDate.format('MMMM YYYY');
-            monthsSet.add(monthYear);
-            
-            appointment.assignedEmployees.forEach(employee => {
-                const userId = employee._id.toString();
-                const userName = employee.name;
-                
-                if (!acc[userId]) {
-                    acc[userId] = {
-                        name: userName, // Store the name
-                        totalHours: 0,
-                        months: {},
-                    };
-                }
-                
-                if (!acc[userId].months[monthYear]) {
-                    acc[userId].months[monthYear] = {
-                        monthYear,
-                        hoursWorked: 0,
-                    };
-                }
-                
-                acc[userId].totalHours += hours;
-                acc[userId].months[monthYear].hoursWorked += hours;
-            });
-            
-            return acc;
-        }, {});
-        
-        allMonthsOfYear.forEach(monthYear => monthsSet.add(monthYear));
-    
-        const monthsFilter = Array.from(monthsSet).map(monthYear => ({
-            text: monthYear,
-            value: monthYear,
-        }));
-        setMonthsFilter(monthsFilter);
-    
-        const transformedData = Object.keys(hoursByEmployee).map(userId => ({
-            key: userId,
-            name: hoursByEmployee[userId].name,
-            totalHours: hoursByEmployee[userId].totalHours.toFixed(2),
-            months: Object.values(hoursByEmployee[userId].months).map(month => ({
-                ...month,
-                hoursWorked: month.hoursWorked.toFixed(2),
-            })),
-        }));
-    
-        setHoursWorked(transformedData);
-    };
-    
     const columns = [
         {
             title: 'Employee Name',
@@ -108,40 +22,186 @@ const AdminHoursTracking = () => {
         },
         {
             title: 'Total Hours Worked',
-            dataIndex: 'totalHours',
-            key: 'totalHours',
-            filters: monthsFilter,
-            onFilter: (value, record) => record.months.some(month => month.monthYear === value),
+            dataIndex: filter === 'overall' ? 'overall' : 'totalHours',
+            key: filter === 'overall' ? 'overall' : 'totalHours',
+            sorter: (a, b) => {
+                if (filter === 'overall') {
+                    return a.overall - b.overall;
+                } else {
+                    return a.totalHours - b.totalHours;
+                }
+            },
         },
     ];
 
-    const expandedRowRender = (record) => {
-        const columns = [
-            { title: 'Month-Year', dataIndex: 'monthYear', key: 'monthYear' },
-            { title: 'Hours Worked', dataIndex: 'hoursWorked', key: 'hoursWorked' },
-        ];
+    const fetchHoursWorked = async () => {
+        const token = localStorage.getItem('token');
+        try {
+            // Ensure month is adjusted correctly and use UTC to avoid timezone issues
+            const adjustedMonth = selectedMonth + 1; // Adjust month for API format
+            const year = selectedYear; // Explicitly state for clarity
+    
+            const response = await axios.get(`/api/appointment/confirmed-appointments?year=${year}&month=${adjustedMonth}&week=${selectedWeek}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            calculateHoursWorked(response.data.data);
+        } catch (error) {
+            console.error('Error fetching hours worked:', error);
+            setHoursWorked([]);
+        }
+    };    
 
-        const data = record.months.map(month => ({
-            key: month.monthYear,
-            monthYear: month.monthYear,
-            hoursWorked: month.hoursWorked,
+    useEffect(() => {
+        // Create a function inside the effect for fetching data
+        const fetchData = async () => {
+            const token = localStorage.getItem('token');
+            // Adjust the month for the API call
+            const apiMonth = selectedMonth + 1;
+            const apiYear = selectedYear;
+            // Note: No need to adjust week as it's likely correctly set by the user interface
+            try {
+                const response = await axios.get(`/api/appointment/confirmed-appointments?year=${apiYear}&month=${apiMonth}&week=${selectedWeek}`, {
+                    headers: { Authorization: `Bearer ${token}` },
+                });
+                calculateHoursWorked(response.data.data);
+            } catch (error) {
+                console.error('Error fetching hours worked:', error);
+                setHoursWorked([]);
+            }
+        };
+    
+        fetchData(); // Call fetch data function
+    }, [filter, selectedYear, selectedMonth, selectedWeek]); // Depend on filter criteria
+    
+    
+    const calculateHoursWorked = (appointments) => {
+        const now = moment();
+        const hoursByEmployee = appointments.reduce((acc, appointment) => {
+            const appointmentDate = moment.utc(appointment.date);
+            if (appointmentDate.isAfter(now)) {
+                return acc;
+            }
+
+            const startTime = moment.utc(appointment.starttime, 'HH:mm');
+            const endTime = moment.utc(appointment.endtime, 'HH:mm');
+            const duration = moment.duration(endTime.diff(startTime));
+            const hours = duration.asHours();
+
+            const period = getPeriod(appointmentDate);
+
+            appointment.assignedEmployees.forEach(employee => {
+                const userId = employee._id.toString();
+                const userName = employee.name;
+
+                if (!acc[userId]) {
+                    acc[userId] = {
+                        name: userName,
+                        totalHours: 0,
+                        periods: {
+                            month: {},
+                            week: {},
+                            overall: { hoursWorked: 0 },
+                        },
+                    };
+                }
+
+                acc[userId].totalHours += hours;
+                acc[userId].periods[period].hoursWorked += hours;
+            });
+
+            return acc;
+        }, {});
+
+        const transformedData = Object.keys(hoursByEmployee).map(userId => ({
+            key: userId,
+            name: hoursByEmployee[userId].name,
+            totalHours: hoursByEmployee[userId].totalHours.toFixed(2),
+            months: hoursByEmployee[userId].periods.month,
+            weeks: hoursByEmployee[userId].periods.week,
+            overall: hoursByEmployee[userId].periods.overall.hoursWorked.toFixed(2),
         }));
 
-        return <Table columns={columns} dataSource={data} pagination={false} />;
+        setHoursWorked(transformedData);
     };
+
+    const getPeriod = (date) => {
+        if (filter === 'month') {
+            return date.format('MMMM YYYY');
+        } else if (filter === 'week') {
+            return date.startOf('week').format('MMMM DD, YYYY') + ' - ' + date.endOf('week').format('MMMM DD, YYYY');
+        } else {
+            return 'overall';
+        }
+    };
+
+    const handleFilterChange = (value) => {
+        setFilter(value);
+    };
+
+    const handleYearChange = (value) => {
+        setSelectedYear(value);
+    };
+
+    const handleMonthChange = (value) => {
+        setSelectedMonth(value);
+    };
+
+    const handleWeekChange = (value) => {
+        setSelectedWeek(value);
+    };
+
+    
 
     return (
         <Layout>
             <div>
                 <h2>Employee Hours Tracker</h2>
-                <Table
-                    columns={columns}
-                    dataSource={hoursWorked}
-                    expandable={{
-                        expandedRowRender,
-                        rowExpandable: record => record.months && record.months.length > 0,
-                    }}
-                />
+                <Select defaultValue="overall" onChange={handleFilterChange}>
+                    <Option value="overall">Overall</Option>
+                    <Option value="month">Month</Option>
+                    <Option value="week">Week</Option>
+                </Select>
+                {filter === 'month' && (
+                    <>
+                        <Select defaultValue={moment().year()} onChange={handleYearChange}>
+                            {Array.from({ length: 10 }, (_, index) => moment().year() - index).map(year => (
+                                <Option key={year} value={year}>
+                                    {year}
+                                </Option>
+                            ))}
+                        </Select>
+                    
+                        <Select defaultValue={moment().month()} onChange={handleMonthChange}>
+                            {moment.months().map((month, index) => (
+                                <Option key={index} value={index}>
+                                    {moment().month(index).format('MMM')}
+                                </Option>
+                            ))}
+                        </Select>
+
+                    </>
+                )}
+                {filter === 'week' && (
+                    <>
+                        <Select defaultValue={moment().year()} onChange={handleYearChange}>
+                            {Array.from({ length: 10 }, (_, index) => moment().year() - index).map(year => (
+                                <Option key={year} value={year}>
+                                    {year}
+                                </Option>
+                            ))}
+                        </Select>
+                        <Select defaultValue={moment().isoWeek()} onChange={handleWeekChange}>
+                            {Array.from({ length: moment().isoWeeksInYear() }, (_, index) => index + 1).map(week => (
+                                <Option key={week} value={week}>
+                                    Week {week}
+                                </Option>
+                            ))}
+                        </Select>
+                    </>
+                )}
+                <Table columns={columns} dataSource={hoursWorked} />
             </div>
         </Layout>
     );

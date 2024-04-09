@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Table, Select } from 'antd';
@@ -34,35 +33,26 @@ const AdminHoursTracking = () => {
         },
     ];
 
-    const fetchHoursWorked = async () => {
-        const token = localStorage.getItem('token');
-        try {
-            // Ensure month is adjusted correctly and use UTC to avoid timezone issues
-            const adjustedMonth = selectedMonth + 1; // Adjust month for API format
-            const year = selectedYear; // Explicitly state for clarity
-    
-            const response = await axios.get(`/api/appointment/confirmed-appointments?year=${year}&month=${adjustedMonth}&week=${selectedWeek}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-            calculateHoursWorked(response.data.data);
-        } catch (error) {
-            console.error('Error fetching hours worked:', error);
-            setHoursWorked([]);
-        }
-    };    
-
     useEffect(() => {
-        // Create a function inside the effect for fetching data
         const fetchData = async () => {
             const token = localStorage.getItem('token');
-            // Adjust the month for the API call
-            const apiMonth = selectedMonth + 1;
-            const apiYear = selectedYear;
-            // Note: No need to adjust week as it's likely correctly set by the user interface
+            let apiUrl = `/api/appointment/confirmed-appointments`;
+            if (filter !== 'overall') {
+                const params = new URLSearchParams();
+        
+                params.append('year', selectedYear);
+        
+                if (filter === 'month') {
+                    params.append('month', selectedMonth + 1);
+                } else if (filter === 'week') {
+                    params.append('week', selectedWeek);
+                }
+        
+                apiUrl += `?${params.toString()}`;
+            }
+        
             try {
-                const response = await axios.get(`/api/appointment/confirmed-appointments?year=${apiYear}&month=${apiMonth}&week=${selectedWeek}`, {
+                const response = await axios.get(apiUrl, {
                     headers: { Authorization: `Bearer ${token}` },
                 });
                 calculateHoursWorked(response.data.data);
@@ -71,11 +61,9 @@ const AdminHoursTracking = () => {
                 setHoursWorked([]);
             }
         };
-    
-        fetchData(); // Call fetch data function
-    }, [filter, selectedYear, selectedMonth, selectedWeek]); // Depend on filter criteria
-    
-    
+        fetchData();
+    }, [filter, selectedYear, selectedMonth, selectedWeek]);
+
     const calculateHoursWorked = (appointments) => {
         const now = moment();
         const hoursByEmployee = appointments.reduce((acc, appointment) => {
@@ -137,35 +125,37 @@ const AdminHoursTracking = () => {
     };
 
     const handleFilterChange = (value) => {
+        setHoursWorked([]);
         setFilter(value);
     };
 
     const handleYearChange = (value) => {
+        setHoursWorked([]);
         setSelectedYear(value);
     };
 
     const handleMonthChange = (value) => {
+        setHoursWorked([]);
         setSelectedMonth(value);
     };
 
     const handleWeekChange = (value) => {
+        setHoursWorked([]);
         setSelectedWeek(value);
     };
-
-    
 
     return (
         <Layout>
             <div>
                 <h2>Employee Hours Tracker</h2>
-                <Select defaultValue="overall" onChange={handleFilterChange}>
+                <Select defaultValue="overall" style={{ width: 120, marginRight: 16 }} onChange={handleFilterChange}>
                     <Option value="overall">Overall</Option>
                     <Option value="month">Month</Option>
                     <Option value="week">Week</Option>
                 </Select>
                 {filter === 'month' && (
                     <>
-                        <Select defaultValue={moment().year()} onChange={handleYearChange}>
+                        <Select defaultValue={moment().year()} style={{ width: 120, marginRight: 16 }} onChange={handleYearChange}>
                             {Array.from({ length: 10 }, (_, index) => moment().year() - index).map(year => (
                                 <Option key={year} value={year}>
                                     {year}
@@ -173,26 +163,25 @@ const AdminHoursTracking = () => {
                             ))}
                         </Select>
                     
-                        <Select defaultValue={moment().month()} onChange={handleMonthChange}>
+                        <Select defaultValue={moment().month()} style={{ width: 120, marginRight: 16 }} onChange={handleMonthChange}>
                             {moment.months().map((month, index) => (
                                 <Option key={index} value={index}>
                                     {moment().month(index).format('MMM')}
                                 </Option>
                             ))}
                         </Select>
-
                     </>
                 )}
                 {filter === 'week' && (
                     <>
-                        <Select defaultValue={moment().year()} onChange={handleYearChange}>
+                        <Select defaultValue={moment().year()} style={{ width: 120, marginRight: 16 }} onChange={handleYearChange}>
                             {Array.from({ length: 10 }, (_, index) => moment().year() - index).map(year => (
                                 <Option key={year} value={year}>
                                     {year}
                                 </Option>
                             ))}
                         </Select>
-                        <Select defaultValue={moment().isoWeek()} onChange={handleWeekChange}>
+                        <Select defaultValue={moment().isoWeek()} style={{ width: 120 }} onChange={handleWeekChange}>
                             {Array.from({ length: moment().isoWeeksInYear() }, (_, index) => index + 1).map(week => (
                                 <Option key={week} value={week}>
                                     Week {week}

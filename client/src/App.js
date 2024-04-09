@@ -20,6 +20,7 @@ import AboutMe from "./pages/About";
 import Contact from "./pages/Contact";
 import Profile from "./pages/employee/Profile";
 import AdminHoursTracking from "./pages/admin/adminHoursTracking";
+import EmployeeHoursWorked from "./pages/employee/EmployeeHoursWorked";
 
 
 
@@ -84,6 +85,14 @@ function App() {
                 </ProtectedRoute>
               }
             />    
+                        <Route
+              path="/hours-worked"
+              element={
+                <ProtectedRoute allowedRoles={['employee']}>
+                  <EmployeeHoursWorked />
+                </ProtectedRoute>
+              }
+            />
             <Route
               path="/admin-schedule-management"
               element={

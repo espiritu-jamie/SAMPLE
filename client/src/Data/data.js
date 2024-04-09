@@ -21,7 +21,7 @@ export const employeeMenu = [
   // },
   {
   name: "Profile",
-  path: "/pages/Profile", // Update with the correct path for the Profile component
+  path: "/my-profile", // Update with the correct path for the Profile component
   icon: "fa-solid fa-user",
   },
   {

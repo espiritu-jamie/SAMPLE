@@ -13,6 +13,7 @@ const {
     rescheduleAppointmentController,
     getFullDaysController,
     getBookedSlotsController,
+    getAllConfirmedAppointments,
     } = require('../controllers/appointmentController');
 
 // Submitting a new appointment for authenticated customers
@@ -44,5 +45,8 @@ router.get('/full-days', authMiddleware, getFullDaysController);
 
 // Fetching booked slots for a specific day
 router.get('/booked-slots', authMiddleware, getBookedSlotsController);
+
+// Fetching all confirmed appointments
+router.get('/confirmed-appointments', authMiddleware, getAllConfirmedAppointments);
 
 module.exports = router;

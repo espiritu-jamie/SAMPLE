@@ -66,59 +66,63 @@ const AdminHoursTracking = () => {
 
     const calculateHoursWorked = (appointments) => {
         const now = moment();
-        const hoursByEmployee = appointments.reduce((acc, appointment) => {
+        const hoursByEmployee = {};
+    
+        appointments.forEach(appointment => {
             const appointmentDate = moment.utc(appointment.date);
             if (appointmentDate.isAfter(now)) {
-                return acc;
+                return;
             }
-
+    
             const startTime = moment.utc(appointment.starttime, 'HH:mm');
             const endTime = moment.utc(appointment.endtime, 'HH:mm');
             const duration = moment.duration(endTime.diff(startTime));
             const hours = duration.asHours();
-
-            const period = getPeriod(appointmentDate);
-
+    
+            const periodKey = getPeriod(appointmentDate);
+    
             appointment.assignedEmployees.forEach(employee => {
                 const userId = employee._id.toString();
                 const userName = employee.name;
-
-                if (!acc[userId]) {
-                    acc[userId] = {
+    
+                if (!hoursByEmployee[userId]) {
+                    hoursByEmployee[userId] = {
                         name: userName,
-                        totalHours: 0,
-                        periods: {
-                            month: {},
-                            week: {},
-                            overall: { hoursWorked: 0 },
-                        },
+                        overall: 0,
+                        byPeriod: {}
                     };
                 }
-
-                acc[userId].totalHours += hours;
-                acc[userId].periods[period].hoursWorked += hours;
+    
+                if (!hoursByEmployee[userId].byPeriod[periodKey]) {
+                    hoursByEmployee[userId].byPeriod[periodKey] = 0;
+                }
+    
+                // Accumulate total hours and hours for the specific period
+                hoursByEmployee[userId].overall += hours;
+                hoursByEmployee[userId].byPeriod[periodKey] += hours;
             });
-
-            return acc;
-        }, {});
-
-        const transformedData = Object.keys(hoursByEmployee).map(userId => ({
-            key: userId,
-            name: hoursByEmployee[userId].name,
-            totalHours: hoursByEmployee[userId].totalHours.toFixed(2),
-            months: hoursByEmployee[userId].periods.month,
-            weeks: hoursByEmployee[userId].periods.week,
-            overall: hoursByEmployee[userId].periods.overall.hoursWorked.toFixed(2),
-        }));
-
+        });
+    
+        // Transform data to array format expected by Ant Design Table
+        const transformedData = Object.keys(hoursByEmployee).map(userId => {
+            const userHours = hoursByEmployee[userId];
+            return {
+                key: userId,
+                name: userHours.name,
+                overall: userHours.overall.toFixed(2),
+                // This will pick the total hours for the selected period (month or week)
+                totalHours: userHours.byPeriod[getPeriod(moment())].toFixed(2),
+            };
+        });
+    
         setHoursWorked(transformedData);
     };
-
+    
     const getPeriod = (date) => {
         if (filter === 'month') {
-            return date.format('MMMM YYYY');
+            return `${date.format('MMMM YYYY')}`;
         } else if (filter === 'week') {
-            return date.startOf('week').format('MMMM DD, YYYY') + ' - ' + date.endOf('week').format('MMMM DD, YYYY');
+            return `Week ${date.isoWeek()} of ${date.year()}`;
         } else {
             return 'overall';
         }

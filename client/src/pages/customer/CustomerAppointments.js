@@ -215,27 +215,7 @@ const CustomerAppointments = () => {
       dataIndex: 'paymentMethod',
       key: 'paymentMethod',
     },
-    {
-      title: 'Actions',
-      key: 'actions',
-      render: (_, record) => (
-        <>
-      <Button 
-        onClick={() => promptCancelAppointment(record._id)} 
-        type="primary"
-        danger
-        disabled={record.status === "cancelled"} // Disable the button if the appointment is canceled
-        style={{ 
-          marginRight: 8,
-          color: record.status === "cancelled" ? "#ccc" : undefined, // Optional: grey out text color
-          borderColor: record.status === "cancelled" ? "#ccc" : undefined // Optional: grey out border color
-        }}
-      >
-        Cancel Appointment
-      </Button>
-    </>
-      ),
-    },
+    
     {
       title: 'Comments',
       key: 'comments',

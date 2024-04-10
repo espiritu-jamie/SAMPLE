@@ -20,6 +20,7 @@ import AboutMe from "./pages/About";
 import Contact from "./pages/Contact";
 import Profile from "./pages/employee/Profile";
 import AdminHoursTracking from "./pages/admin/adminHoursTracking";
+import Additional from "./pages/customer/additional";
 
 
 
@@ -131,6 +132,15 @@ function App() {
               element={
                 <ProtectedRoute allowedRoles={['general']}>
                   <CustomerAppointments />
+                </ProtectedRoute> // if they are logged in 
+              }
+
+            />
+            <Route
+              path="/additional"
+              element={
+                <ProtectedRoute allowedRoles={['general']}>
+                  <Additional />
                 </ProtectedRoute> // if they are logged in 
               }
 

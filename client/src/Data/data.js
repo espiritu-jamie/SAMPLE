@@ -72,6 +72,11 @@ export const userMenu = [
     name:"Book Now",
     path: "/book-now",
     icon: "fa-solid fa-calendar"
+  },
+  {
+    name:"Additional",
+    path: "/additional",
+    icon: "fa-solid fa-calendar"
   }
 ];
 

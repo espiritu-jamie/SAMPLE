@@ -12,7 +12,7 @@ const AppointmentDetailsModal = ({ isVisible, onClose, appointment, fetchAppoint
     const [selectedEmployees, setSelectedEmployees] = useState([]);
     const [cancellationReason, setCancellationReason] = useState('');
     const [rescheduledDate, setRescheduledDate] = useState(null);
-    // Add a state to check if the appointment is canceled
+
     const isCanceled = appointment?.status === 'cancelled';
 
     useEffect(() => {
@@ -55,7 +55,6 @@ const AppointmentDetailsModal = ({ isVisible, onClose, appointment, fetchAppoint
     }, [appointment?.date, appointment?.starttime, appointment?.endtime]);
 
     const handleUpdateAssignees = async () => {
-        // Check if assigning for the first time and ensure employees are selected
         if (appointment?.status !== 'confirmed' && selectedEmployees.length === 0) {
             message.error("Please select at least one employee to assign.");
             return;
@@ -145,7 +144,6 @@ const AppointmentDetailsModal = ({ isVisible, onClose, appointment, fetchAppoint
         />
       );
 
-      // Inside AppointmentDetailsModal component
         const isPastAppointment = useCallback(() => {
             const now = moment();
             const appointmentEnd = moment(appointment.date + ' ' + appointment.endtime, "YYYY-MM-DD HH:mm");

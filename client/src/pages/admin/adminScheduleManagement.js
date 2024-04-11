@@ -17,7 +17,7 @@ const ScheduleManagement = () => {
     const [filter, setFilter] = useState('all');
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [currentAppointment, setCurrentAppointment] = useState(null);
-    const calendarRef = useRef(null); // Ref for accessing FullCalendar methods
+ 
 
     const fetchAppointments = async () => {
         const token = localStorage.getItem('token');

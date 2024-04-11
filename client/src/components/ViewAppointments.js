@@ -108,7 +108,6 @@ const ViewAppointments = ({ isAdminView }) => {
         ) : null
       ),
     },
-    // You can add more columns if needed.
   ];
 
   const handleViewRatings = async (appointmentId) => {

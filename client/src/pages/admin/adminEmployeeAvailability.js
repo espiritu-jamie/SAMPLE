@@ -62,7 +62,6 @@ const AdminEmployeeAvailability = () => {
             dataIndex: 'date',
             key: 'date',
             sorter: (a, b) => moment(a.date).unix() - moment(b.date).unix(),
-            // Sort dates using moment.js by converting them to UNIX timestamps
         },
         {
             title: 'Start Time',
@@ -86,11 +85,9 @@ const AdminEmployeeAvailability = () => {
                 </Radio.Group>
                 {sortMode === 'byDate' ? (
                     <MyCalendar events={availabilities.map(availability => {
-                        // Directly use moment.utc to handle the date in UTC
                         const eventDateStart = moment.utc(availability.date);
                         const eventDateEnd = moment.utc(availability.date);
 
-                        // Adjust the time part using UTC methods
                         const start = eventDateStart.add(moment.duration(availability.starttime)).toISOString();
                         const end = eventDateEnd.add(moment.duration(availability.endtime)).toISOString();
 

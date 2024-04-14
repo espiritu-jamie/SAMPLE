@@ -35,18 +35,7 @@ app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "./client/build/index.html"));
 });
 
-app.get('/api/data', (req, res) => {
-  res.json({ message: 'Data successfully fetched!' });
-});
-
 const PORT = process.env.PORT || 4001;
-
-const cors = require('cors');
-
-// CORS configuration - adjust the origin to match your deployment URL
-app.use(cors({
-    origin: 'https://your-vercel-deployment-url.vercel.app', // Adjust this to your Vercel frontend URL
-}));
 
 
 app.listen(PORT, () => {

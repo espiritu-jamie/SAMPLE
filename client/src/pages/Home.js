@@ -34,7 +34,7 @@ const Home = () => {
           </Carousel>
         </div>
         <div className="text-section">
-          <h1>JKL CLEANING SERVICE</h1>
+          <h1>JKL <span className="accent-text">CLEANING SERVICE</span></h1>
           <p>We treat your house like ours!</p>
           <p>With a team of trusted professionals, we ensure every nook and cranny is handled with care, providing a spotless, refreshing home environment for you and your loved ones.</p>
           <button className="book-now-button" onClick={() => navigateTo("/register")}>Book Now</button>

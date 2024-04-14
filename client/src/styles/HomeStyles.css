@@ -21,6 +21,10 @@
   border-top: 80px solid white; /* The color should match the section's background */
 }
 
+.accent-text {
+  color: #C9A959; /* Highlight color */
+}
+
 .how-it-works-container {
   background-color: #f0e8d7;
 }

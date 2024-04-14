@@ -1,6 +1,6 @@
 const express = require("express");
 const colors = require("colors");
-const morgan = require("morgan"); // Corrected typo from 'moragan' to 'morgan'
+const morgan = require("morgan"); 
 const dotenv = require("dotenv");
 const userRoutes = require('./routes/userRoute');
 const availabilityRoutes = require('./routes/availabilityRoute'); 
@@ -18,7 +18,7 @@ connectDb();
 const app = express();
 
 app.use(express.json());
-app.use(morgan("dev")); // Corrected typo
+app.use(morgan("dev")); 
 
 // Routes
 app.use("/api/user", userRoutes);
@@ -38,5 +38,5 @@ app.get("*", (req, res) => {
 const PORT = process.env.PORT || 4001;
 
 app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`.green); // Example of using 'colors'
+    console.log(`Server running on http://localhost:${PORT}`.green); 
 });

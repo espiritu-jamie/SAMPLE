@@ -19,6 +19,8 @@
   max-width: 60%;
   background-color: #fffaef ; /* Light transparency for the text container */
   box-shadow: 10px 10px 25px rgba(0, 0, 0, 0.2); /* Adding shadow for depth */
+  padding: 2rem;
+  border-radius: 15px;
 
 }
 

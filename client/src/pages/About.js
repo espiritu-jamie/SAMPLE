@@ -50,7 +50,8 @@
 import React from 'react';
 import Navbar from '../components/Navbar';
 import { useNavigate } from "react-router-dom";
-import '../styles/AboutStyles.css'; // Ensure this CSS file is updated with the styles provided below
+import '../styles/AboutStyles.css'; 
+import Footer from '../components/Footer';
 
 const AboutMe = () => {
   const navigate = useNavigate();
@@ -96,6 +97,7 @@ const AboutMe = () => {
             <button className="view-more-button" onClick={() => navigateTo("/register")}>Book Now</button>
           </div>
         </div>
+        <Footer />
 </div>
 
   );

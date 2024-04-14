@@ -85,7 +85,7 @@ function App() {
                 </ProtectedRoute>
               }
             />    
-                        <Route
+            <Route
               path="/hours-worked"
               element={
                 <ProtectedRoute allowedRoles={['employee']}>

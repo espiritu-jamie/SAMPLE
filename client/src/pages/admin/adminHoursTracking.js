@@ -58,6 +58,9 @@ const AdminHoursTracking = () => {
                     headers: { Authorization: `Bearer ${token}` }, 
                 });
                 calculateHoursWorked(response.data.data); 
+                console.log("response: ", response);
+                console.log("response: ", response.data.data);
+                console.log("in here");
             } catch (error) {
                 console.error('Error fetching hours worked:', error);
                 setHoursWorked([]); 
@@ -69,6 +72,8 @@ const AdminHoursTracking = () => {
     const calculateHoursWorked = (appointments) => {
         const now = moment();
         const hoursByEmployee = {};
+
+        console.log(appointments);
     
         appointments.forEach(appointment => {
             const appointmentDate = moment.utc(appointment.date);

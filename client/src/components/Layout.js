@@ -58,9 +58,6 @@ const Layout = ({ children }) => {
   ? employeeMenu
   : userMenu;
 
-
-    console.log(SidebarMenu);
-
   return (
     <>
       <div className="main">

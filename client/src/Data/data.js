@@ -55,7 +55,7 @@ export const adminMenu = [
   },
   {
     name: "Hours Tracking",
-    path: "/admin-hours-tracker",
+    path: "/admin-hours-tracking",
     icon: "fa-solid fa-calendar",
   }
 ];

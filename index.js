@@ -21,7 +21,7 @@ const app = express();
 app.use(express.json());
 app.use(morgan("dev")); 
 app.use(cors({
-  origin: 'https://sample-production-1b84.up.railway.app'
+  origin: 'https://jklcleaningservice.vercel.app/'
 }));
 
 // Routes

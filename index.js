@@ -10,6 +10,7 @@ const announcementRoutes = require('./routes/announcementRoute');
 const ratingRoutes = require('./routes/ratingRoute');
 const connectDb = require("./config/connectDb");
 const path = require("path");
+const cors = require("cors");
 
 //dotenv config
 dotenv.config();
@@ -19,6 +20,9 @@ const app = express();
 
 app.use(express.json());
 app.use(morgan("dev")); 
+app.use(cors({
+  origin: 'https://sample-production-1b84.up.railway.app'
+}));
 
 // Routes
 app.use("/api/user", userRoutes);

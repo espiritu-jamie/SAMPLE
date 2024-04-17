@@ -14,6 +14,16 @@ The JKL Cleaning Service Web-based Platform is dedicated to modernizing the oper
 
 This platform is built using the MERN stack (MongoDB, Express.js, React, Node.js), ensuring a robust, scalable, and responsive user experience.
 
+- **MongoDB:** A document-oriented NoSQL database used to store application data.
+- **Express.js:** A web application framework for Node.js, designed for building web applications and APIs.
+- **React:** A JavaScript library for building user interfaces, particularly single-page applications where you need fast interactions.
+- **Node.js:** A JavaScript runtime built on Chrome's V8 JavaScript engine, used for building scalable network applications.
+
+Additionally, we utilize the following technologies for enhanced security and functionality:
+
+- **JWT (JSON Web Token):** Used for secure user authentication and authorization. JWTs allow us to transmit secure information between the client and server as a JSON object.
+- **Bcrypt:** A password hashing library that helps us securely store user passwords. By hashing and salting the passwords, bcrypt ensures that even if the password data is compromised, the actual passwords remain secure.
+
 ## Adaptation from Existing Repository
 
 This project is adapted from the [AppointDoc repository](https://github.com/OviSarkar62/AppointDoc) by OviSarkar62, which originally focuses on patient/doctor appointments. We have customized and extended this to fit the specific needs of a cleaning service management system.
@@ -43,9 +53,9 @@ cd <repository-directory>
 Create a .env file in the root directory with the following contents:
 
 ```bash
-DB_URL=<your-mongodb-url>
-JWT_SECRET=<your-jwt-secret>
-PORT=4000
+DB_URL = mongodb+srv://<user>:<pass>@cluster0.l17quyr.mongodb.net/database
+JWT_SECRET = <your-jwt-secret>
+PORT = 4000
 ```
 
 Install dependencies in both the root and client directories:

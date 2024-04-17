@@ -1,5 +1,5 @@
 .combined-section {
-  position: relative; /* Needed for absolute positioning of the pseudo-element */
+  position: relative; 
   display: flex;
   width: 85%;
   align-items: center;
@@ -11,18 +11,18 @@
 .combined-section:after {
   content: "";
   position: absolute;
-  bottom: -80px; /* Adjust this value based on the size of the arrow */
+  bottom: -80px;
   left: 50%;
-  transform: translateX(-50%); /* Centers the arrow horizontally */
+  transform: translateX(-50%);
   width: 0;
   height: 0;
-  border-left: 80px solid transparent; /* Adjust the size of the arrow */
-  border-right: 80px solid transparent; /* Adjust the size of the arrow */
-  border-top: 80px solid white; /* The color should match the section's background */
+  border-left: 80px solid transparent;
+  border-right: 80px solid transparent;
+  border-top: 80px solid white;
 }
 
 .accent-text {
-  color: #C9A959; /* Highlight color */
+  color: #C9A959;
 }
 
 .how-it-works-container {
@@ -42,7 +42,7 @@
   text-align: left; 
   display: flex;
   flex-direction: column;
-  justify-content: center; /* Centers text vertically */
+  justify-content: center;
 }
 
 .text-bottom {
@@ -68,7 +68,6 @@ p {
   border-radius: 12px;
 }
 
-/* Adjust feature container layout */
 .feature-container {
   display: flex;
   justify-content: space-around;
@@ -78,18 +77,17 @@ p {
   padding: 40px 0;
 }
 
-/* Adjust feature boxes */
 .feature {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 40%; /* Increased from 30% to 40% */
-  padding: 20px; /* Increased padding */
+  width: 40%;
+  padding: 20px;
 }
 
 .feature img {
   width: 100%;
-  max-width: 500px; /* Increased max-width */
+  max-width: 500px;
   height: auto;
   border-radius: 12px;
 }
@@ -97,7 +95,7 @@ p {
 
 
 .feature h3 {
-  font-size: 2.4rem; /* Increased title size */
+  font-size: 2.4rem;
   color: #2b4159;
   margin-bottom: 10px;
   font-weight: 700;
@@ -105,19 +103,19 @@ p {
 
 
 .book-now-button {
-  background-color: #2b4159; /* Button background color */
-  color: white; /* Button text color */
-  padding: 10px 20px; /* Button padding */
-  border: none; /* Remove border */
-  cursor: pointer; /* Cursor indication for clickable element */
-  border-radius: 5px; /* Rounded corners for the button */
-  font-size: 1rem; /* Font size */
-  font-weight: bold; /* Font weight */
-  margin-top: 20px; /* Space above the button */
+  background-color: #2b4159;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer; 
+  border-radius: 5px;
+  font-size: 1rem; 
+  font-weight: bold;
+  margin-top: 20px;
 }
 
 .book-now-button:hover {
-  background-color: #C9A959; /* Button hover background color */
+  background-color: #C9A959;
 }
 
 h3 {
@@ -129,13 +127,13 @@ h3 {
 }
 
 .custom-title {
-  font-size: 1.3rem; /* Larger font size for titles */
-  color: #2b4159; /* Optional: Adjust color if needed */
-  font-weight: bold; /* Optional: Make font bold */
+  font-size: 1.3rem;
+  color: #2b4159;
+  font-weight: bold;
 }
 
 .custom-description {
-  font-size: 1.0rem; /* Larger font size for descriptions */
-  color: #555; /* Optional: Adjust color if needed */
-  margin-top: 10px; /* Adds spacing between title and description */
+  font-size: 1.0rem;
+  color: #555;
+  margin-top: 10px;
 }

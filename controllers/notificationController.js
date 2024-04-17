@@ -21,7 +21,7 @@ const sendNotificationController = async (req, res) => {
 // Fetch all notifications for a user
 const getAllNotificationController = async (req, res) => {
   try {
-      const userId = req.body.userId; // Assuming you have a way to identify the user (e.g., JWT token)
+      const userId = req.body.userId;
       const notifications = await Notification.find({ userId }).populate('userId', 'name');
       res.status(200).json({ success: true, message: 'Notifications fetched successfully', data: notifications });
   } catch (error) {
@@ -73,7 +73,7 @@ const dismissNotificationController = async (req, res) => {
 const markNotificationAsUnreadController = async (req, res) => {
   try {
       const { notificationId } = req.params;
-      const userId = req.body.userId; // or extract from JWT token if using authentication
+      const userId = req.body.userId;
       const notification = await Notification.findByIdAndUpdate(
           notificationId,
           { $pull: { readBy: { userId } } },
@@ -123,7 +123,7 @@ const dismissAllNotificationsController = async (req, res) => {
 // Mark all notifications as unread for a user
 const markAllNotificationsAsUnreadController = async (req, res) => {
   try {
-    const userId = req.body.userId; // or req.user._id if you're extracting the user from a JWT token
+    const userId = req.body.userId;
 
     const result = await Notification.updateMany(
       { 'readBy.userId': userId },

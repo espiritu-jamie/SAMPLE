@@ -1,65 +1,62 @@
-/* Diagonal split background between #2b4159 and white */
 .aboutme-container {
   background: linear-gradient(to bottom right, white 50%, #2b4159 50% 100%);
   background-repeat: no-repeat;
-  min-height: 150vh; /* Ensure it covers the full height of the viewport */
+  min-height: 150vh; 
 }
 
-/* Ensuring content is readable and well-presented against the background */
 .content-container {
   margin-top: 20px;
-  background-color: rgba(255, 255, 255, 0.5); /* Light transparency for the content background */
+  background-color: rgba(255, 255, 255, 0.5); 
   padding: 20px;
   border-radius: 10px;
 }
 
-/* Ensuring text readability and visual appeal */
 .text-container {
-  margin: 50px auto; /* Centering the text container */
+  margin: 50px auto; 
   max-width: 60%;
-  background-color: #fffaef ; /* Light transparency for the text container */
-  box-shadow: 10px 10px 25px rgba(0, 0, 0, 0.2); /* Adding shadow for depth */
+  background-color: #fffaef ;
+  box-shadow: 10px 10px 25px rgba(0, 0, 0, 0.2); 
   padding: 2rem;
   border-radius: 15px;
 
 }
 
 .headline, .description-text {
-  color: #2b4159; /* Adjusting text color for better contrast */
+  color: #2b4159;
 }
 
 .view-more-button {
-  margin: 30px 30px; /* Space between text and button */
+  margin: 30px 30px; 
 }
 .subheading {
   font-size: 2rem;
-  color: #2b4159; /* Using the existing color scheme */
-  margin-top: 30px; /* Space above subheadings */
-  margin-bottom: 10px; /* Space below subheadings for separation */
-  margin-left: 0px; /* Indentation for subheadings */
+  color: #2b4159;
+  margin-top: 30px;
+  margin-bottom: 10px;
+  margin-left: 0px; 
 }
 
-/* Styles for the description list */
+
 .description-list {
   margin: 15px;
-  list-style-type: disc; /* Or another preferred style */
-  color: #2b4159; /* Matching the description text color */
-  padding-left: 40px; /* Indentation for the list items */
+  list-style-type: disc; 
+  color: #2b4159; 
+  padding-left: 40px; 
 }
 
 .accent-text {
-  color: #C9A959; /* Highlight color */
+  color: #C9A959;
 }
 
 .view-more-button {
-  background-color: #2b4159; /* Button background color */
-  color: white; /* Button text color */
-  padding: 10px 20px; /* Button padding */
-  border: none; /* Remove border */
-  cursor: pointer; /* Cursor indication for clickable element */
-  border-radius: 5px; /* Rounded corners for the button */
+  background-color: #2b4159;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
 }
 
 .view-more-button:hover {
-  background-color: #C9A959; /* Button hover background color */
+  background-color: #C9A959;
 }

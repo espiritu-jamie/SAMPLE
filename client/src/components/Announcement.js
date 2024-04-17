@@ -12,14 +12,12 @@ const Announcements = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [announcementsPerPage] = useState(3);
 
-  // Calculate the current announcements
 const indexOfLastAnnouncement = currentPage * announcementsPerPage;
 const indexOfFirstAnnouncement = indexOfLastAnnouncement - announcementsPerPage;
 const currentAnnouncements = announcements.slice(indexOfFirstAnnouncement, indexOfLastAnnouncement);
 
 const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-// Calculate the total number of pages
 const pageNumbers = [];
 for (let i = 1; i <= Math.ceil(announcements.length / announcementsPerPage); i++) {
   pageNumbers.push(i);

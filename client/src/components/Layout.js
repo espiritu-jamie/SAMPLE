@@ -22,7 +22,6 @@ const Layout = ({ children }) => {
         });
         if (data.success) {
           const currentUserId = localStorage.getItem('userId');
-          // Only include notifications that have not been read or dismissed by the current user
           const newNotifications = data.data.filter(notification => 
             !notification.readBy.some(read => read.userId === currentUserId) &&
             !notification.dismissedBy.some(dismissed => dismissed.userId === currentUserId)
@@ -38,19 +37,13 @@ const Layout = ({ children }) => {
     if (localStorage.getItem("token")) {
       fetchNotifications();
     }
-  }, [localStorage.getItem('fetchTrigger')]); // Reacting to changes in local storage to re-fetch notifications
+  }, [localStorage.getItem('fetchTrigger')]);
 
   const handleLogout = () => {
     localStorage.clear();
     message.success("Logout Successfully");
     navigate("/");
   };
-
-  // const SidebarMenu = user?.userRole === "admin"
-  //   ? adminMenu.filter((menu) => menu.name !== "Profile")
-  //   : user?.userRole === "employee"
-  //   ? employeeMenu.filter((menu) => menu.name !== "Profile")
-  //   : userMenu;
 
   const SidebarMenu = user?.userRole === "admin"
   ? adminMenu

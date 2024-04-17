@@ -22,7 +22,6 @@ const NotificationPage = () => {
       });
       if (data.success) {
         const currentUserId = localStorage.getItem('userId');
-        // Filter out dismissed notifications for the current user
         const filteredNotifications = data.data.filter(notification => 
           !notification.dismissedBy.some(user => user.userId === currentUserId)
         );
@@ -46,7 +45,6 @@ const handleDismissNotification = async (notificationId) => {
         },
       });
 
-      // Immediately remove the notification from state to update UI
       const currentUserId = localStorage.getItem('userId');
       
       setNotifications(currentNotifications => 
@@ -71,11 +69,8 @@ const handleDismissNotification = async (notificationId) => {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
       });
-      // Optimistically update the UI to reflect the read status
       setNotifications(notifications.map(notification => {
         if (notification._id === notificationId) {
-          // Assuming your backend correctly updates the notification object
-          // to include the current user in readBy upon marking as read
           window.location.reload();
           return { ...notification, readBy: [...notification.readBy, { userId: 'currentUserId' }] }; // Adjust 'currentUserId' as necessary
         }
@@ -162,7 +157,6 @@ const handleDismissNotification = async (notificationId) => {
   };
   
   const markAllAsUnread = async () => {
-    // Assuming you have an endpoint '/api/notification/mark-all-as-unread'
     try {
       await axios.put('/api/notification/mark-all-as-unread', {}, {
         headers: {
@@ -170,7 +164,7 @@ const handleDismissNotification = async (notificationId) => {
         },
       });
       message.success('All notifications marked as unread');
-      fetchNotifications(); // Refresh the list
+      fetchNotifications(); 
       window.location.reload();
     } catch (error) {
       console.error('Error marking all notifications as unread:', error);
@@ -185,7 +179,6 @@ const handleDismissNotification = async (notificationId) => {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
       });
-      // Update the UI accordingly
       window.location.reload();
     } catch (error) {
       console.error('Error marking notification as unread:', error);

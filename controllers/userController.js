@@ -54,31 +54,12 @@ const registerController = async (req, res) => {
 
 const viewprofilecontroller = async (req, res) => {
   try {
-    // Check if user object is available in the request
-    // if (!req.user) {
-    //     return res.status(401).json({ success: false, message: 'User not authenticated' });
-    // }
-
-    // Log the userId received from the frontend
-    const userId = req.body.userId; // Extract the userId from the URL parameter
-
-    // Optionally, compare the userId with req.user._id (if your logic requires)
-    // This depends on your application's requirements
-    // For example, you might want to ensure that users can only view their own profile
-    // if (req.user._id !== userId) {
-    //   // Handle the case where the user is trying to access someone else's profile, if needed
-    // }
+    const userId = req.body.userId;
     const user = await userModel.findById(userId);
     if (!user) {
       return res.status(404).send({ success: false, message: 'User not found' });
     }
 
-    // Since the example shows you are using req.user for user data,
-    // the rest of the function might not need significant changes.
-
-    // const { name, email, address, phoneNumber } = req.user;
-
-    // Construct the user profile object
     const userProfile = {
       _id: user._id,
       name: user.name,
@@ -99,9 +80,8 @@ const viewprofilecontroller = async (req, res) => {
 const updateProfileController = async (req, res) => {
   console.log("updateProfileController");
   try {
-    const userId = req.params.userId; // Extract userId from URL parameters
+    const userId = req.params.userId;
     const { name, email, address, phoneNumber } = req.body;
-    // console.log(name, email, address, phoneNumber);
 
     const missingFields = [];
 
@@ -152,7 +132,7 @@ const authController = async (req, res) => {
         success: false,
       });
     } else {
-      user.password = undefined; // move this line here
+      user.password = undefined;
       res.status(200).send({
         success: true,
         data: user,

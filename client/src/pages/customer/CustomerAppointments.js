@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Layout from "../../components/Layout";
 import { Table, Button, message, Radio, Input, Modal, Rate, Select } from "antd";
-// import FullCalendar from "@fullcalendar/react";
-// import dayGridPlugin from "@fullcalendar/daygrid";
 import moment from "moment";
 import "../../styles/CustomerAppointmentsStyles.css";
 
@@ -12,7 +10,6 @@ const { Option } = Select;
 const CustomerAppointments = () => {
   const [appointments, setAppointments] = useState([]);
   const [filter, setFilter] = useState("all");
-  // const [viewMode, setViewMode] = useState('list'); 
   const [commentModalVisible, setCommentModalVisible] = useState(false);
   const [commentText, setCommentText] = useState("");
   const [selectedAppointmentId, setSelectedAppointmentId] = useState(null);
@@ -91,19 +88,17 @@ const CustomerAppointments = () => {
   
   const handleComment = async (appointmentId) => {
     setSelectedAppointmentId(appointmentId);
-    setHasRated(false); // Reset to default
-    setExistingRating(0); // Reset to default
-    setExistingComment(""); // Reset to default
+    setHasRated(false);
+    setExistingRating(0);
+    setExistingComment(""); 
   
     try {
-      // Fetch existing rating for this appointment, if any
       const res = await axios.get(`/api/rating/${appointmentId}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
       });
       if (res.data && res.data.data && res.data.data.length > 0) {
-        // Assuming the response has the format { data: [{ rating, comment }] }
         const ratingData = res.data.data[0];
         setHasRated(true);
         setExistingRating(ratingData.rating);
@@ -126,7 +121,7 @@ const CustomerAppointments = () => {
 
     try {
       const res = await axios.post(
-        '/api/rating/submit', // Adjust the URL based on your API endpoint
+        '/api/rating/submit', 
         {
           appointmentId: selectedAppointmentId,
           rating: rating,
@@ -141,7 +136,6 @@ const CustomerAppointments = () => {
   
       if (res.status === 200 || res.status === 201) {
         message.success("Rating submitted successfully");
-        // Update any state or perform any actions needed after successful submission
       } else {
         throw new Error('Failed to submit rating');
       }
@@ -149,17 +143,15 @@ const CustomerAppointments = () => {
       console.error("Error submitting rating:", error);
       message.error("Failed to submit rating. Please try again.");
     } finally {
-      // Reset the modal and state regardless of success or failure
       setCommentModalVisible(false);
       setRating(0);
       setCommentText("");
-      // Optionally, refetch any data that should be updated
     }
   };
   
 
   const handleCancelComment = () => {
-    setCommentText(""); // Reset the comment text
+    setCommentText("");
     setCommentModalVisible(false);
   };
 
@@ -224,11 +216,11 @@ const CustomerAppointments = () => {
         onClick={() => promptCancelAppointment(record._id)} 
         type="primary"
         danger
-        disabled={record.status === "cancelled"} // Disable the button if the appointment is canceled
+        disabled={record.status === "cancelled"} 
         style={{ 
           marginRight: 8,
-          color: record.status === "cancelled" ? "#ccc" : undefined, // Optional: grey out text color
-          borderColor: record.status === "cancelled" ? "#ccc" : undefined // Optional: grey out border color
+          color: record.status === "cancelled" ? "#ccc" : undefined, 
+          borderColor: record.status === "cancelled" ? "#ccc" : undefined 
         }}
       >
         Cancel Appointment
@@ -240,14 +232,12 @@ const CustomerAppointments = () => {
       title: 'Comments',
       key: 'comments',
       render: (_, record) => {
-        // Convert appointment date and current date to Moment objects for comparison
         const appointmentDate = moment(record.date, "MMMM D, YYYY");
         const currentDate = moment().startOf('day');
 
         console.log("appointmentDate", appointmentDate);
         console.log("currentDate", currentDate);
         
-        // Check if the appointment date is before the current date
         const isPastAppointment = appointmentDate.isBefore(currentDate);
     
         return (
@@ -255,7 +245,7 @@ const CustomerAppointments = () => {
             <Button 
               onClick={() => handleComment(record._id)}
               type="primary"
-              disabled={!isPastAppointment || record.status === "cancelled"} // Disable if the appointment is in the future or cancelled
+              disabled={!isPastAppointment || record.status === "cancelled"}
               style={{ 
                 color: (!isPastAppointment || record.status === "cancelled") ? "#ccc" : undefined,
                 borderColor: (!isPastAppointment || record.status === "cancelled") ? "#ccc" : undefined
@@ -296,7 +286,7 @@ const CustomerAppointments = () => {
       } else if (filter === "upcoming") {
         return appointmentDate.isSameOrAfter(now);
       }
-      return true; // If filter is "all", return all appointments
+      return true; 
     });
   };
   
@@ -327,20 +317,20 @@ const CustomerAppointments = () => {
   onCancel={handleCancelComment}
   okText="Submit Comment"
   cancelText="Cancel"
-  okButtonProps={{ disabled: hasRated }} // Disable the OK button if the user has already rated
+  okButtonProps={{ disabled: hasRated }} 
 >
   <Rate
-    value={hasRated ? existingRating : rating} // Show existing rating if available
+    value={hasRated ? existingRating : rating} 
     onChange={(value) => setRating(value)}
     style={{ marginBottom: 16 }}
-    disabled={hasRated} // Make rate component read-only if already rated
+    disabled={hasRated} 
   />
   <Input.TextArea
-    value={hasRated ? existingComment : commentText} // Show existing comment if available
+    value={hasRated ? existingComment : commentText} 
     onChange={(e) => setCommentText(e.target.value)}
     rows={4}
     placeholder="Enter your comment"
-    disabled={hasRated} // Make text area read-only if already rated
+    disabled={hasRated} 
   />
 </Modal>
   
@@ -350,7 +340,7 @@ const CustomerAppointments = () => {
           onOk={handleCancelAppointment}
           onCancel={() => {
             setCancelModalVisible(false);
-            setCancellationReason(""); // Reset the cancellation reason if the modal is cancelled
+            setCancellationReason(""); 
           }}
           okText="Confirm Cancellation"
           cancelText="Go Back"

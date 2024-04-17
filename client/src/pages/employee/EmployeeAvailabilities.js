@@ -4,17 +4,17 @@ import axios from 'axios';
 import { Table, Modal, Button, Radio, Select, Divider, Collapse } from 'antd';
 import Layout from '../../components/Layout';
 import { DeleteOutlined } from '@ant-design/icons';
-import moment from 'moment'; // Import moment
-import FullCalendar from '@fullcalendar/react'; // import the FullCalendar component
-import dayGridPlugin from '@fullcalendar/daygrid'; // import the day grid plugin
-import SubmitAvailability from '../../components/SubmitAvailability'; // Import the SubmitAvailability component
+import moment from 'moment'; 
+import FullCalendar from '@fullcalendar/react'; 
+import dayGridPlugin from '@fullcalendar/daygrid'; 
+import SubmitAvailability from '../../components/SubmitAvailability'; 
 
 const { Option } = Select;
 const { Panel } = Collapse;
 
 const EmployeeAvailabilities = () => {
   const [availabilities, setAvailabilities] = useState([]);
-  const [viewMode, setViewMode] = useState('list'); // State to track the selected view mode
+  const [viewMode, setViewMode] = useState('list'); 
 
   const [selectedAvailability, setSelectedAvailability] = useState(null);
   const [isDetailModalVisible, setIsDetailModalVisible] = useState(false);
@@ -35,12 +35,10 @@ const EmployeeAvailabilities = () => {
   };
 
   const formatTime = (time) => {
-    // Convert to 12-hour format with AM/PM
     return moment(time, 'HH:mm').format('hh:mm A');
   };
 
   const formatDateWithDayOfWeek = (date) => {
-    // Format the date with the day of the week, year, month, and day
     return moment.utc(date).format('dddd, MMMM Do YYYY');
   };
 
@@ -58,7 +56,7 @@ const EmployeeAvailabilities = () => {
       const token = localStorage.getItem('token');
       const headers = { Authorization: `Bearer ${token}` };
       await axios.delete(`/api/availability/${availabilityId}`, { headers });
-      fetchAvailabilities(); // Refresh the list after deletion
+      fetchAvailabilities();
     } catch (error) {
       console.error('Error deleting availability:', error);
       Modal.error({
@@ -69,15 +67,14 @@ const EmployeeAvailabilities = () => {
   };
 
   const onEventClick = (clickInfo) => {
-    // Find the clicked availability details by its ID
     const availability = availabilities.find(a => a._id === clickInfo.event.id);
     setSelectedAvailability(availability);
-    setIsDetailModalVisible(true); // Show the details modal
+    setIsDetailModalVisible(true); 
   };
 
   const closeDetailModal = () => {
     setIsDetailModalVisible(false);
-    setSelectedAvailability(null); // Reset selected availability
+    setSelectedAvailability(null); 
   };
 
   const columns = [
@@ -86,7 +83,6 @@ const EmployeeAvailabilities = () => {
       dataIndex: 'date',
       key: 'date',
       render: (text, record) => formatDateWithDayOfWeek(record.date),
-      // Add a sorter function for the date column
       sorter: (a, b) => moment(a.date).unix() - moment(b.date).unix(),
     },
     {
@@ -117,7 +113,6 @@ const EmployeeAvailabilities = () => {
   return (
     <Layout>
       <div style={{ textAlign: 'center', maxWidth: '900px', margin: '0 auto' }}>
-        {/* Render SubmitAvailability component and pass fetchAvailabilities to refresh list */}
         <Collapse defaultActiveKey={[]}>
           <Panel header="Add Availability" key="1">
         <SubmitAvailability onAvailabilitySubmitted={fetchAvailabilities} />
@@ -171,15 +166,14 @@ const EmployeeAvailabilities = () => {
             contentHeight="auto"
             plugins={[dayGridPlugin]}
             initialView="dayGridMonth"
-            timeZone="UTC" // Explicitly set FullCalendar to use UTC
+            timeZone="UTC" 
             events={availabilities.map((availability) => ({
               id: availability._id,
               title: `Available: ${moment(availability.starttime, 'HH:mm').format('hh:mm A')} - ${moment(availability.endtime, 'HH:mm').format('hh:mm A')}`,
               start: moment.utc(availability.date).startOf('day').add(moment.duration(availability.starttime)).toISOString(),
               end: moment.utc(availability.date).startOf('day').add(moment.duration(availability.endtime)).toISOString(),
-              // Use moment.duration to properly parse the "HH:mm" formatted times
             }))}
-            eventClick={onEventClick} // Attach event click listener
+            eventClick={onEventClick} 
           />
         )}
         </Panel>

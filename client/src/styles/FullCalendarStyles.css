@@ -1,31 +1,27 @@
-/* FullCalendar header styles */
 .fc .fc-col-header-cell-cushion {
-    color: #2b4159 !important; /* Change the text color to black */
-    text-decoration: none !important; /* Remove underline */
+    color: #2b4159 !important; 
+    text-decoration: none !important;
   }
   
-  /* FullCalendar event styles */
   .fc .fc-event-title, 
   .fc .fc-event-time {
-    color: #2b4159 !important; /* Change the text color to black */
-    text-decoration: none !important; /* Remove underline */
+    color: #2b4159 !important;
+    text-decoration: none !important;
   }
   
-  /* FullCalendar day number styles */
   .fc .fc-daygrid-day-number {
-    color: #2b4159 !important; /* Change the text color to black */
-    text-decoration: none !important; /* Remove underline */
+    color: #2b4159 !important;
+    text-decoration: none !important;
   }
   
-  
-  /* This will target all links within the FullCalendar and set the cursor to default */
+
   .fc .a {
-    cursor: default !important; /* Ensures the cursor does not change to a pointer when hovering */
-    text-decoration: none !important; /* Optionally removes the underline from links */
+    cursor: default !important; 
+    text-decoration: none !important; 
   }
   
-  /* This will target the "today" button in the FullCalendar header and set the cursor to pointer */
+
   .fc-today-button {
-    cursor: pointer !important; /* Ensures the cursor changes to a pointer when hovering */
+    cursor: pointer !important;
   }
   

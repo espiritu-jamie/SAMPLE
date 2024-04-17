@@ -33,11 +33,9 @@ const SubmitAvailability = ({ onAvailabilitySubmitted }) => {
       return;
     }
 
-    // Convert time strings to moment objects for comparison
     const startTimeMoment = moment(time.starttime, 'HH:mm');
     const endTimeMoment = moment(time.endtime, 'HH:mm');
 
-    // Check if end time is before or equal to start time
     if (!endTimeMoment.isAfter(startTimeMoment)) {
       message.error("End time must be later than start time.");
       return;
@@ -63,9 +61,9 @@ const SubmitAvailability = ({ onAvailabilitySubmitted }) => {
 
       dispatch(hideLoading());
       message.success("Availability submitted successfully");
-      onAvailabilitySubmitted(); // Refresh availabilities on parent component
-      setDates([]); // Clear dates after successful submission
-      setTime({ starttime: null, endtime: null }); // Clear times after successful submission
+      onAvailabilitySubmitted(); 
+      setDates([]); 
+      setTime({ starttime: null, endtime: null });
     } catch (error) {
       dispatch(hideLoading());
       message.error("Failed to submit availability");

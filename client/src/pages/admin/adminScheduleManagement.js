@@ -70,8 +70,8 @@ const ScheduleManagement = () => {
                     <Option value="cancelled">Cancelled</Option>
                 </Select>
                 <FullCalendar
-                    aspectRatio={1.5} // Adjust the width to height ratio
-                    contentHeight="auto" // or you can use a specific height like '600px'
+                    aspectRatio={1.5} 
+                    contentHeight="auto" 
                     plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
                     initialView="dayGridMonth"
                     headerToolbar={{

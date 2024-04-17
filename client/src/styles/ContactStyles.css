@@ -20,10 +20,10 @@
   
   .contact-details-container {
     display: flex;
-    justify-content: center; /* Changed to center to make sure the details are centered */
-    align-items: center; /* Added to vertically center the details in the container */
-    flex-direction: row; /* Stack the contact details on top of each other */
-    gap: 1rem; /* Space between contact detail sections */
+    justify-content: center; 
+    align-items: center; 
+    flex-direction: row; 
+    gap: 1rem; 
     width: 100%;
   }
   
@@ -32,9 +32,9 @@
     border-radius: 15px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     padding: 1rem;
-    width: 80%; /* Set width to 80% of parent container */
-    max-width: 350px; /* Adjust to manage the size */
-    margin: 20px auto; /* Added auto to horizontally center the details */
+    width: 80%;
+    max-width: 350px;
+    margin: 20px auto;
     text-align: center;
   }
   
@@ -55,7 +55,7 @@
   
   @media (max-width: 600px) {
     .contact-detail {
-      width: 90%; /* Increase width for small screens if desired */
+      width: 90%;
     }
   }
   

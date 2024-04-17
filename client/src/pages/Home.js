@@ -41,7 +41,6 @@ const Home = () => {
         </div>
 
       </div>
-      {/* New container for three divs */}
       <div className='how-it-works-container'>
       <div className='text-bottom'>
         <h3>HOW IT WORKS</h3>

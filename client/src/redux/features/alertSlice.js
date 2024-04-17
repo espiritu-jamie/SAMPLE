@@ -5,8 +5,6 @@ export const alertSlice = createSlice({
   initialState: {
     loading: false,
     user: {
-      // notification: [],
-      // seennotification: [],
     },
   },
   reducers: {
@@ -16,12 +14,6 @@ export const alertSlice = createSlice({
     hideLoading: (state) => {
       state.loading = false;
     },
-    // setUserNotification: (state, action) => {
-    //   state.user.notification = action.payload;
-    // },
-    // setSeenNotification: (state, action) => {
-    //   state.user.seennotification = action.payload;
-    // },
   },
 });
 
@@ -30,8 +22,6 @@ console.log(alertSlice);
 export const {
   showLoading,
   hideLoading,
-  // setUserNotification,
-  // setSeenNotification,
 } = alertSlice.actions;
 
 

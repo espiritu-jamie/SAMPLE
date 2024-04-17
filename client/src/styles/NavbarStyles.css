@@ -8,23 +8,23 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100%; /* Full width */
-  padding: 0 50px; /* Adjust padding as needed */
-  position: relative; /* Set position to relative */
+  width: 100%;
+  padding: 0 50px;
+  position: relative;
 }
 
 .navbar-logo {
-  width: 120px; /* Adjust as needed */
+  width: 120px;
   height: auto;
-  border-radius: 50%; /* Circular shape */  
-  order: 2; /* Change order to 2 */
+  border-radius: 50%;
+  order: 2;
 }
 
 .navbar-brand {
   font-size: 24px;
   color: #2b4159;
   font-weight: bold;
-  display: none; /* Hide on smaller screens */
+  display: none;
 }
 
 .navbar-menu {
@@ -33,13 +33,12 @@
   gap: 16px;
 }
 
-/* NavbarStyles.css */
 .navbar-menu button {
-  background-color: transparent; /* Make background transparent */
-  color: #C9A959; /* Adjust text color as needed */
-  padding: 20px; /* Adjust padding as needed */
+  background-color: transparent;
+  color: #C9A959;
+  padding: 20px;
   border: none;
-  border-radius: 0; /* Remove rounded corners */
+  border-radius: 0; 
   cursor: pointer;
   text-transform: uppercase;
   font-size: larger;
@@ -52,13 +51,11 @@
   color: #C9A959;
 }
 
-/* Add vertical gap between items */
 .navbar-menu li {
-  margin-bottom: 0px; /* Adjust vertical gap as needed */
+  margin-bottom: 0px; 
 }
 
-/* Remove vertical gap for horizontal layout */
-@media (min-width: 200000px) { /* Adjust breakpoint as needed */
+@media (min-width: 200000px) { 
   .navbar-menu li {
     margin-bottom: 0;
   }
@@ -70,10 +67,10 @@
   right: 1%;
   top: 0;
   bottom: 0;
-  width: 53%; /* Adjust based on how much area you want colored */
-  background-color: #2b4159; /* The slant color */
-  transform: skewX(-20deg); /* Creates the slant */
-  z-index: -1; /* Ensures the slant is behind the content */
+  width: 53%; 
+  background-color: #2b4159; 
+  transform: skewX(-20deg); 
+  z-index: -1; 
 }
 
 .navbar {

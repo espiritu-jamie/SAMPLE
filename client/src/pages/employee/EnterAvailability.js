@@ -1,5 +1,5 @@
 import React from "react";
-import SubmitAvailability from "../../components/SubmitAvailability"; // Update the path as needed
+import SubmitAvailability from "../../components/SubmitAvailability"; 
 
 const EnterAvailabilityPage = () => {
   return (

@@ -14,14 +14,9 @@ export const employeeMenu = [
     path: "/my-availability",
     icon: "fa-solid fa-list",
   },
-  // {
-  //   name: "Enter Availability",
-  //   path: "/enter-availability",
-  //   icon: "fa-solid fa-calendar-plus",
-  // },
   {
   name: "Profile",
-  path: "/my-profile", // Update with the correct path for the Profile component
+  path: "/my-profile",
   icon: "fa-solid fa-user",
   },
   {
@@ -31,7 +26,6 @@ export const employeeMenu = [
   },
 ];
 
-// admin menu
 export const adminMenu = [
   {
     name: "Home",
@@ -60,7 +54,6 @@ export const adminMenu = [
   }
 ];
 
-// user menu
 export const userMenu = [
   {
     name: "Home",

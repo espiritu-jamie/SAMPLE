@@ -1,8 +1,8 @@
 const Rating = require("../models/ratingModel");
 const Appointment = require("../models/appointmentModel");
 const User = require("../models/userModel");
-const Notification = require("../models/notificationModel"); // Ensure the Notification model is imported
-const moment = require("moment"); // Assuming you're using moment.js for date formatting
+const Notification = require("../models/notificationModel");
+const moment = require("moment");
 
 // Function to submit a new rating for an appointment
 const submitRatingController = async (req, res) => {

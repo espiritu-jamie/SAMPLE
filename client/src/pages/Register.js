@@ -11,7 +11,6 @@ const Register = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  // Submit for Register
   const submitHandler = async (values) => {
     try {
       dispatch(showLoading());

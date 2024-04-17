@@ -42,7 +42,7 @@ const EmployeeShiftsPage = () => {
     const handleEventClick = ({ event }) => {
         setSelectedAppointment({
             ...event.extendedProps,
-            date: moment(event.start).format('YYYY-MM-DD'), // Ensure date is in the correct format
+            date: moment(event.start).format('YYYY-MM-DD'),
             starttime: moment(event.start).format('HH:mm'),
             endtime: moment(event.end).format('HH:mm'),
         });
@@ -66,7 +66,7 @@ const EmployeeShiftsPage = () => {
                     onClose={() => setIsModalVisible(false)}
                     appointment={selectedAppointment}
                     userRole="employee"
-                    fetchAppointments={fetchConfirmedAppointments} // This prop might need to be adjusted based on your implementation
+                    fetchAppointments={fetchConfirmedAppointments}
                 />
             )}
         </Layout>

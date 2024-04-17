@@ -7,15 +7,15 @@ const Contact = () => {
   return (
     <div>
       <Navbar />
-      <div className="contact-page-container"> {/* Wrapper for the entire contact section */}
-        <div className="contact-container"> {/* Container for the Contact Us header and description */}
+      <div className="contact-page-container"> 
+        <div className="contact-container"> 
           <h1 className="headline"><span className="accent-text">Contact</span> Us</h1>
           <p className="description-text">
             If you have any questions about JKL Cleaning Service or wish to inquire about our services and pricing, please feel free to reach out. We're here to help with any inquiries or assistance you might need.
           </p>
         
-        <div className="contact-details-container"> {/* Container for email and phone information */}
-          <div className="contact-detail email-container"> {/* Individual container for email */}
+        <div className="contact-details-container"> 
+          <div className="contact-detail email-container"> 
             <h2 className="contact-method">Send us an email</h2>
             <p className="contact-description">
               Pen us your concerns or requests. We'll make sure to sweep up a response in no time!
@@ -23,7 +23,7 @@ const Contact = () => {
             <p className="contact-info"><u>info@jklCleaning.com</u></p>
           </div>
 
-          <div className="contact-detail phone-container"> {/* Individual container for phone */}
+          <div className="contact-detail phone-container"> 
             <h2 className="contact-method">Talk with us</h2>
             <p className="contact-description">
               Got questions or need immediate assistance? Call us now. Our team is always ready to mop up your worries!

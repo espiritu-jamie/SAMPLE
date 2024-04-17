@@ -15,10 +15,8 @@ const BookingPage = () => {
   const [bookedSlots, setBookedSlots] = useState([]);
   const [areSlotsAvailable, setAreSlotsAvailable] = useState(true);
 
-  // Constant for cost per square foot
   const COST_PER_SQFT = 0.10;
 
-  // Custom time slots based on your new schedule
   const allTimeSlots = [
     { start: "07:00", end: "09:00" },
     { start: "09:30", end: "11:30" },
@@ -42,31 +40,19 @@ const BookingPage = () => {
     }
   };
 
-  // useEffect(() => {
-  //   // Fetch booked slots if the selected date changes
-  //   const date = form.getFieldValue('date');
-  //   if (date) {
-  //     fetchBookedSlots(date);
-  //   }
-  // }, [form]);
-
   useEffect(() => {
-    // Whenever bookedSlots changes, check if there are available slots and update the state
     const availableSlots = allTimeSlots.filter(slot => !bookedSlots.includes(slot));
     setAreSlotsAvailable(availableSlots.length > 0);
   }, [bookedSlots, allTimeSlots]);
   
-  // Update getAvailableTimeSlots to filter out booked slots
   const getAvailableTimeSlots = () => {
     return allTimeSlots.filter(slot => !bookedSlots.includes(slot));
   };
 
   const handleStartTimeChange = (value) => {
-    // Extract end time based on the selected slot
     const selectedSlot = allTimeSlots.find(slot => slot.startsWith(value));
     const calculatedEndTime = selectedSlot.split(" - ")[1];
     setEndTime(calculatedEndTime);
-    // Automatically setting endtime in the form is not needed anymore as we display it differently
   };
 
   const handleSubmit = async (values) => {
@@ -107,7 +93,6 @@ const BookingPage = () => {
     setCost(parseFloat((value * COST_PER_SQFT).toFixed(2)));
   };
 
-  // Function to disable past dates and dates within 3 days
   const disabledDate = (current) => {
     return current && current < moment().endOf('day').add(3, 'days');
   };
@@ -180,7 +165,7 @@ const BookingPage = () => {
                   ? "Time Slot"
                   : <span style={{ color: 'red', fontWeight: 'bold' }}>We are fully booked for this date. Please select a different date.</span>
               }
-              rules={[{ required: areSlotsAvailable, message: 'Time Slot is required' }]} // Make required only if slots are available
+              rules={[{ required: areSlotsAvailable, message: 'Time Slot is required' }]} 
             >
               <Select 
                 placeholder="Select a time slot" 
@@ -192,11 +177,6 @@ const BookingPage = () => {
                 ))}
               </Select>
             </Form.Item>
-            {/* <Form.Item
-              label="End Time"
-            >
-              <Input value={endTime} disabled />
-            </Form.Item> */}
             <Form.Item
               name="area"
               label="Enter the Area you want to get cleaned (in sqft)"

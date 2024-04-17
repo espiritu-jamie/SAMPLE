@@ -2,7 +2,6 @@ const Announcement = require("../models/announcementModel");
 const User = require("../models/userModel");
 const Notification = require("../models/notificationModel");
 
-// Function to create a new announcement
 const createAnnouncementController = async (req, res) => {
   const { title, content, targetRoles } = req.body;
 
@@ -15,10 +14,8 @@ const createAnnouncementController = async (req, res) => {
     });
     await newAnnouncement.save();
 
-    // Fetch users who belong to the targetRoles
     const targetUsers = await User.find({ userRole: { $in: targetRoles } });
 
-    // Prepare and send a notification to each targeted user
     const notificationPromises = targetUsers.map(user => {
       return new Notification({
         userId: user._id,
@@ -29,7 +26,6 @@ const createAnnouncementController = async (req, res) => {
       }).save();
     });
 
-    // Wait for all notifications to be saved
     await Promise.all(notificationPromises);
 
     return res.status(201).json({
@@ -77,7 +73,7 @@ const getAnnouncementsForUserController = async (req, res) => {
 
 const dismissAnnouncementController = async (req, res) => {
   try {
-    const userId = req.body.userId; // Assuming your auth middleware adds the user to req
+    const userId = req.body.userId; 
     const { announcementId } = req.body;
 
     const user = await User.findById(userId);

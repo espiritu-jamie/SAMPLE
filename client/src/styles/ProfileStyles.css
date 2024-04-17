@@ -63,12 +63,3 @@
 .profile-main-container .form-btn{
     width: clamp(4.688rem, 11.867vw - 1.009rem, 9.375rem);
 }
-
-.profile-container Form{
-
-}
-
-/*.ant-form-item-control-input-content{*/
-/*  display: flex;*/
-/*  justify-content: center;*/
-/*}*/

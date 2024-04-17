@@ -2,7 +2,6 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    /* Adjust the colors and positions in the linear-gradient to match your image */
     background: linear-gradient(
         to top right,
         #C9A959 35%, 
@@ -26,5 +25,5 @@
     text-align: center;
     width: 100%;
     max-width: 465px;
-    position: relative; /* Added for positioning the logo absolutely within this container */
+    position: relative;
 }

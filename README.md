@@ -1,137 +1,91 @@
-# AppointDoc
+# JKL Cleaning Service Web-based Platform
 
-This is a professional-grade MERN (MongoDB, Express, React, Node.js) stack web application for booking doctor appointments. Patients can browse through a list of doctors and their availability and book an appointment with their preferred doctor. Doctors can view their schedule, manage their availability, and approve/cancel appointments.
+## Project Overview
 
-## Project View
+The JKL Cleaning Service Web-based Platform is dedicated to modernizing the operational aspects of JKL Cleaning Service. This intuitive online platform enhances customer interaction and employee management, featuring critical functionalities such as online booking, employee scheduling, and comprehensive administrative tools. Our aim is to improve efficiency, accuracy, and customer satisfaction, driving continuous growth and prosperity in the digital age.
 
-<h4>1. For User Profile<h4/>
+## Main Features
 
-- **Homepage**
-<p align="center">
-  <img alt="img-name" src="Images/Homepage from User.png" width="700">
-</p>
-  
-- **Appointment Lists**
-<p align="center">
-  <img alt="img-name" src="Images/Appointment Lists from User Profile.png" width="700">
-</p>
-  
-- **Booking Appointment**
-<p align="center">
-  <img alt="img-name" src="Images/Booking Appointment as User.png" width="700">
-</p>
-  
-- **Apply As Doctor**
-<p align="center">
-  <img alt="img-name" src="Images/User can apply for doctor.png" width="700">
-</p>
+- **Online Booking:** Allows customers to book cleaning services online at their convenience.
+- **Employee Scheduling:** Enables efficient management of employee schedules, reducing conflicts and optimizing workforce utilization.
+- **Administrative Tools:** Comprehensive set of tools for managing schedules, appointments, and customer interactions seamlessly.
 
-- **New Notifications**
-<p align="center">
-  <img alt="img-name" src="Images/Notification Page for New Notifications.png" width="700">
-</p>
+## Technical Stack
 
-- **Read Notifications**
-<p align="center">
-  <img alt="img-name" src="Images/After Read Notification Page.png" width="700">
-</p>
+This platform is built using the MERN stack (MongoDB, Express.js, React, Node.js), ensuring a robust, scalable, and responsive user experience.
 
-<h4>2. For Doctor Profile<h4/>
-  
-- **Homepage**
-<p align="center">
-  <img alt="img-name" src="Images/Doctor Homepage.png" width="700">
-</p>
-  
-- **Appointment Lists**
-<p align="center">
-  <img alt="img-name" src="Images/Appointment Lists from Doctor Profile.png" width="700">
-</p>
+## Adaptation from Existing Repository
 
-- **Manage Profile**
-<p align="center">
-  <img alt="img-name" src="Images/Manage Doctor Profile.png" width="700">
-</p>
-  
-<h4>3. For Admin Profile<h4/>
-  
-- **Homepage**
-<p align="center">
-  <img alt="img-name" src="Images/Homepage for Admin.png" width="700">
-</p>
+This project is adapted from the [AppointDoc repository](https://github.com/OviSarkar62/AppointDoc) by OviSarkar62, which originally focuses on patient/doctor appointments. We have customized and extended this to fit the specific needs of a cleaning service management system.
 
-- **Doctors List**
-<p align="center">
-  <img alt="img-name" src="Images/Doctor List from admin page.png" width="700">
-</p>
-  
-- **Users List**
-<p align="center">
-  <img alt="img-name" src="Images/Users List from Admin.png" width="700">
-</p>
-  
+## Collaboration
+
+This project is developed in collaboration with JKL Cleaning Service to tailor every aspect of the platform to the unique requirements of their business operations.
+
 ## Installation
 
-To set up BloodLife locally, follow these steps:
+### Prerequisites
 
-- Clone the repository:
+- Node.js
+- npm (Node Package Manager)
 
-      git clone https://github.com/OviSarkar62/AppointDoc.git
-      
-- Install the required dependencies for backend:
+Ensure you have Node.js and npm installed on your system. If not, you can download and install them from [Node.js official website](https://nodejs.org/).
 
-      npm install express joi jsonwebtoken moment mongoose morgan nodemon zxcvbn dotenv colors bcryptjs
-     
-- Navigate to the client directory: 
+### Setup
 
-       cd client
-    
-- Install the dependencies for the client: 
+Clone the repository and navigate into it:
 
-       npm i react-router-dom react-redux axios antd @reduxjs/toolkit react-bootstrap moment
-    
-- Create a .env file in the root directory with the following environment variables:
+```bash
+git clone <repository-url>
+cd <repository-directory>
+```
 
-       DB_URL = mongodb+srv://<user>:<pass>@cluster0.l17quyr.mongodb.net/database
+Create a .env file in the root directory with the following contents:
 
-       JWT_SECRET = A_Secret_Value
-  
-       PORT = 4000
+```bash
+DB_URL=<your-mongodb-url>
+JWT_SECRET=<your-jwt-secret>
+PORT=4000
+```
 
-- Start the server: 
+Install dependencies in both the root and client directories:
 
-       npm start
-    
-- In a new terminal window, navigate to the client directory:
+```bash
+# Install server dependencies
+npm install
+# Navigate to the client directory
+cd client
+# Install client dependencies
+npm install
+```
 
-       cd client
-    
-- Start the client: 
+### Running the Application
+To start the server:
 
-       npm start
-    
-- Access the application. Open your web browser and visit http://localhost:3000 to access the application.
+```bash
+# In the root directory
+npm start
+```
 
+To start the client:
 
-## Usage
+```bash
+# In the client directory
+npm start
+```
 
-- The AppointDoc application allows doctors to manage their appointments with ease. Doctors can create new appointments, view existing appointments, and approve or reject appointments as necessary.
+Access the application by navigating to http://localhost:3000 in your web browser.
 
-- To create a new appointment, the user needs to click on the "New Appointment" button on the doctor's card. They will then be presented with a form where they can enter the details of the appointment, including date and time.
+## Security
+Data security is a paramount aspect of the JKL Cleaning Service Web-based Platform. We employ advanced security measures including encrypted data storage, secure authentication mechanisms, and robust access controls to protect sensitive information.
 
-- To view existing appointments, the doctor needs to click on the "Appointments" button on the sidebar. They will then be presented with a list of all their appointments, presented by date and time. The doctor can click on any appointment to approve or reject to change it's pending status.
+## Future Enhancements
+We are committed to continuously improving the platform by integrating more features based on user feedback and advancing technology to support the growing needs of JKL Cleaning Service.
 
-- To update time of availability, the doctor needs to click on the profile page where they wish to update the time of appointments. They will then be presented with a form where they can edit the start time and end time details of the appointment.
+## License
+This project is licensed under the MIT License - see the LICENSE.md file for details.
 
-## Stack
+## Acknowledgments
+Thanks to OviSarkar62 for the original AppointDoc repository, which provided a solid foundation for our adaptation.
+Gratitude to the team members and contributors who have made this project possible.
 
-- MongoDB - NoSQL database for storing data
-- Express - Backend framework for building RESTful APIs
-- React - Frontend framework for building user interfaces
-- Node.js - JavaScript runtime environment for building scalable server-side applications
-- JWT - JSON Web Token for user authentication and authorization
-- Bcrypt - Password hashing library for secure password storage
-
-## Live Link
-
-The live project: [AppointDoc](https://appoint-doc.vercel.app/login)
